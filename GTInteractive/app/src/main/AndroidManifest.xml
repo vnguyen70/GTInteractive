@@ -31,13 +31,18 @@
 
         <activity
             android:name=".MainMapActivity"
-            android:label="@string/title_activity_main_map">
+            android:label="@string/title_activity_main_map"></activity>
+        <activity android:name=".MainTemp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".buildingDetail"
+            android:label="@string/title_activity_building_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
