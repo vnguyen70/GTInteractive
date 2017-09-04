@@ -10,7 +10,7 @@ public class MainTemp extends AppCompatActivity {
     Button mapButton;
     Button buildingDetailButton;
     Button internalMapButton;
-
+    Button searchButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +19,8 @@ public class MainTemp extends AppCompatActivity {
         mapButton = (Button) findViewById(R.id.mapButton);
         buildingDetailButton = (Button) findViewById(R.id.buildingDetailButton);
         internalMapButton = (Button) findViewById(R.id.internalMapButton);
-
+        // can't rename for some reason
+        searchButton = (Button) findViewById(R.id.searchButton);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,6 +34,14 @@ public class MainTemp extends AppCompatActivity {
             public void onClick(View view) {
                 Intent buildingDetailIntent = new Intent(MainTemp.this, buildingDetail.class);
                 startActivity(buildingDetailIntent);
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(MainTemp.this, SearchActivity.class);
+                startActivity(searchIntent);
             }
         });
     }

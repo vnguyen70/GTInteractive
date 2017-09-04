@@ -28,7 +28,21 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
+        <meta-data android:name="android.app.searchable"
+            android:resource="@xml/searchable"/>
 
+        <activity android:name=".SearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+
+        <activity android:name=".SearchActivity"></activity>
+
+        <provider android:name=".SuggestionProvider"
+            android:authorities="com.example.SuggestionProvider2" />
         <activity
             android:name=".MainMapActivity"
             android:label="@string/title_activity_main_map" />
