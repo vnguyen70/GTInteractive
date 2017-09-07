@@ -28,8 +28,23 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
-        <meta-data android:name="android.app.searchable"
+        <meta-data
+            android:name="android.app.searchable"
             android:resource="@xml/searchable"/>
+
+        <activity android:name=".MainTemp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MainMapActivity"
+            android:label="@string/title_activity_main_map" />
+
+        <activity android:name=".buildingDetail"></activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".PersistenceTestActivity"></activity>
 
         <activity android:name=".SearchableActivity">
             <intent-filter>
@@ -39,21 +54,9 @@
                 android:resource="@xml/searchable"/>
         </activity>
 
-        <activity android:name=".SearchActivity"></activity>
-
         <provider android:name=".SuggestionProvider"
             android:authorities="com.example.SuggestionProvider2" />
-        <activity
-            android:name=".MainMapActivity"
-            android:label="@string/title_activity_main_map" />
-        <activity android:name=".MainTemp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".buildingDetail"></activity>
     </application>
 
 </manifest>

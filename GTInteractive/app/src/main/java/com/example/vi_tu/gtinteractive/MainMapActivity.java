@@ -37,10 +37,8 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng gatech = new LatLng(33.777433, -84.398636);
+        mMap.addMarker(new MarkerOptions().position(gatech).title("Marker in Georgia Tech"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gatech, (float) 14.6));
     }
 }

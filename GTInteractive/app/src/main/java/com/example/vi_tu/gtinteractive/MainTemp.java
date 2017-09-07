@@ -11,6 +11,7 @@ public class MainTemp extends AppCompatActivity {
     Button buildingDetailButton;
     Button internalMapButton;
     Button searchButton;
+    Button persistenceTestActivityButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,8 +20,9 @@ public class MainTemp extends AppCompatActivity {
         mapButton = (Button) findViewById(R.id.mapButton);
         buildingDetailButton = (Button) findViewById(R.id.buildingDetailButton);
         internalMapButton = (Button) findViewById(R.id.internalMapButton);
-        // can't rename for some reason
         searchButton = (Button) findViewById(R.id.searchButton);
+        persistenceTestActivityButton = (Button) findViewById(R.id.persistenceTestActivityButton);
+
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -28,7 +30,6 @@ public class MainTemp extends AppCompatActivity {
                 startActivity(mapIntent);
             }
         });
-
         buildingDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,12 +37,18 @@ public class MainTemp extends AppCompatActivity {
                 startActivity(buildingDetailIntent);
             }
         });
-
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent searchIntent = new Intent(MainTemp.this, SearchActivity.class);
                 startActivity(searchIntent);
+            }
+        });
+        persistenceTestActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent persistenceTestActivityIntent = new Intent(MainTemp.this, PersistenceTestActivity.class);
+                startActivity(persistenceTestActivityIntent);
             }
         });
     }
