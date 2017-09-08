@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         internalMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent internalBuldingActivityIntent = new Intent(MainActivity.this, InternalBuildingActivity.class);
-                startActivity(internalBuldingActivityIntent);
+                Intent internalBuildingActivityIntent = new Intent(MainActivity.this, InternalBuildingActivity.class);
+                startActivity(internalBuildingActivityIntent);
             }
         });
     }
