@@ -31,7 +31,7 @@ public class MainTemp extends AppCompatActivity {
         buildingDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent buildingDetailIntent = new Intent(MainTemp.this, buildingDetail.class);
+                Intent buildingDetailIntent = new Intent(MainTemp.this, buildingDetail_info.class);
                 startActivity(buildingDetailIntent);
             }
         });
