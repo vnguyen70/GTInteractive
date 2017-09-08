@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.R;
+import com.example.vi_tu.gtinteractive.domain.Building;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rayner on 8/31/17.
@@ -15,15 +19,16 @@ import com.example.vi_tu.gtinteractive.R;
 
 //
 public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingAdapterViewHolder>  {
-    private String[] mBuildingData;
-    public BuildingAdapter() {
 
+    private List<Building> bList;
+
+    public BuildingAdapter() {
+        bList = new ArrayList<>();
     }
 
     public class BuildingAdapterViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mBuildingTextView;
-
 
         public BuildingAdapterViewHolder(View view) {
             super(view);
@@ -36,26 +41,23 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.search_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-
-        View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
         return new BuildingAdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(BuildingAdapterViewHolder buildingAdapterViewHolder, int position) {
-        String building = mBuildingData[position];
-        buildingAdapterViewHolder.mBuildingTextView.setText(building);
+        String buildingName = bList.get(position).getName();
+        buildingAdapterViewHolder.mBuildingTextView.setText(buildingName);
     }
 
     @Override
     public int getItemCount() {
-        if (null == mBuildingData) return 0;
-        return mBuildingData.length;
+        return bList.size();
     }
 
-    public void setBuildingData(String[] buildingData) {
-        mBuildingData = buildingData;
+    public void setBuildingsData(List<Building> bList) {
+        this.bList = bList;
         notifyDataSetChanged();
     }
 }

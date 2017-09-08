@@ -1,0 +1,34 @@
+TODO: figure out what needs to go in the activity lifecyle methods, e.g.:
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//    }
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//    }
+
+TODO: clean up resources everywhere, e.g.:
+
+db.close();
+cursor.close();
+
+TODO: allow users to clear search history / suggestions
+TODO: control search suggestions: https://developer.android.com/guide/topics/search/search-dialog.html#SearchableActivity

@@ -68,10 +68,9 @@
         </activity>
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_main_map" />
+            android:label="@string/title_activity_map" />
         <activity android:name=".BuildingDetailsActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".PersistenceTestActivity" />
+        <activity android:name=".BuildingSearchActivity" />
         <activity android:name=".SearchableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

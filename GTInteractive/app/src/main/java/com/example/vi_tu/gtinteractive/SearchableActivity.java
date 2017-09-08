@@ -3,14 +3,17 @@ package com.example.vi_tu.gtinteractive;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.temp.BuildingAdapter;
-import com.example.vi_tu.gtinteractive.temp.SQLiteDBHelper;
 import com.example.vi_tu.gtinteractive.temp.SuggestionProvider;
 
 import java.util.List;
@@ -20,53 +23,52 @@ import java.util.List;
  */
 
 public class SearchableActivity extends Activity {
+
     private RecyclerView mRecyclerView;
     private BuildingAdapter mBuildingAdapter;
-    List<String> buildingData;
-    SQLiteDBHelper myDb = new SQLiteDBHelper(this);
+
+    private SQLiteDatabase db;
+    private BuildingPersistence buildingsDB;
+
+    private SearchRecentSuggestions suggestions;
+
+    List<Building> bList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_list);
-        buildingData = myDb.getBuildingNames();
-        mRecyclerView = findViewById(R.id.recyclerview_search);
+        // get access to database through BuildingPersistence object
+        PersistenceHelper dbHelper = new PersistenceHelper(this);
+        db = dbHelper.getWritableDatabase();
+        buildingsDB = new BuildingPersistence(db);
+        // retrieve all buildings from database
+        bList = buildingsDB.getAll();
+        // recycler view stuff
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView = findViewById(R.id.recyclerview_search);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-
         mBuildingAdapter = new BuildingAdapter();
-        // building data has to be String[]
-        mBuildingAdapter.setBuildingData(buildingData.toArray(new String[buildingData.size()]));
+        mBuildingAdapter.setBuildingsData(bList);
         mRecyclerView.setAdapter(mBuildingAdapter);
-
+        // search suggestions
+        suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+        // search intent
         Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) { // TODO: auto-search as the user types (whenever a new character is entered)
             String query = intent.getStringExtra(SearchManager.QUERY);
-            doMySearch(query);
-            // saves the query
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+            List<Building> queryResults = buildingsDB.findByName(query); // TODO: allow the user to choose whether to search by name, address, or buildingId
+            mBuildingAdapter.setBuildingsData(queryResults);
             suggestions.saveRecentQuery(query, null);
         }
     }
-            //TODO: Allow user to clear suggestions for privacy? Perhaps not important because it's just building searches
+
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.d("MyTag", "reached new intent in searchable activity");
+        Log.d("BUILDINGS_SEARCH", "reached new intent in searchable activity");
     }
 
-    public void doMySearch(String query) {
-        for (String building : buildingData) {
-            //TODO: Allow user to enter partial building name
-            if (query.equals(building)) {
-                String[] dummyBuildingData2 = new String[] {building};
-                mBuildingAdapter.setBuildingData(dummyBuildingData2);
-
-            }
-        }
-    }
-    //TODO: Control search suggestions
-    // https://developer.android.com/guide/topics/search/search-dialog.html#SearchableActivity
 }
 
 
