@@ -1,16 +1,20 @@
 package com.example.vi_tu.gtinteractive;
 
-import android.app.usage.UsageEvents;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+
+import com.example.vi_tu.gtinteractive.domain.Event;
+import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.temp.EventAdapter;
+
+import java.util.List;
 
 import static com.example.vi_tu.gtinteractive.R.color.colorAccent;
 
@@ -20,23 +24,27 @@ public class buildingDetail_events extends AppCompatActivity {
     Button diningButton;
 
     private RecyclerView eventsRecycler;
-    private RecyclerView.Adapter eventsAdapter;
+    private EventAdapter eventsAdapter;
     private RecyclerView.LayoutManager eventsLayoutManager;
 
-    String[] placeData = new String[3];
+    private SQLiteDatabase db;
+    private EventPersistence eventsDB;
+    List<Event> eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_building_detail_events);
 
+        // Instantiating top banner buttons
         eventsButton = (Button) findViewById(R.id.eventsButton);
         infoButton = (Button) findViewById(R.id.infoButton);
         diningButton = (Button) findViewById(R.id.diningButton);
 
-
+        // Changes styling of currently selected button
         eventsButton.setBackgroundColor(getResources().getColor(colorAccent));
 
+        // Click listeners
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,24 +62,25 @@ public class buildingDetail_events extends AppCompatActivity {
             }
         });
 
-        placeData[0] = "test0";
-        placeData[1] = "test1";
-        placeData[2] = "test2";
+        // Database instantiation
+        PersistenceHelper dbHelper = new PersistenceHelper(this);
+        db = dbHelper.getWritableDatabase();
+        eventsDB = new EventPersistence(db);
+
+        eventList = eventsDB.getAll();
+
+        // Recycle view creation
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         eventsRecycler = (RecyclerView) findViewById(R.id.recyclerView);
 
-        eventsRecycler.setHasFixedSize(true);
+        eventsRecycler.setLayoutManager(layoutManager);
 
-        eventsLayoutManager = new LinearLayoutManager(this);
-        eventsRecycler.setLayoutManager(eventsLayoutManager);
 
         eventsAdapter = new EventAdapter();
+        eventsAdapter.setData(eventList);
+
         eventsRecycler.setAdapter(eventsAdapter);
 
     }
-
-
-
-
-
 }

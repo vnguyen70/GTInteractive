@@ -1,11 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-<<<<<<< HEAD
     tools:context="com.example.vi_tu.gtinteractive.buildingDetail_info">
-=======
-    tools:context="com.example.vi_tu.gtinteractive.BuildingDetailsActivity">
->>>>>>> master
+<!--<<<<<<< HEAD-->
+
+<!--=======-->
+    <!--tools:context="com.example.vi_tu.gtinteractive.BuildingDetailsActivity">-->
+<!--&gt;>>>>>> master-->
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
