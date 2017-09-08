@@ -60,4 +60,5 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
         this.bList = bList;
         notifyDataSetChanged();
     }
+
 }

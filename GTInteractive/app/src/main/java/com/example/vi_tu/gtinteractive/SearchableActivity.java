@@ -19,7 +19,7 @@ import com.example.vi_tu.gtinteractive.temp.SuggestionProvider;
 import java.util.List;
 
 /**
- * Created by Raykris on 8/31/17.
+ * Created by Rayner on 8/31/17.
  */
 
 public class SearchableActivity extends Activity {
@@ -32,7 +32,7 @@ public class SearchableActivity extends Activity {
 
     private SearchRecentSuggestions suggestions;
 
-    List<Building> bList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,16 +42,8 @@ public class SearchableActivity extends Activity {
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
-        // retrieve all buildings from database
-        bList = buildingsDB.getAll();
-        // recycler view stuff
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView = findViewById(R.id.recyclerview_search);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
-        mBuildingAdapter = new BuildingAdapter();
-        mBuildingAdapter.setBuildingsData(bList);
-        mRecyclerView.setAdapter(mBuildingAdapter);
+
+
         // search suggestions
         suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
         // search intent
@@ -59,7 +51,7 @@ public class SearchableActivity extends Activity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) { // TODO: auto-search as the user types (whenever a new character is entered)
             String query = intent.getStringExtra(SearchManager.QUERY);
             List<Building> queryResults = buildingsDB.findByName(query); // TODO: allow the user to choose whether to search by name, address, or buildingId
-            mBuildingAdapter.setBuildingsData(queryResults);
+            setContentView(R.layout.activity_building_detail);
             suggestions.saveRecentQuery(query, null);
         }
     }
