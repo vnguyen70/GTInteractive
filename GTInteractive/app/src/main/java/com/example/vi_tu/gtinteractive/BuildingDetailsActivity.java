@@ -14,9 +14,9 @@ public class BuildingDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_building_detail);
+        setContentView(R.layout.activity_building_detail_info);
 
-        internalMapButton = (Button) findViewById(R.id.button5);
+        internalMapButton = (Button) findViewById(R.id.internalMapButton);
 
         internalMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -25,5 +25,8 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                 startActivity(internalBuildingActivityIntent);
             }
         });
+
+
+
     }
 }

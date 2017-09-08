@@ -28,9 +28,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+<!--<<<<<<< HEAD-->
+<!--=======-->
         <meta-data
             android:name="android.app.searchable"
             android:resource="@xml/searchable" />
+<!--&gt;>>>>>> master-->
 
         <activity
             android:name=".MainActivity">
@@ -39,6 +42,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--<<<<<<< HEAD-->
+        <activity android:name=".buildingDetail_info" />
+        <activity android:name=".buildingDetail_events" />
+        <activity android:name=".buildingDetail_dining"></activity>
+<!--=======-->
         <activity
             android:name=".BuildingsTestActivity"
             android:label="@string/title_activity_buildings_test"
@@ -86,6 +94,7 @@
             android:name=".temp.SuggestionProvider"
             android:authorities="com.example.SuggestionProvider2" />
 
+<!--&gt;>>>>>> master-->
     </application>
 
 </manifest>
