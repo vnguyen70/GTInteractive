@@ -51,7 +51,7 @@ public class SearchableActivity extends Activity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) { // TODO: auto-search as the user types (whenever a new character is entered)
             String query = intent.getStringExtra(SearchManager.QUERY);
             List<Building> queryResults = buildingsDB.findByName(query); // TODO: allow the user to choose whether to search by name, address, or buildingId
-            setContentView(R.layout.activity_building_detail);
+            setContentView(R.layout.activity_building_detail_info);
             suggestions.saveRecentQuery(query, null);
         }
     }
