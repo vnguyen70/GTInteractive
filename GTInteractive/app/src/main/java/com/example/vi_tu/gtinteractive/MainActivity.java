@@ -70,6 +70,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(diningsTestActivityIntent);
             }
         });
+
+        internalMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent internalBuldingActivityIntent = new Intent(MainActivity.this, InternalBuildingActivity.class);
+                startActivity(internalBuldingActivityIntent);
+            }
+        });
     }
 
 
