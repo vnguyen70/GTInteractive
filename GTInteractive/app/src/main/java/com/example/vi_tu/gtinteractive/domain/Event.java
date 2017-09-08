@@ -28,7 +28,6 @@ public class Event{
     DateTime startDate;
     DateTime endDate;
     String location;
-    String body;
     List<String> categories; // TODO: create Category enum class?
     DateTime pubDate;
 
@@ -43,7 +42,6 @@ public class Event{
         public static final String COLUMN_START_DATE = "startDate";
         public static final String COLUMN_END_DATE = "endDate";
         public static final String COLUMN_LOCATION = "location";
-        public static final String COLUMN_BODY = "body";
         public static final String COLUMN_CATEGORIES = "categories";
         public static final String COLUMN_PUB_DATE = "pubDate";
         public static final String COLUMN_BUILDING_ID = "buildingId";

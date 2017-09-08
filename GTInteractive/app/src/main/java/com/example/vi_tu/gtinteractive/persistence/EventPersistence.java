@@ -44,7 +44,6 @@ public class EventPersistence extends BasePersistence<Event>{
         cv.put(Event.Contract.COLUMN_START_DATE, dateTimeToMillis(e.getStartDate()));
         cv.put(Event.Contract.COLUMN_END_DATE, dateTimeToMillis(e.getEndDate()));
         cv.put(Event.Contract.COLUMN_LOCATION, e.getLocation());
-        cv.put(Event.Contract.COLUMN_BODY, e.getBody());
         cv.put(Event.Contract.COLUMN_CATEGORIES, serializer.serialize(e.getCategories()));
         cv.put(Event.Contract.COLUMN_PUB_DATE, dateTimeToMillis(e.getPubDate()));
         cv.put(Event.Contract.COLUMN_BUILDING_ID, e.getBuildingId());
@@ -60,7 +59,6 @@ public class EventPersistence extends BasePersistence<Event>{
                 .startDate(cursorIndexToDateTime(c, c.getColumnIndex(Event.Contract.COLUMN_START_DATE)))
                 .endDate(cursorIndexToDateTime(c, c.getColumnIndex(Event.Contract.COLUMN_END_DATE)))
                 .location(c.getString(c.getColumnIndex(Event.Contract.COLUMN_LOCATION)))
-                .body(c.getString(c.getColumnIndex(Event.Contract.COLUMN_BODY)))
                 .categories(serializer.deserialize(c.getString(c.getColumnIndex(Event.Contract.COLUMN_CATEGORIES))))
                 .pubDate(cursorIndexToDateTime(c, c.getColumnIndex(Event.Contract.COLUMN_PUB_DATE)))
                 .buildingId(c.getString(c.getColumnIndex(Event.Contract.COLUMN_BUILDING_ID)))

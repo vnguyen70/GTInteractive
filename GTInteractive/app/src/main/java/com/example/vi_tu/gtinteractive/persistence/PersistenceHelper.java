@@ -18,7 +18,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "persistence.db";
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 4;
 
     // Constructor
     public PersistenceHelper(Context context) {
@@ -53,7 +53,6 @@ public class PersistenceHelper extends SQLiteOpenHelper {
                 Event.Contract.COLUMN_START_DATE + " DATETIME, " +
                 Event.Contract.COLUMN_END_DATE + " DATETIME, " +
                 Event.Contract.COLUMN_LOCATION + " TEXT, " +
-                Event.Contract.COLUMN_BODY + " TEXT, " +
                 Event.Contract.COLUMN_CATEGORIES + " TEXT, " +
                 Event.Contract.COLUMN_PUB_DATE + " DATETIME, " +
                 Event.Contract.COLUMN_BUILDING_ID + " TEXT " +
