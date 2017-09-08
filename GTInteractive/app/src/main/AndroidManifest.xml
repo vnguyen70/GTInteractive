@@ -28,20 +28,71 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+<<<<<<< HEAD
+=======
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+>>>>>>> master
 
         <activity
-            android:name=".MainMapActivity"
-            android:label="@string/title_activity_main_map" />
-        <activity android:name=".MainTemp">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".buildingDetail_info" />
         <activity android:name=".buildingDetail_events" />
         <activity android:name=".buildingDetail_dining"></activity>
+=======
+        <activity
+            android:name=".BuildingsTestActivity"
+            android:label="@string/title_activity_buildings_test"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.vi_tu.gtinteractive.MainActivity" />
+        </activity>
+        <activity
+            android:name=".DiningsTestActivity"
+            android:label="@string/title_activity_dinings_test"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.vi_tu.gtinteractive.MainActivity" />
+        </activity>
+        <activity
+            android:name=".EventsTestActivity"
+            android:label="@string/title_activity_events_test"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.vi_tu.gtinteractive.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MapActivity"
+            android:label="@string/title_activity_map" />
+        <activity android:name=".BuildingDetailsActivity" />
+        <activity android:name=".BuildingSearchActivity" />
+        <activity android:name=".SearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <provider
+            android:name=".temp.SuggestionProvider"
+            android:authorities="com.example.SuggestionProvider2" />
+
+>>>>>>> master
     </application>
 
 </manifest>

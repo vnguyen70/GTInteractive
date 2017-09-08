@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD:GTInteractive/app/src/main/res/layout/activity_building_detail_info.xml
     tools:context="com.example.vi_tu.gtinteractive.buildingDetail_info">
+=======
+    tools:context="com.example.vi_tu.gtinteractive.BuildingDetailsActivity">
+>>>>>>> master:GTInteractive/app/src/main/res/layout/activity_building_detail.xml
 
     <ImageView
         android:id="@+id/imageView"
