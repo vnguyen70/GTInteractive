@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     Button buildingsTestActivityButton;
     Button eventsTestActivityButton;
     Button diningsTestActivityButton;
+    Button printerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         buildingsTestActivityButton = (Button) findViewById(R.id.buildingsTestActivityButton);
         eventsTestActivityButton = (Button) findViewById(R.id.eventsTestActivityButton);
         diningsTestActivityButton = (Button) findViewById(R.id.diningsTestActivityButton);
+        printerButton = (Button) findViewById(R.id.printerButton);
 
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent internalBuildingActivityIntent = new Intent(MainActivity.this, InternalBuildingActivity.class);
                 startActivity(internalBuildingActivityIntent);
+            }
+        });
+
+        printerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent printerIntent = new Intent(MainActivity.this, PrinterActivity.class);
+                startActivity(printerIntent);
             }
         });
     }

@@ -69,6 +69,7 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
+        <activity android:name=".PrinterActivity" />
         <activity android:name=".BuildingDetailsActivity" />
         <activity android:name=".InternalBuildingActivity" />
         <activity android:name=".BuildingSearchActivity" />
