@@ -13,12 +13,12 @@ import java.util.List;
 
 public class BasePersistence<T> {
 
-    protected SQLiteDatabase db;
-    protected String tableName;
-    protected String idColumnName;
-    protected String orderBy;
+    SQLiteDatabase db;
+    String tableName;
+    String idColumnName;
+    String orderBy;
 
-    public BasePersistence(SQLiteDatabase db, String tableName, String idColumnName, String orderBy) {
+    BasePersistence(SQLiteDatabase db, String tableName, String idColumnName, String orderBy) {
         this.db = db;
         this.tableName = tableName;
         this.idColumnName = idColumnName;
@@ -67,7 +67,7 @@ public class BasePersistence<T> {
 
     /******** Helper Functions ********************************************************************/
 
-    protected T findOne(String selection) {
+    T findOne(String selection) {
         Cursor c = db.query(
                 tableName,
                 null,
@@ -86,7 +86,7 @@ public class BasePersistence<T> {
         return t;
     }
 
-    protected List<T> findMany(String selection) {
+    List<T> findMany(String selection) {
         Cursor c = db.query(
                 tableName,
                 null,
