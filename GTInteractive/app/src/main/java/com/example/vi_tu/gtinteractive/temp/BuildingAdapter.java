@@ -1,4 +1,4 @@
-package com.example.vi_tu.gtinteractive;
+package com.example.vi_tu.gtinteractive.temp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.vi_tu.gtinteractive.R;
 
 /**
  * Created by Rayner on 8/31/17.

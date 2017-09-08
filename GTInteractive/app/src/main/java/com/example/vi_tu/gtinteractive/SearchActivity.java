@@ -17,6 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.vi_tu.gtinteractive.temp.BuildingMessage;
+import com.example.vi_tu.gtinteractive.temp.SQLiteDBHelper;
+import com.example.vi_tu.gtinteractive.temp.ServerCallback;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -36,7 +39,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
 
         myDb = new SQLiteDBHelper(this);
         if (myDb.getSize() == 0) {

@@ -1,10 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.vi_tu.gtinteractive.BuildingDetailsActivity">
+    tools:context="com.example.vi_tu.gtinteractive.DiningsTestActivity">
+
+    <item
+        android:id="@+id/action_reload"
+        android:title="@string/action_reload"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_display"
+        android:title="@string/action_display"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
 </menu>

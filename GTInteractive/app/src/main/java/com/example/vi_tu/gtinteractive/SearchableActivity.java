@@ -9,6 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.vi_tu.gtinteractive.temp.BuildingAdapter;
+import com.example.vi_tu.gtinteractive.temp.SQLiteDBHelper;
+import com.example.vi_tu.gtinteractive.temp.SuggestionProvider;
+
 import java.util.List;
 
 /**
