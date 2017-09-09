@@ -38,3 +38,6 @@ TODO: control search suggestions: https://developer.android.com/guide/topics/sea
 
 TODO: cleanup:
 - Remove unnecessary member variables from classes. The only variables that should be member variables are those that NEED to be shared across methods. An example would be SQLiteDatabase db, which only needs to be accessed in onCreate.
+
+
+TODO: null check everywhere, in case database has zero objects

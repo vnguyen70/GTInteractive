@@ -26,6 +26,7 @@ import java.util.List;
 
 import static android.R.drawable.btn_default;
 import static com.example.vi_tu.gtinteractive.R.color.colorAccent;
+import static com.example.vi_tu.gtinteractive.utilities.NetworkUtils.updateDiningStatus;
 
 public class BuildingDetailActivity extends AppCompatActivity {
 
@@ -75,6 +76,9 @@ public class BuildingDetailActivity extends AppCompatActivity {
             buildingId = "166"; // CULC by default TODO
             b = buildingsDB.findByBuildingId(buildingId);
         }
+
+        updateDiningStatus(diningsDB, getApplicationContext()); // TODO: only update dinings associated with building?
+
 //        dList = diningsDB.findByBuildingId(buildingId); // TODO: buildingID is not consistent between buildings API and dining API gg...
 //        eList = eventsDB.findByBuildingId(buildingId); // TODO: buildingID is not consistent between buildings API and dining API gg...
         dList = diningsDB.getAll();

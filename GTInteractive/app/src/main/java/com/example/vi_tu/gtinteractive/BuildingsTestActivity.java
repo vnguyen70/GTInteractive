@@ -12,8 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
@@ -31,7 +29,6 @@ public class BuildingsTestActivity extends AppCompatActivity {
     private BuildingPersistence buildingsDB;
 
     public static final String REQUEST_TAG = "BuildingsTestActivity";
-    private RequestQueue queue;
 
     private static final long BUILDINGS_CACHE_DURATION_MS = 86400000; // number of milliseconds in 1 day
 
@@ -49,15 +46,13 @@ public class BuildingsTestActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
 
-        queue = Volley.newRequestQueue(this);
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         long nowMS = DateTime.now().getMillis();
         long buildingsCacheExpiredMS = sharedPreferences.getLong("buildingsCacheExpiredMS", 0);
 
         if (nowMS >= buildingsCacheExpiredMS) {
-            loadBuildingsFromAPI(buildingsDB, queue);
+            loadBuildingsFromAPI(buildingsDB, getApplicationContext());
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("buildingsCacheExpiredMS", nowMS + BUILDINGS_CACHE_DURATION_MS);
             editor.apply();
@@ -85,7 +80,7 @@ public class BuildingsTestActivity extends AppCompatActivity {
                 return true;
             case R.id.action_reload:
                 tvBuildingsTest.setText("");
-                loadBuildingsFromAPI(buildingsDB, queue);
+                loadBuildingsFromAPI(buildingsDB, getApplicationContext());
                 return true;
             case R.id.action_clear:
                 buildingsDB.deleteAll();

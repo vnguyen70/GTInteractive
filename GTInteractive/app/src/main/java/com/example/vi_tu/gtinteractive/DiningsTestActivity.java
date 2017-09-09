@@ -12,8 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
@@ -31,7 +29,6 @@ public class DiningsTestActivity extends AppCompatActivity {
     private DiningPersistence diningsDB;
 
     public static final String REQUEST_TAG = "DiningsTestActivity";
-    private RequestQueue queue;
 
     private static final long DININGS_CACHE_DURATION_MS = 86400000; // number of milliseconds in 1 day
 
@@ -49,15 +46,13 @@ public class DiningsTestActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         diningsDB = new DiningPersistence(db);
 
-        queue = Volley.newRequestQueue(this);
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         long nowMS = DateTime.now().getMillis();
         long diningsCacheExpiredMS = sharedPreferences.getLong("diningsCacheExpiredMS", 0);
 
         if (nowMS >= diningsCacheExpiredMS) {
-            loadDiningsFromAPI(diningsDB, queue);
+            loadDiningsFromAPI(diningsDB, getApplicationContext());
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("diningsCacheExpiredMS", nowMS + DININGS_CACHE_DURATION_MS);
             editor.apply();
@@ -85,7 +80,7 @@ public class DiningsTestActivity extends AppCompatActivity {
                 return true;
             case R.id.action_reload:
                 tvDiningsTest.setText("");
-                loadDiningsFromAPI(diningsDB, queue);
+                loadDiningsFromAPI(diningsDB, getApplicationContext());
                 return true;
             case R.id.action_clear:
                 diningsDB.deleteAll();

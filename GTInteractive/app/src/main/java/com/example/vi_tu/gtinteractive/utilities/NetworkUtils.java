@@ -1,10 +1,10 @@
 package com.example.vi_tu.gtinteractive.utilities;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -34,7 +34,7 @@ public class NetworkUtils {
 
     // TODO: upon any failure, set sharedPreferences so that database is reloaded next time activity starts
 
-    public static void loadBuildingsFromAPI(final BuildingPersistence buildingsDB, final RequestQueue queue) {
+    public static void loadBuildingsFromAPI(final BuildingPersistence buildingsDB, Context context) {
         buildingsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadBuildingsFromAPI()...");
         String buildingsURL = "https://m.gatech.edu/api/gtplaces/buildings";
@@ -54,32 +54,10 @@ public class NetworkUtils {
                     }
                 });
 //        buildingsRequest.setTag(REQUEST_TAG);
-        queue.add(buildingsRequest);
+        RequestQueueSingleton.getRequestQueue(context).add(buildingsRequest);
     }
 
-    public static void loadEventsFromRSSFeed(final EventPersistence eventsDB, final BuildingPersistence buildingsDB, final RequestQueue queue) {
-        eventsDB.deleteAll();
-        Log.d("NETWORK_TEST", "loadEventsFromRSSFeed()...");
-        String eventsURL = "http://www.calendar.gatech.edu/feeds/events.xml";
-        final StringRequest eventsRequest = new StringRequest(Request.Method.GET, eventsURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String r) {
-                        Log.d("NETWORK_TEST", "successful response from events RSS feed");
-                        new ProcessEventsResponseTask(eventsDB, buildingsDB).execute(r);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("NETWORK_TEST", "failed response from events RSS feed");
-                        // TODO: display Toast indicating error loading events
-                    }
-                });
-//        eventsRequest.setTag(REQUEST_TAG);
-        queue.add(eventsRequest);
-    }
-
-    public static void loadDiningsFromAPI(final DiningPersistence diningsDB, final RequestQueue queue) {
+    public static void loadDiningsFromAPI(final DiningPersistence diningsDB, Context context) {
         diningsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadDiningsFromAPI()...");
         String diningsURL = "http://diningdata.itg.gatech.edu:80/api/DiningLocations";
@@ -99,7 +77,50 @@ public class NetworkUtils {
             }
         });
 //        diningsRequest.setTag(REQUEST_TAG);
-        queue.add(diningsRequest);
+        RequestQueueSingleton.getRequestQueue(context).add(diningsRequest);
+    }
+
+    public static void updateDiningStatus(final DiningPersistence diningsDB, Context context) {
+        Log.d("NETWORK_TEST", "updateDiningStatus()...");
+        String diningURL = "http://diningdata.itg.gatech.edu:80/api/DiningLocations?type=dynamic";
+        final JsonArrayRequest diningsRequest = new JsonArrayRequest(Request.Method.GET, diningURL, new JSONObject(),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray r) {
+                        Log.d("NETWORK_TEST", "successful response from Dinings API");
+                        new UpdateDiningStatusTask(diningsDB).execute(r);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("NETWORK_TEST", "failed response from Dinings API");
+                // TODO: display Toast indicating error loading dining
+            }
+        });
+//        diningsRequest.setTag(REQUEST_TAG);
+        RequestQueueSingleton.getRequestQueue(context).add(diningsRequest);
+    }
+
+    public static void loadEventsFromRSSFeed(final EventPersistence eventsDB, final BuildingPersistence buildingsDB, Context context) {
+        eventsDB.deleteAll();
+        Log.d("NETWORK_TEST", "loadEventsFromRSSFeed()...");
+        String eventsURL = "http://www.calendar.gatech.edu/feeds/events.xml";
+        final StringRequest eventsRequest = new StringRequest(Request.Method.GET, eventsURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String r) {
+                        Log.d("NETWORK_TEST", "successful response from events RSS feed");
+                        new ProcessEventsResponseTask(eventsDB, buildingsDB).execute(r);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("NETWORK_TEST", "failed response from events RSS feed");
+                // TODO: display Toast indicating error loading events
+            }
+        });
+//        eventsRequest.setTag(REQUEST_TAG);
+        RequestQueueSingleton.getRequestQueue(context).add(eventsRequest);
     }
 
     private static class ProcessBuildingsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
@@ -145,6 +166,151 @@ public class NetworkUtils {
         protected void onPostExecute(Boolean wasSuccessful) {
             // TODO: display Toast indicating success / failure
         }
+    }
+
+    private static class ProcessDiningsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
+
+        private DiningPersistence diningsDB;
+
+        ProcessDiningsResponseTask(DiningPersistence diningsDB) {
+            this.diningsDB = diningsDB;
+        }
+
+        @Override
+        protected Boolean doInBackground(JSONArray... jsonArrays) {
+            JSONArray r = jsonArrays[0];
+            List<Dining> dList = new ArrayList<>();
+            try {
+                for (int i = 0; i < r.length(); i++) {
+                    JSONObject o = r.getJSONObject(i);
+
+                    // tags
+                    List<Dining.Tag> tags = new ArrayList<>();
+                    JSONArray tagsArray = o.optJSONArray("Tags");
+                    for (int j = 0; j < tagsArray.length(); j++) {
+                        JSONObject tagObject = tagsArray.getJSONObject(j);
+                        Dining.Tag t = Dining.Tag.builder()
+                                .tagId(tagObject.optString("TagID"))
+                                .name(tagObject.optString("Name"))
+                                .helpText(tagObject.optString("HelpText"))
+                                .build();
+                        tags.add(t);
+                    }
+
+                    // open and close times
+                    LocalTime[] openTimes= new LocalTime[Dining.DAYS_PER_WEEK];
+                    LocalTime[] closeTimes= new LocalTime[Dining.DAYS_PER_WEEK];
+                    JSONArray timesArray = o.optJSONArray("HoursOfOperations");
+                    if (timesArray.length() > 7) {
+                        // TODO: this shouldn't be possible - check to make sure
+                    }
+                    for (int j = 0; j < timesArray.length(); j++) {
+                        JSONObject timesObject = timesArray.getJSONObject(j);
+                        JSONObject openTimeObject = timesObject.optJSONObject("Open");
+                        JSONObject closeTimeObject = timesObject.optJSONObject("Close");
+                        openTimes[openTimeObject.optInt("Day")] = DateTime.parse(openTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
+                        closeTimes[closeTimeObject.optInt("Day")] = DateTime.parse(closeTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
+                    }
+
+                    // exceptions
+                    List<Dining.Exception> exceptions = new ArrayList<>();
+                    JSONArray exceptionsArray = o.optJSONArray("Exceptions");
+                    for (int j = 0; j < exceptionsArray.length(); j++) {
+                        JSONObject exceptionObject = exceptionsArray.getJSONObject(j).optJSONObject("Exception");
+
+                        LocalTime[] exceptionOpenTimes= new LocalTime[Dining.DAYS_PER_WEEK];
+                        LocalTime[] exceptionCloseTimes= new LocalTime[Dining.DAYS_PER_WEEK];
+                        JSONArray exceptionTimesArray = exceptionObject.optJSONArray("HoursOfExceptions");
+                        if (exceptionTimesArray.length() > 7) {
+                            // TODO: this shouldn't be possible - check to make sure
+                        }
+                        for (int k = 0; k < exceptionTimesArray.length(); k++) {
+                            JSONObject timesObject = exceptionTimesArray.getJSONObject(k);
+                            JSONObject openTimeObject = timesObject.optJSONObject("Open");
+                            JSONObject closeTimeObject = timesObject.optJSONObject("Close");
+                            exceptionOpenTimes[openTimeObject.optInt("Day")] = DateTime.parse(openTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
+                            exceptionCloseTimes[closeTimeObject.optInt("Day")] = DateTime.parse(closeTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
+                        }
+
+                        Dining.Exception e = Dining.Exception.builder()
+                                .openTimes(exceptionOpenTimes)
+                                .closeTimes(exceptionCloseTimes)
+                                .startDateTime(DateTime.parse(exceptionObject.optString("StartDateTime"))) // TODO: null check?
+                                .endDateTime(DateTime.parse(exceptionObject.optString("EndDateTime"))) // TODO: null check?
+                                .build();
+                        exceptions.add(e);
+                    }
+
+                    // build Dining object
+                    Dining d = Dining.builder()
+                            .diningId(o.optString("ID"))
+                            .buildingId(Integer.toString(o.optJSONObject("Building").optInt("BuildingID")))
+                            .latitude(o.has("Latitude") ? Double.parseDouble(o.getString("Latitude")) : null)
+                            .longitude(o.has("Longitude") ? Double.parseDouble(o.getString("Longitude")) : null)
+                            .name(o.optString("Name"))
+                            .description(o.optString("Description"))
+                            .locationDetails(o.optString("LocationDetails"))
+                            .logoURL(o.optString("LogoURL"))
+                            .menuLinkURL(o.optString("MenuLinkURL"))
+                            .promotionMessage(o.optString("PromotionMessage"))
+                            .promotionStartDate(o.optString("PromotionStartDate") != "null" ? DateTime.parse(o.optString("PromotionStartDate")) : null)
+                            .promotionEndDate(o.optString("PromotionEndDate") != "null" ? DateTime.parse(o.optString("PromotionEndDate")) : null)
+                            .openTimes(openTimes)
+                            .closeTimes(closeTimes)
+                            .exceptions(exceptions)
+                            .tags(tags)
+                            .isOpen(o.optBoolean("isOpen"))
+                            .upcomingStatusChange(o.optString("upcomingStatusChange") != "null" ? DateTime.parse(o.optString("upcomingStatusChange")) : null)
+                            .build();
+                    dList.add(d);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return diningsDB.createMany(dList);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean wasSuccessful) {
+            // TODO: display Toast indicating success / failure
+        }
+    }
+
+    private static class UpdateDiningStatusTask extends AsyncTask<JSONArray, Void, Boolean> {
+
+        private DiningPersistence diningsDB;
+
+        UpdateDiningStatusTask(DiningPersistence diningsDB) {
+            this.diningsDB = diningsDB;
+        }
+
+        @Override
+        protected Boolean doInBackground(JSONArray... jsonArrays) {
+            JSONArray r = jsonArrays[0];
+            try {
+                for (int i = 0; i < r.length(); i++) {
+                    JSONObject o = r.getJSONObject(i);
+                    String id = o.optString("ID");
+                    Dining d = diningsDB.get(id);
+                    if (d != null) {
+                        d.setIsOpen(o.optBoolean("isOpen"));
+                        d.setUpcomingStatusChange(!o.optString("upcomingStatusChange").equals("null") ? DateTime.parse(o.optString("upcomingStatusChange")) : null);
+                    }
+                    diningsDB.update(d, id);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean wasSuccessful) {
+            // TODO: update UI with new status
+        }
+
     }
 
     private static class ProcessEventsResponseTask extends AsyncTask<String, Void, Boolean> {
@@ -272,112 +438,4 @@ public class NetworkUtils {
         }
     }
 
-    private static class ProcessDiningsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
-
-        private DiningPersistence diningsDB;
-
-        ProcessDiningsResponseTask(DiningPersistence diningsDB) {
-            this.diningsDB = diningsDB;
-        }
-
-        @Override
-        protected Boolean doInBackground(JSONArray... jsonArrays) {
-            JSONArray r = jsonArrays[0];
-            List<Dining> dList = new ArrayList<>();
-            try {
-                for (int i = 0; i < r.length(); i++) {
-                    JSONObject o = r.getJSONObject(i);
-
-                    // tags
-                    List<Dining.Tag> tags = new ArrayList<>();
-                    JSONArray tagsArray = o.optJSONArray("Tags");
-                    for (int j = 0; j < tagsArray.length(); j++) {
-                        JSONObject tagObject = tagsArray.getJSONObject(j);
-                        Dining.Tag t = Dining.Tag.builder()
-                                .tagId(tagObject.optString("TagID"))
-                                .name(tagObject.optString("Name"))
-                                .helpText(tagObject.optString("HelpText"))
-                                .build();
-                        tags.add(t);
-                    }
-
-                    // open and close times
-                    LocalTime[] openTimes= new LocalTime[Dining.DAYS_PER_WEEK];
-                    LocalTime[] closeTimes= new LocalTime[Dining.DAYS_PER_WEEK];
-                    JSONArray timesArray = o.optJSONArray("HoursOfOperations");
-                    if (timesArray.length() > 7) {
-                        // TODO: this shouldn't be possible - check to make sure
-                    }
-                    for (int j = 0; j < timesArray.length(); j++) {
-                        JSONObject timesObject = timesArray.getJSONObject(j);
-                        JSONObject openTimeObject = timesObject.optJSONObject("Open");
-                        JSONObject closeTimeObject = timesObject.optJSONObject("Close");
-                        openTimes[openTimeObject.optInt("Day")] = DateTime.parse(openTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                        closeTimes[closeTimeObject.optInt("Day")] = DateTime.parse(closeTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                    }
-
-                    // exceptions
-                    List<Dining.Exception> exceptions = new ArrayList<>();
-                    JSONArray exceptionsArray = o.optJSONArray("Exceptions");
-                    for (int j = 0; j < exceptionsArray.length(); j++) {
-                        JSONObject exceptionObject = exceptionsArray.getJSONObject(j).optJSONObject("Exception");
-
-                        LocalTime[] exceptionOpenTimes= new LocalTime[Dining.DAYS_PER_WEEK];
-                        LocalTime[] exceptionCloseTimes= new LocalTime[Dining.DAYS_PER_WEEK];
-                        JSONArray exceptionTimesArray = exceptionObject.optJSONArray("HoursOfExceptions");
-                        if (exceptionTimesArray.length() > 7) {
-                            // TODO: this shouldn't be possible - check to make sure
-                        }
-                        for (int k = 0; k < exceptionTimesArray.length(); k++) {
-                            JSONObject timesObject = exceptionTimesArray.getJSONObject(k);
-                            JSONObject openTimeObject = timesObject.optJSONObject("Open");
-                            JSONObject closeTimeObject = timesObject.optJSONObject("Close");
-                            exceptionOpenTimes[openTimeObject.optInt("Day")] = DateTime.parse(openTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                            exceptionCloseTimes[closeTimeObject.optInt("Day")] = DateTime.parse(closeTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                        }
-
-                        Dining.Exception e = Dining.Exception.builder()
-                                .openTimes(exceptionOpenTimes)
-                                .closeTimes(exceptionCloseTimes)
-                                .startDateTime(DateTime.parse(exceptionObject.optString("StartDateTime"))) // TODO: null check?
-                                .endDateTime(DateTime.parse(exceptionObject.optString("EndDateTime"))) // TODO: null check?
-                                .build();
-                        exceptions.add(e);
-                    }
-
-                    // build Dining object
-                    Dining d = Dining.builder()
-                            .diningId(o.optString("ID"))
-                            .buildingId(Integer.toString(o.optJSONObject("Building").optInt("BuildingID")))
-                            .latitude(o.has("Latitude") ? Double.parseDouble(o.getString("Latitude")) : null)
-                            .longitude(o.has("Longitude") ? Double.parseDouble(o.getString("Longitude")) : null)
-                            .name(o.optString("Name"))
-                            .description(o.optString("Description"))
-                            .locationDetails(o.optString("LocationDetails"))
-                            .logoURL(o.optString("LogoURL"))
-                            .menuLinkURL(o.optString("MenuLinkURL"))
-                            .promotionMessage(o.optString("PromotionMessage"))
-                            .promotionStartDate(o.optString("PromotionStartDate") != "null" ? DateTime.parse(o.optString("PromotionStartDate")) : null)
-                            .promotionEndDate(o.optString("PromotionEndDate") != "null" ? DateTime.parse(o.optString("PromotionEndDate")) : null)
-                            .openTimes(openTimes)
-                            .closeTimes(closeTimes)
-                            .exceptions(exceptions)
-                            .tags(tags)
-                            .isOpen(o.optBoolean("isOpen"))
-                            .upcomingStatusChange(o.optString("upcomingStatusChange") != "null" ? DateTime.parse(o.optString("upcomingStatusChange")) : null)
-                            .build();
-                    dList.add(d);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return diningsDB.createMany(dList);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean wasSuccessful) {
-            // TODO: display Toast indicating success / failure
-        }
-    }
 }

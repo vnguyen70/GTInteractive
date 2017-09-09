@@ -12,8 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
@@ -33,7 +31,6 @@ public class EventsTestActivity extends AppCompatActivity {
     private BuildingPersistence buildingsDB;
 
     public static final String REQUEST_TAG = "EventsTestActivity";
-    private RequestQueue queue;
 
     private static final long EVENTS_CACHE_DURATION_MS = 86400000; // number of milliseconds in 1 day
 
@@ -52,15 +49,13 @@ public class EventsTestActivity extends AppCompatActivity {
         eventsDB = new EventPersistence(db);
         buildingsDB = new BuildingPersistence(db);
 
-        queue = Volley.newRequestQueue(this);
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         long nowMS = DateTime.now().getMillis();
         long eventsCacheExpiredMS = sharedPreferences.getLong("eventsCacheExpiredMS", 0);
 
         if (nowMS >= eventsCacheExpiredMS) {
-            loadEventsFromRSSFeed(eventsDB, buildingsDB, queue);
+            loadEventsFromRSSFeed(eventsDB, buildingsDB, getApplicationContext());
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("eventsCacheExpiredMS", nowMS + EVENTS_CACHE_DURATION_MS);
             editor.apply();
@@ -88,7 +83,7 @@ public class EventsTestActivity extends AppCompatActivity {
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
-                loadEventsFromRSSFeed(eventsDB, buildingsDB, queue);
+                loadEventsFromRSSFeed(eventsDB, buildingsDB, getApplicationContext());
                 return true;
             case R.id.action_clear:
                 eventsDB.deleteAll();
