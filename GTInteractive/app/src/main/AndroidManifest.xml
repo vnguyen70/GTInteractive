@@ -46,6 +46,9 @@
         <activity android:name=".buildingDetail_info" />
         <activity android:name=".buildingDetail_events" />
         <activity android:name=".buildingDetail_dining"></activity>
+
+        <activity android:name=".mapFilter_dining" />
+        <activity android:name=".mapFilter_parking" />
 <!--=======-->
         <activity
             android:name=".BuildingsTestActivity"

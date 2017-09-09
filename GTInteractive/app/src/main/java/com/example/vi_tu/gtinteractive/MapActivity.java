@@ -1,7 +1,10 @@
 package com.example.vi_tu.gtinteractive;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +16,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    Button diningButton;
+    Button printButton;
+    Button parkingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,34 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        diningButton = (Button) findViewById(R.id.diningButton);
+        printButton = (Button) findViewById(R.id.printButton);
+        parkingButton = (Button) findViewById(R.id.parkingButton);
+
+        diningButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent diningIntent = new Intent(MapActivity.this, mapFilter_dining.class);
+                startActivity(diningIntent);
+            }
+        });
+
+        parkingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent parkIntent = new Intent(MapActivity.this, mapFilter_parking.class);
+                startActivity(parkIntent);
+            }
+        });
+
+        printButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent printingIntent = new Intent(MapActivity.this, PrinterActivity.class);
+                startActivity(printingIntent);
+            }
+        });
     }
 
 
@@ -38,7 +72,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng gatech = new LatLng(33.777433, -84.398636);
-        mMap.addMarker(new MarkerOptions().position(gatech).title("Marker in Georgia Tech"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gatech, (float) 14.6));
     }
 }

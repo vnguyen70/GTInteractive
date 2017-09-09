@@ -1,7 +1,10 @@
 package com.example.vi_tu.gtinteractive;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +16,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class PrinterActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    Button filterButton;
+    Button parkingButton;
+    Button diningButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,34 @@ public class PrinterActivity extends FragmentActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        filterButton = (Button) findViewById(R.id.filterButton);
+        parkingButton = (Button) findViewById(R.id.parkingButton);
+        diningButton = (Button) findViewById(R.id.diningButton);
+
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent clear = new Intent(PrinterActivity.this, MapActivity.class);
+                startActivity(clear);
+            }
+        });
+
+        diningButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent diningIntent = new Intent(PrinterActivity.this, mapFilter_dining.class);
+                startActivity(diningIntent);
+            }
+        });
+
+        parkingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent parkingIntent = new Intent(PrinterActivity.this, mapFilter_parking.class);
+                startActivity(parkingIntent);
+            }
+        });
     }
 
 
