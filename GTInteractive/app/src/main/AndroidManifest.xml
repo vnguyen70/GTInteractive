@@ -93,9 +93,9 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <provider
-            android:name=".temp.SuggestionProvider"
-            android:authorities="com.example.SuggestionProvider2" />
+        <!--<provider-->
+            <!--android:name=".temp.SuggestionProvider"-->
+            <!--android:authorities="com.example.SuggestionProvider2" />-->
 
 <!--&gt;>>>>>> master-->
     </application>

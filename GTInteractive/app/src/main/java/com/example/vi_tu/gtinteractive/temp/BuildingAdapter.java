@@ -1,13 +1,16 @@
 package com.example.vi_tu.gtinteractive.temp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vi_tu.gtinteractive.R;
+import com.example.vi_tu.gtinteractive.buildingDetail_info;
 import com.example.vi_tu.gtinteractive.domain.Building;
 
 import java.util.ArrayList;
@@ -26,13 +29,27 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
         bList = new ArrayList<>();
     }
 
-    public class BuildingAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class BuildingAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mBuildingTextView;
-
+        public String buildingId;
         public BuildingAdapterViewHolder(View view) {
             super(view);
             mBuildingTextView = (TextView) view.findViewById(R.id.tv_building_data);
+            buildingId = "";
+            view.setOnClickListener(this);
+        }
+
+        public void onClick(View view) {
+            Context context = view.getContext();
+            Toast.makeText(view.getContext(), this.buildingId, Toast.LENGTH_LONG).show();
+            Intent buildingDetailIntent = new Intent(context, buildingDetail_info.class);
+            buildingDetailIntent.putExtra("buildingId", buildingId);
+            context.startActivity(buildingDetailIntent);
+        }
+
+        public void setBuildingId(String buildingId) {
+            this.buildingId = buildingId;
         }
     }
 
@@ -48,7 +65,9 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
     @Override
     public void onBindViewHolder(BuildingAdapterViewHolder buildingAdapterViewHolder, int position) {
         String buildingName = bList.get(position).getName();
+        String buildingId = bList.get(position).getBuildingId();
         buildingAdapterViewHolder.mBuildingTextView.setText(buildingName);
+        buildingAdapterViewHolder.setBuildingId(buildingId);
     }
 
     @Override
