@@ -2,11 +2,13 @@ package com.example.vi_tu.gtinteractive;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.domain.Building;
@@ -23,10 +25,12 @@ public class buildingDetail_info extends AppCompatActivity {
     Button infoButton;
     Button diningButton;
 
-    TextView altNamesText;
+    TextView phoneNumberText;
     TextView hoursText;
     TextView addressText;
+    TextView buildingNameText;
 
+    ImageView buildingPicture;
     private SQLiteDatabase db;
     private BuildingPersistence buildingDB;
 
@@ -40,26 +44,33 @@ public class buildingDetail_info extends AppCompatActivity {
         infoButton = (Button) findViewById(R.id.infoButton);
         diningButton = (Button) findViewById(R.id.diningButton);
 
-        altNamesText = (TextView) findViewById(R.id.altNamesText);
+        buildingNameText = (TextView) findViewById(R.id.nameTextView);
+        phoneNumberText = (TextView) findViewById(R.id.phoneNumberText);
         hoursText = (TextView) findViewById(R.id.hoursText);
         addressText = (TextView) findViewById(R.id.addressText);
+
+        buildingPicture = (ImageView) findViewById(R.id.buildingImageView);
 
         // Database instantiation
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         db = dbHelper.getWritableDatabase();
         buildingDB = new BuildingPersistence(db);
 
-        // Currently hardcoded to find Clough (???)
-        Building currBuilding = buildingDB.findByBuildingId("166");
+        // find Building by id from intent
+        Intent intent = getIntent();
+        Building currBuilding = buildingDB.findByBuildingId(intent.getStringExtra("buildingId"));
 
         // Setting elements with proper data
-        String altName = currBuilding.getAltNames();
-        String hours = currBuilding.getTimeOpen() + " - " + currBuilding.getTimeClose();
+        String name = currBuilding.getName();
+//        String altName = currBuilding.getAltNames();
+//        String hours = currBuilding.getTimeOpen().toString("HH:mm") + " - " + currBuilding.getTimeClose().toString();
         String address = currBuilding.getAddress();
-        altNamesText.setText(altName);
-        hoursText.setText(hours);
+        String phoneNumber = currBuilding.getPhoneNum();
+        String buildingPictureLink = currBuilding.getLink();
+        buildingNameText.setText(name);
+        phoneNumberText.setText(phoneNumber);
         addressText.setText(address);
-
+//        buildingPicture.setImageURI(Uri.parse(buildingPictureLink));
         infoButton.setBackgroundColor(getResources().getColor(colorAccent));
 
         eventsButton.setOnClickListener(new View.OnClickListener() {
