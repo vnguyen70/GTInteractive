@@ -32,4 +32,5 @@
     <string name="temp_hours">8:00AM - 8:00PM</string>
     <string name="general_information">General Information</string>
     <string name="address">Address:</string>
+    <string name="action_clear">Clear</string>
 </resources>

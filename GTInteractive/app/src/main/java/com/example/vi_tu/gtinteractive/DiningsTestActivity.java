@@ -81,22 +81,30 @@ public class DiningsTestActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case R.id.action_display:
-                List<Dining> dList = diningsDB.getAll();
-                String results = "";
-                for (Dining d : dList) {
-                    results += d.getDiningId() + " - " + d.getNameTokens() + " - " + d.getBuildingId() + "\n";
-                }
-                tvDiningsTest.setText("" + dList.size() + " dinings found:\n\n" + results);
+                displayResults();
                 return true;
             case R.id.action_reload:
                 tvDiningsTest.setText("");
                 loadDiningsFromAPI(diningsDB, queue);
+                return true;
+            case R.id.action_clear:
+                diningsDB.deleteAll();
+                displayResults();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void displayResults() {
+        List<Dining> dList = diningsDB.getAll();
+        String results = "";
+        for (Dining d : dList) {
+            results += d.getDiningId() + " - " + d.getNameTokens() + " - " + d.getBuildingId() + "\n";
+        }
+        tvDiningsTest.setText("" + dList.size() + " dinings found:\n\n" + results);
     }
 
 }

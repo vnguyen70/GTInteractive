@@ -81,22 +81,30 @@ public class BuildingsTestActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case R.id.action_display:
-                List<Building> bList = buildingsDB.getAll();
-                String results = "";
-                for (Building b : bList) {
-                    results += b.getBuildingId() + " - " + b.getNameTokens() + " - " + b.getAddressTokens() + "\n";
-                }
-                tvBuildingsTest.setText("" + bList.size() + " buildings found:\n\n" + results);
+                displayResults();
                 return true;
             case R.id.action_reload:
                 tvBuildingsTest.setText("");
                 loadBuildingsFromAPI(buildingsDB, queue);
+                return true;
+            case R.id.action_clear:
+                buildingsDB.deleteAll();
+                displayResults();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void displayResults() {
+        List<Building> bList = buildingsDB.getAll();
+        String results = "";
+        for (Building b : bList) {
+            results += b.getBuildingId() + " - " + b.getNameTokens() + " - " + b.getAddressTokens() + "\n";
+        }
+        tvBuildingsTest.setText("" + bList.size() + " buildings found:\n\n" + results);
     }
 
 }

@@ -84,32 +84,40 @@ public class EventsTestActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case R.id.action_display:
-                List<Event> eList = eventsDB.getAll();
-                String results = "";
-                int none = 0;
-                int single = 0;
-                int multiple = 0;
-                for (Event e : eList) {
-                    results += e.getLocation() + "\n-- " + e.getBuildingId() + " --\n\n";
-                    if (e.getBuildingId().equals("NONE")) {
-                        none++;
-                    } else if (e.getBuildingId().startsWith("MANY", 0)) {
-                        multiple++;
-                    } else {
-                        single++;
-                    }
-                }
-                tvEventsTest.setText("" + eList.size() + " events found:\n\nbuildingId matches:\n - none: " + none + "\n - single: " + single + "\n - multiple: " + multiple + "\n\n" + results);
+                displayResults();
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
                 loadEventsFromRSSFeed(eventsDB, buildingsDB, queue);
+                return true;
+            case R.id.action_clear:
+                eventsDB.deleteAll();
+                displayResults();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void displayResults() {
+        List<Event> eList = eventsDB.getAll();
+        String results = "";
+        int none = 0;
+        int single = 0;
+        int multiple = 0;
+        for (Event e : eList) {
+            results += e.getLocation() + "\n-- " + e.getBuildingId() + " --\n\n";
+            if (e.getBuildingId().equals("NONE")) {
+                none++;
+            } else if (e.getBuildingId().startsWith("MANY", 0)) {
+                multiple++;
+            } else {
+                single++;
+            }
+        }
+        tvEventsTest.setText("" + eList.size() + " events found:\n\nbuildingId matches:\n - none: " + none + "\n - single: " + single + "\n - multiple: " + multiple + "\n\n" + results);
     }
 
 }
