@@ -11,15 +11,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by kaliq on 9/4/2017.
- */
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event{
+public class Event {
 
     // From RSS feed: http://www.calendar.gatech.edu/feeds/events.xml
     String title;
@@ -46,4 +42,5 @@ public class Event{
         public static final String COLUMN_PUB_DATE = "pubDate";
         public static final String COLUMN_BUILDING_ID = "buildingId";
     }
+
 }

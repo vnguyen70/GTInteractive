@@ -29,7 +29,6 @@ public class EventsTestActivity extends AppCompatActivity {
 
     private TextView tvEventsTest;
 
-    private SQLiteDatabase db;
     private EventPersistence eventsDB;
     private BuildingPersistence buildingsDB;
 
@@ -49,7 +48,7 @@ public class EventsTestActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
-        db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
         buildingsDB = new BuildingPersistence(db);
 

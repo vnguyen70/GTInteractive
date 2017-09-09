@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
     Button mapButton;
     Button buildingDetailButton;
     Button internalMapButton;
@@ -20,14 +21,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        buildingsTestActivityButton = (Button) findViewById(R.id.buildingsTestActivityButton);
+        diningsTestActivityButton = (Button) findViewById(R.id.diningsTestActivityButton);
+        eventsTestActivityButton = (Button) findViewById(R.id.eventsTestActivityButton);
         mapButton = (Button) findViewById(R.id.mapButton);
         buildingDetailButton = (Button) findViewById(R.id.buildingDetailButton);
         internalMapButton = (Button) findViewById(R.id.internalMapButton);
         searchButton = (Button) findViewById(R.id.searchButton);
-        buildingsTestActivityButton = (Button) findViewById(R.id.buildingsTestActivityButton);
-        eventsTestActivityButton = (Button) findViewById(R.id.eventsTestActivityButton);
-        diningsTestActivityButton = (Button) findViewById(R.id.diningsTestActivityButton);
 
+        buildingsTestActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent buildingsTestActivityIntent = new Intent(MainActivity.this, BuildingsTestActivity.class);
+                startActivity(buildingsTestActivityIntent);
+            }
+        });
+        diningsTestActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent diningsTestActivityIntent = new Intent(MainActivity.this, DiningsTestActivity.class);
+                startActivity(diningsTestActivityIntent);
+            }
+        });
+        eventsTestActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent eventsTestActivityIntent = new Intent(MainActivity.this, EventsTestActivity.class);
+                startActivity(eventsTestActivityIntent);
+            }
+        });
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,8 +60,15 @@ public class MainActivity extends AppCompatActivity {
         buildingDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent buildingDetailIntent = new Intent(MainActivity.this, buildingDetail_info.class);
+                Intent buildingDetailIntent = new Intent(MainActivity.this, BuildingDetailActivity.class);
                 startActivity(buildingDetailIntent);
+            }
+        });
+        internalMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent internalMapIntent = new Intent(MainActivity.this, InternalMapActivity.class);
+                startActivity(internalMapIntent);
             }
         });
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -49,36 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(searchIntent);
             }
         });
-        buildingsTestActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent buildingsTestActivityIntent = new Intent(MainActivity.this, BuildingsTestActivity.class);
-                startActivity(buildingsTestActivityIntent);
-            }
-        });
-        eventsTestActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent eventsTestActivityIntent = new Intent(MainActivity.this, EventsTestActivity.class);
-                startActivity(eventsTestActivityIntent);
-            }
-        });
-        diningsTestActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent diningsTestActivityIntent = new Intent(MainActivity.this, DiningsTestActivity.class);
-                startActivity(diningsTestActivityIntent);
-            }
-        });
 
-        internalMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent internalBuildingActivityIntent = new Intent(MainActivity.this, InternalBuildingActivity.class);
-                startActivity(internalBuildingActivityIntent);
-            }
-        });
     }
-
 
 }

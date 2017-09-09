@@ -21,4 +21,15 @@
         "Display:\n\n"
         "Retrieves cached objects from local database and displays them.\n\n"
     </string>
+    <string name="clough_undergraduate_learning_commons">Clough Undergraduate Learning Commons</string>
+    <string name="info_button_text">Info</string>
+    <string name="dining_button_text">Dining</string>
+    <string name="events_button_text">Events</string>
+    <string name="view_internal_map">View Internal Map</string>
+    <string name="hours_of_operation">Hours of Operation:</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="alt_names">Alt Names:</string>
+    <string name="temp_hours">8:00AM - 8:00PM</string>
+    <string name="general_information">General Information</string>
+    <string name="address">Address:</string>
 </resources>

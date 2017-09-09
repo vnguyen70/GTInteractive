@@ -28,7 +28,6 @@ public class DiningsTestActivity extends AppCompatActivity {
 
     private TextView tvDiningsTest;
 
-    private SQLiteDatabase db;
     private DiningPersistence diningsDB;
 
     public static final String REQUEST_TAG = "DiningsTestActivity";
@@ -47,7 +46,7 @@ public class DiningsTestActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
-        db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         diningsDB = new DiningPersistence(db);
 
         queue = Volley.newRequestQueue(this);
@@ -85,7 +84,7 @@ public class DiningsTestActivity extends AppCompatActivity {
                 List<Dining> dList = diningsDB.getAll();
                 String results = "";
                 for (Dining d : dList) {
-                    results += d.getDiningId() + " - " + d.getNameTokens() + "\n";
+                    results += d.getDiningId() + " - " + d.getNameTokens() + " - " + d.getBuildingId() + "\n";
                 }
                 tvDiningsTest.setText("" + dList.size() + " dinings found:\n\n" + results);
                 return true;

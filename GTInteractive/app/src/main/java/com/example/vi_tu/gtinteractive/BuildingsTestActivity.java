@@ -28,7 +28,6 @@ public class BuildingsTestActivity extends AppCompatActivity {
 
     private TextView tvBuildingsTest;
 
-    private SQLiteDatabase db;
     private BuildingPersistence buildingsDB;
 
     public static final String REQUEST_TAG = "BuildingsTestActivity";
@@ -47,7 +46,7 @@ public class BuildingsTestActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
-        db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
 
         queue = Volley.newRequestQueue(this);

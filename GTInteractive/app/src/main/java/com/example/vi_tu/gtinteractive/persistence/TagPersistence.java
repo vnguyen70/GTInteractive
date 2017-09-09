@@ -10,10 +10,6 @@ import java.util.List;
 
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenize;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 public class TagPersistence extends BasePersistence<Dining.Tag> {
 
     public TagPersistence(SQLiteDatabase db) {

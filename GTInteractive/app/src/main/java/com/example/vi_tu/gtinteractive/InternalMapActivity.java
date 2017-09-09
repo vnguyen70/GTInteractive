@@ -1,13 +1,9 @@
 package com.example.vi_tu.gtinteractive;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by Jonathan on 9/7/2017.
- */
-
-public class InternalBuildingActivity extends AppCompatActivity {
+public class InternalMapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

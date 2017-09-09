@@ -12,11 +12,7 @@ import java.util.List;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.cursorIndexToDateTime;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.dateTimeToMillis;
 
-/**
- * Created by kaliq on 9/5/2017.
- */
-
-public class EventPersistence extends BasePersistence<Event>{
+public class EventPersistence extends BasePersistence<Event> {
 
     private ListSerializer<String> serializer;
 
@@ -29,8 +25,7 @@ public class EventPersistence extends BasePersistence<Event>{
     /******** Search Functions ********************************************************************/
 
     public List<Event> findByBuildingId(String buildingId) {
-        String selection = Event.Contract.COLUMN_BUILDING_ID + " = " + buildingId;
-        return findMany(selection);
+        return findMany(Event.Contract.COLUMN_BUILDING_ID + " = " + buildingId);
     }
 
     /******** Helper Functions ********************************************************************/

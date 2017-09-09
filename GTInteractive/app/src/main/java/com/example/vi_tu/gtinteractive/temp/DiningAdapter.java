@@ -1,6 +1,5 @@
 package com.example.vi_tu.gtinteractive.temp;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,78 +8,56 @@ import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.R;
 import com.example.vi_tu.gtinteractive.domain.Dining;
-import com.example.vi_tu.gtinteractive.domain.Event;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by vi_tu on 9/5/2017.
- */
+public class DiningAdapter extends RecyclerView.Adapter<DiningAdapter.DiningViewHolder> {
 
-public class DiningAdapter extends RecyclerView.Adapter<DiningAdapter.ViewHolder> {
-    private List<Dining> placeData;
+    private List<Dining> dList;
 
     public DiningAdapter() {
-        placeData = new ArrayList<>();
+        dList = new ArrayList<>();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // Instantiate event_card elements
-        public final TextView nameText;
-        public final TextView operationHrsText;
-        public final TextView descriptionText;
-
-
-        public ViewHolder(View v) {
-            super(v);
-            nameText = (TextView) v.findViewById(R.id.nameText);
-            operationHrsText = (TextView) v.findViewById(R.id.operationHrsText);
-            descriptionText = (TextView) v.findViewById(R.id.descriptionText);
-
-        }
-    }
-
-
-
-    @Override
-    public DiningAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        int layoutIDEventCard = R.layout.dining_card;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-
-        View view = inflater.inflate(layoutIDEventCard, parent, shouldAttachToParentImmediately);
-        return new ViewHolder(view);
+    public DiningAdapter(List<Dining> dList) {
+        this.dList = dList;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-//        holder.mTextView.setText(placeData[position]);
-        String name = placeData.get(position).getName();
-        String description = placeData.get(position).getDescription();
-        String operationHrs = placeData.get(position).getOpenTimes() + " - "
-                + placeData.get(position).getCloseTimes();
+    public DiningViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        return new DiningViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.dining_card, viewGroup, false));
+    }
 
-        // Sets titleText TextView to building's title
-        holder.nameText.setText(name);
-        // Sets description text
-        holder.descriptionText.setText(description);
-
-        /* Operation hours currently show up as something weird so I'm hardcoding until we can
-        figure it out */
-//        holder.operationHrsText.setText(operationHrs);
-        holder.operationHrsText.setText("8:00 AM - 9:00 PM");
-
+    @Override
+    public void onBindViewHolder(DiningViewHolder holder, int position) {
+        Dining d = dList.get(position);
+        holder.nameText.setText(d.getName());
+        holder.descriptionText.setText(d.getDescription());
+        holder.operationHrsText.setText("8:00 AM - 9:00 PM"); // TODO
     }
 
     @Override
     public int getItemCount() {
-        return placeData.size();
+        return dList.size();
     }
 
-    public void setData(List<Dining> data) {
-        placeData = data;
+    public void setData(List<Dining> dList) {
+        this.dList = dList;
         notifyDataSetChanged();
+    }
+
+    public class DiningViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView nameText;
+        public TextView operationHrsText;
+        public TextView descriptionText;
+
+        public DiningViewHolder(View view) {
+            super(view);
+            nameText = view.findViewById(R.id.nameText);
+            operationHrsText = view.findViewById(R.id.operationHrsText);
+            descriptionText = view.findViewById(R.id.descriptionText);
+        }
     }
 }

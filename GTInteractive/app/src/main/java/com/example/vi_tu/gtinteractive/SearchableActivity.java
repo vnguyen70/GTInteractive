@@ -6,53 +6,33 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.temp.BuildingAdapter;
 import com.example.vi_tu.gtinteractive.temp.SuggestionProvider;
 
 import java.util.List;
 
-/**
- * Created by Rayner on 8/31/17.
- */
-
 public class SearchableActivity extends Activity {
 
-    private RecyclerView mRecyclerView;
-    private BuildingAdapter mBuildingAdapter;
-
-    private SQLiteDatabase db;
     private BuildingPersistence buildingsDB;
-
-    private SearchRecentSuggestions suggestions;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_list);
-        // get access to database through BuildingPersistence object
         PersistenceHelper dbHelper = new PersistenceHelper(this);
-        db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
-
-
-        // search suggestions
-        suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
-        // search intent
+        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
         Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) { // TODO: auto-search as the user types (whenever a new character is entered)
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            List<Building> queryResults = buildingsDB.findByName(query); // TODO: allow the user to choose whether to search by name, address, or buildingId
+            List<Building> queryResults = buildingsDB.findByName(query);
             if (queryResults.size() == 1) {
-                Intent buildingDetailIntent = new Intent(SearchableActivity.this, buildingDetail_info.class);
+                Intent buildingDetailIntent = new Intent(SearchableActivity.this, BuildingDetailActivity.class);
                 buildingDetailIntent.putExtra("buildingId", queryResults.get(0).getBuildingId());
                 startActivity(buildingDetailIntent);
             }

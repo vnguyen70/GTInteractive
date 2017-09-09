@@ -30,10 +30,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 public class NetworkUtils {
 
     // TODO: upon any failure, set sharedPreferences so that database is reloaded next time activity starts
@@ -352,7 +348,9 @@ public class NetworkUtils {
                     // build Dining object
                     Dining d = Dining.builder()
                             .diningId(o.optString("ID"))
-                            .buildingId(o.optJSONObject("Building").optInt("BuildingID"))
+                            .buildingId(Integer.toString(o.optJSONObject("Building").optInt("BuildingID")))
+                            .latitude(o.has("Latitude") ? Double.parseDouble(o.getString("Latitude")) : null)
+                            .longitude(o.has("Longitude") ? Double.parseDouble(o.getString("Longitude")) : null)
                             .name(o.optString("Name"))
                             .description(o.optString("Description"))
                             .locationDetails(o.optString("LocationDetails"))

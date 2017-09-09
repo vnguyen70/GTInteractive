@@ -15,16 +15,11 @@ import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.cursorI
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.dateTimeToMillis;
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenize;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
-public class DiningPersistence extends BasePersistence<Dining>{
+public class DiningPersistence extends BasePersistence<Dining> {
 
     private ListSerializer<LocalTime> timeSerializer;
     private ListSerializer<Dining.Exception> exceptionSerializer;
     private ListSerializer<Dining.Tag> tagSerializer;
-
 
     public DiningPersistence(SQLiteDatabase db) {
         super(db, Dining.Contract.TABLE_NAME, Dining.Contract._ID,
@@ -73,6 +68,8 @@ public class DiningPersistence extends BasePersistence<Dining>{
         ContentValues cv = new ContentValues();
         cv.put(Dining.Contract.COLUMN_DINING_ID, d.getDiningId());
         cv.put(Dining.Contract.COLUMN_BUILDING_ID, d.getBuildingId());
+        cv.put(Dining.Contract.COLUMN_LATITUDE, d.getLatitude());
+        cv.put(Dining.Contract.COLUMN_LONGITUDE, d.getLongitude());
         cv.put(Dining.Contract.COLUMN_NAME, d.getName());
         cv.put(Dining.Contract.COLUMN_DESCRIPTION, d.getDescription());
         cv.put(Dining.Contract.COLUMN_LOCATION_DETAILS, d.getLocationDetails());
@@ -96,7 +93,9 @@ public class DiningPersistence extends BasePersistence<Dining>{
     protected Dining toDomain(Cursor c) {
         return Dining.builder()
                 .diningId(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_DINING_ID)))
-                .buildingId(c.getInt(c.getColumnIndex(Dining.Contract.COLUMN_BUILDING_ID)))
+                .buildingId(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_BUILDING_ID)))
+                .latitude(c.getDouble(c.getColumnIndex(Dining.Contract.COLUMN_LATITUDE)))
+                .longitude(c.getDouble(c.getColumnIndex(Dining.Contract.COLUMN_LONGITUDE)))
                 .name(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_NAME)))
                 .description(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_DESCRIPTION)))
                 .locationDetails(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_LOCATION_DETAILS)))
@@ -104,7 +103,7 @@ public class DiningPersistence extends BasePersistence<Dining>{
                 .menuLinkURL(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_MENU_LINK_URL)))
                 .promotionMessage(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_PROMOTION_MESSAGE)))
                 .promotionStartDate(cursorIndexToDateTime(c, c.getColumnIndex(Dining.Contract.COLUMN_PROMOTION_START_DATE)))
-                .promotionEndDate(cursorIndexToDateTime(c,c.getColumnIndex(Dining.Contract.COLUMN_PROMOTION_END_DATE) ))
+                .promotionEndDate(cursorIndexToDateTime(c, c.getColumnIndex(Dining.Contract.COLUMN_PROMOTION_END_DATE)))
                 .openTimes(timeSerializer.deserializeTimeArray(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_OPEN_TIMES))))
                 .closeTimes(timeSerializer.deserializeTimeArray(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_CLOSE_TIMES))))
                 .exceptions(exceptionSerializer.deserialize(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_EXCEPTIONS))))

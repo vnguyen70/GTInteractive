@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 public class StringUtils {
 
     public static String tokenize(String input) {
@@ -19,25 +15,17 @@ public class StringUtils {
     }
 
     public static boolean isInteger(String str) {
-//        if (str == null) {
-//            return false;
-//        }
+        if (str == null) { return false; }
         int length = str.length();
-//        if (length == 0) {
-//            return false;
-//        }
+        if (length == 0) { return false; }
         int i = 0;
-//        if (str.charAt(0) == '-') {
-//            if (length == 1) {
-//                return false;
-//            }
-//            i = 1;
-//        }
+        if (str.charAt(0) == '-') {
+            if (length == 1) { return false; }
+            i = 1;
+        }
         for (; i < length; i++) {
             char c = str.charAt(i);
-            if (c < '0' || c > '9') {
-                return false;
-            }
+            if (c < '0' || c > '9') { return false; }
         }
         return true;
     }

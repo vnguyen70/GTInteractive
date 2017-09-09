@@ -19,10 +19,6 @@ import static com.example.vi_tu.gtinteractive.utilities.StringUtils.isInteger;
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenize;
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenizeList;
 
-/**
- * Created by kaliq on 9/4/2017.
- */
-
 public class BuildingPersistence extends BasePersistence<Building> {
 
     public BuildingPersistence(SQLiteDatabase db) {
@@ -34,7 +30,6 @@ public class BuildingPersistence extends BasePersistence<Building> {
 
     // TODO: improve performance by creating a new function that utilizes SQL full text search (pre-indexing)
     // TODO: filter against building nicknames
-
     public Building findByBuildingId(String buildingId) {
         return findOne(Building.Contract.COLUMN_BUILDING_ID + " = " + buildingId);
     }
@@ -147,7 +142,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
         bestMatches = getBestMatches(buildingScores);
         if (bestMatches.size() == 1) {
             buildingId = bestMatches.get(0);
-        } else if (bestMatches.size() > 1){
+        } else if (bestMatches.size() > 1) {
             buildingId = "MANY: " + bestMatches.toString();
         } else {
             buildingId = "NONE";

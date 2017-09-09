@@ -12,10 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -28,7 +24,9 @@ public class Dining {
 
     // Object info
     String diningId;
-    Integer buildingId; // TODO: note: buildingId is String in Building class, but Integer in Dining class
+    String buildingId;
+    Double latitude;
+    Double longitude;
 
     // Display info
     String name; // e.g. "Subway"
@@ -57,28 +55,6 @@ public class Dining {
 
     // Custom fields
     String nameTokens; // name converted into lowercase tokens separated by spaces for easy searching
-
-    public final class Contract implements BaseColumns {
-        public static final String TABLE_NAME = "dinings";
-        public static final String COLUMN_DINING_ID = "diningId";
-        public static final String COLUMN_BUILDING_ID = "buildingId";
-        public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_LOCATION_DETAILS = "locationDetails";
-        public static final String COLUMN_LOGO_URL = "logoURL";
-        public static final String COLUMN_MENU_LINK_URL = "menuLinkURL";
-        public static final String COLUMN_PROMOTION_MESSAGE = "promotionMessage";
-        public static final String COLUMN_PROMOTION_START_DATE = "promotionStartDate";
-        public static final String COLUMN_PROMOTION_END_DATE = "promotionEndDate";
-        public static final String COLUMN_OPEN_TIMES = "openTimes";
-        public static final String COLUMN_CLOSE_TIMES = "closeTimes";
-        public static final String COLUMN_EXCEPTIONS = "exceptions";
-        public static final String COLUMN_TAGS = "tags";
-        public static final String COLUMN_TAG_IDS = "tagIds";
-        public static final String COLUMN_IS_OPEN = "isOpen";
-        public static final String COLUMN_UPCOMING_STATUS_CHANGE = "upcomingStatusChange";
-        public static final String COLUMN_NAME_TOKENS = "nameTokens";
-    }
 
     @Data
     @Builder
@@ -119,6 +95,30 @@ public class Dining {
             public static final String COLUMN_HELP_TEXT = "helpText";
             public static final String COLUMN_NAME_TOKENS = "nameTokens";
         }
+    }
+
+    public final class Contract implements BaseColumns {
+        public static final String TABLE_NAME = "dinings";
+        public static final String COLUMN_DINING_ID = "diningId";
+        public static final String COLUMN_BUILDING_ID = "buildingId";
+        public static final String COLUMN_LATITUDE = "latitude";
+        public static final String COLUMN_LONGITUDE = "longitude";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_LOCATION_DETAILS = "locationDetails";
+        public static final String COLUMN_LOGO_URL = "logoURL";
+        public static final String COLUMN_MENU_LINK_URL = "menuLinkURL";
+        public static final String COLUMN_PROMOTION_MESSAGE = "promotionMessage";
+        public static final String COLUMN_PROMOTION_START_DATE = "promotionStartDate";
+        public static final String COLUMN_PROMOTION_END_DATE = "promotionEndDate";
+        public static final String COLUMN_OPEN_TIMES = "openTimes";
+        public static final String COLUMN_CLOSE_TIMES = "closeTimes";
+        public static final String COLUMN_EXCEPTIONS = "exceptions";
+        public static final String COLUMN_TAGS = "tags";
+        public static final String COLUMN_TAG_IDS = "tagIds";
+        public static final String COLUMN_IS_OPEN = "isOpen";
+        public static final String COLUMN_UPCOMING_STATUS_CHANGE = "upcomingStatusChange";
+        public static final String COLUMN_NAME_TOKENS = "nameTokens";
     }
 
 }

@@ -13,21 +13,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by kaliq on 9/4/2017.
- */
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Building{
+public class Building {
 
     public static final Map<String, String> shortcuts = Collections.unmodifiableMap(
-      new HashMap<String, String>() {{
-          put("Georgia Tech Campus", "GEORGIA_TECH_CAMPUS");
-          put("Atlanta, GA", "ATLANTA_GA");
-      }});
+            new HashMap<String, String>() {{
+                put("Georgia Tech Campus", "GEORGIA_TECH_CAMPUS");
+                put("Atlanta, GA", "ATLANTA_GA");
+            }});
 
     // From API: http://gtjourney.gatech.edu/gt-devhub/apis/places
     String buildingId;

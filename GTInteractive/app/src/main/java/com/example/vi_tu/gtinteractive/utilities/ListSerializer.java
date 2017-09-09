@@ -9,10 +9,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 public class ListSerializer<T> {
 
     public String serialize(List<T> list) {

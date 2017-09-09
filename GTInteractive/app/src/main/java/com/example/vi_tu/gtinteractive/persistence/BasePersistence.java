@@ -7,18 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 public class BasePersistence<T> {
 
-    protected SQLiteDatabase db;
-    protected String tableName;
-    protected String idColumnName;
-    protected String orderBy;
+    SQLiteDatabase db;
+    String tableName;
+    String idColumnName;
+    String orderBy;
 
-    public BasePersistence(SQLiteDatabase db, String tableName, String idColumnName, String orderBy) {
+    BasePersistence(SQLiteDatabase db, String tableName, String idColumnName, String orderBy) {
         this.db = db;
         this.tableName = tableName;
         this.idColumnName = idColumnName;
@@ -46,16 +42,24 @@ public class BasePersistence<T> {
     }
 
     // returns row id of newly inserted object
-    public long create(T t) { return db.insert(tableName, null, toContentValues(t)); }
+    public long create(T t) {
+        return db.insert(tableName, null, toContentValues(t));
+    }
 
     // returns number of rows affected (should be 1)
-    public int update(T t, String id) { return db.update(tableName, toContentValues(t), idColumnName + " = " + id, null); }
+    public int update(T t, String id) {
+        return db.update(tableName, toContentValues(t), idColumnName + " = " + id, null);
+    }
 
     // returns number of rows affected (should be 1)
-    public int delete(String id) { return db.delete(tableName, idColumnName + " = " + id, null); }
+    public int delete(String id) {
+        return db.delete(tableName, idColumnName + " = " + id, null);
+    }
 
     // returns number of rows affected
-    public int deleteAll() { return db.delete(tableName, null, null); }
+    public int deleteAll() {
+        return db.delete(tableName, null, null);
+    }
 
     public T get(String id) {
         return findOne(idColumnName + " = " + id);
@@ -67,7 +71,7 @@ public class BasePersistence<T> {
 
     /******** Helper Functions ********************************************************************/
 
-    protected T findOne(String selection) {
+    T findOne(String selection) {
         Cursor c = db.query(
                 tableName,
                 null,
@@ -86,7 +90,7 @@ public class BasePersistence<T> {
         return t;
     }
 
-    protected List<T> findMany(String selection) {
+    List<T> findMany(String selection) {
         Cursor c = db.query(
                 tableName,
                 null,
@@ -104,11 +108,11 @@ public class BasePersistence<T> {
         return tList;
     }
 
-    protected T toDomain(Cursor c) {
+    T toDomain(Cursor c) {
         return null;
     }
 
-    protected ContentValues toContentValues(T t) {
+    ContentValues toContentValues(T t) {
         return new ContentValues();
     }
 

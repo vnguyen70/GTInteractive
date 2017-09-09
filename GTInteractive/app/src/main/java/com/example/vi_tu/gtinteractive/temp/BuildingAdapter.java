@@ -7,67 +7,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.vi_tu.gtinteractive.BuildingDetailActivity;
 import com.example.vi_tu.gtinteractive.R;
-import com.example.vi_tu.gtinteractive.buildingDetail_info;
 import com.example.vi_tu.gtinteractive.domain.Building;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Rayner on 8/31/17.
- */
-
-//
-public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingAdapterViewHolder>  {
+public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder> {
 
     private List<Building> bList;
 
     public BuildingAdapter() {
-        bList = new ArrayList<>();
+        this.bList = new ArrayList<>();
     }
 
-    public class BuildingAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public final TextView mBuildingTextView;
-        public String buildingId;
-        public BuildingAdapterViewHolder(View view) {
-            super(view);
-            mBuildingTextView = (TextView) view.findViewById(R.id.tv_building_data);
-            buildingId = "";
-            view.setOnClickListener(this);
-        }
-
-        public void onClick(View view) {
-            Context context = view.getContext();
-            Toast.makeText(view.getContext(), this.buildingId, Toast.LENGTH_LONG).show();
-            Intent buildingDetailIntent = new Intent(context, buildingDetail_info.class);
-            buildingDetailIntent.putExtra("buildingId", buildingId);
-            context.startActivity(buildingDetailIntent);
-        }
-
-        public void setBuildingId(String buildingId) {
-            this.buildingId = buildingId;
-        }
+    public BuildingAdapter(List<Building> bList) {
+        this.bList = bList;
     }
 
     @Override
-    public BuildingAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.search_list_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
-        return new BuildingAdapterViewHolder(view);
+    public BuildingViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        return new BuildingViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_list_item, viewGroup, false));
     }
 
     @Override
-    public void onBindViewHolder(BuildingAdapterViewHolder buildingAdapterViewHolder, int position) {
-        String buildingName = bList.get(position).getName();
-        String buildingId = bList.get(position).getBuildingId();
-        buildingAdapterViewHolder.mBuildingTextView.setText(buildingName);
-        buildingAdapterViewHolder.setBuildingId(buildingId);
+    public void onBindViewHolder(BuildingViewHolder holder, int position) {
+        Building b = bList.get(position);
+        holder.buildingNameView.setText(b.getName());
+        holder.setBuildingId(b.getBuildingId());
     }
 
     @Override
@@ -75,9 +44,33 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
         return bList.size();
     }
 
-    public void setBuildingsData(List<Building> bList) {
+    public void setData(List<Building> bList) {
         this.bList = bList;
         notifyDataSetChanged();
+    }
+
+    public class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public TextView buildingNameView;
+        public String buildingId;
+
+        public BuildingViewHolder(View view) {
+            super(view);
+            buildingNameView = view.findViewById(R.id.tv_building_data);
+            buildingId = "";
+            view.setOnClickListener(this);
+        }
+
+        public void onClick(View view) {
+            Context context = view.getContext();
+            Intent buildingDetailsActivityIntent = new Intent(context, BuildingDetailActivity.class);
+            buildingDetailsActivityIntent.putExtra("buildingId", buildingId);
+            context.startActivity(buildingDetailsActivityIntent);
+        }
+
+        public void setBuildingId(String buildingId) {
+            this.buildingId = buildingId;
+        }
     }
 
 }

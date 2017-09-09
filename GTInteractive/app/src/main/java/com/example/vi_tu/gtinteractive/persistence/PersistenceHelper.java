@@ -8,17 +8,13 @@ import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
-/**
- * Created by kaliq on 9/4/2017.
- */
-
 public class PersistenceHelper extends SQLiteOpenHelper {
 
     // The database name
     private static final String DATABASE_NAME = "persistence.db";
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
 
     // Constructor
     public PersistenceHelper(Context context) {
@@ -61,7 +57,9 @@ public class PersistenceHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_DININGS_TABLE = "CREATE TABLE " + Dining.Contract.TABLE_NAME + " (" +
                 Dining.Contract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Dining.Contract.COLUMN_DINING_ID + " TEXT, " +
-                Dining.Contract.COLUMN_BUILDING_ID + " INTEGER, " +
+                Dining.Contract.COLUMN_BUILDING_ID + " TEXT, " +
+                Dining.Contract.COLUMN_LATITUDE + " DOUBLE, " +
+                Dining.Contract.COLUMN_LONGITUDE + " DOUBLE, " +
                 Dining.Contract.COLUMN_NAME + " TEXT, " +
                 Dining.Contract.COLUMN_DESCRIPTION + " TEXT, " +
                 Dining.Contract.COLUMN_LOCATION_DETAILS + " TEXT, " +

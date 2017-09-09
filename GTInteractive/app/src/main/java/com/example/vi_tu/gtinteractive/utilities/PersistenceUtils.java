@@ -5,10 +5,6 @@ import android.database.Cursor;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-/**
- * Created by kaliq on 9/7/2017.
- */
-
 public class PersistenceUtils {
 
     public static Long timeToMillis(LocalTime input) {
