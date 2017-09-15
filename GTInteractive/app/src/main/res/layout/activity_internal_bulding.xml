@@ -20,7 +20,7 @@
         android:id="@+id/blueprintCcbFloor1"
         android:layout_width="398dp"
         android:layout_height="519dp"
-        app:srcCompat="@drawable/floor_1_ccb"
+        app:srcCompat="@drawable/floor_50_1"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="64dp"
         android:layout_marginLeft="44dp"

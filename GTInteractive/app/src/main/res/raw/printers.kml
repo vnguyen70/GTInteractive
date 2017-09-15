@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Georgia Tech Printers</name>
+    <description><![CDATA[Locations on Georgia Tech's campus with Pharos-enabled printers for use with free print balance. Unless noted otherwise, all printers are B/W only. Areas with color printers are noted in the description, and will also have a green marker. Some printers may be restricted to users with building BuzzCard access - these should be noted in the description. If you have any updates or corrections, please see this Reddit thread: http://bit.ly/1STUhsu]]></description>
+    <Folder>
+      <name>Residential (Housing Residents Only)</name>
+      <Placemark>
+        <name>Brittain Rec</name>
+        <description>Near Laundry Room and Wreck Techs Office *Accessible by Housing residents only*</description>
+        <Point>
+          <coordinates>
+            -84.3911844,33.7724477,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Glenn/Towers Connector</name>
+        <description>Downstairs, near Vending *Accessible by Housing residents only*</description>
+        <Point>
+          <coordinates>
+            -84.3913333,33.7736773,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Woodruff</name>
+        <description>Near Dining *Accessible by Housing residents only*</description>
+        <Point>
+          <coordinates>
+            -84.4065294,33.7791139,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Fitten</name>
+        <description>McMillan Street Entrance Lobby *Accessible by Housing residents only*</description>
+        <Point>
+          <coordinates>
+            -84.403827,33.778231,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>North Ave North</name>
+        <description>Inside NANO Housing Office *Accessible by Housing residents only*</description>
+        <Point>
+          <coordinates>
+            -84.3911362,33.7704789,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GLC</name>
+        <description>Activity Room</description>
+        <Point>
+          <coordinates>
+            -84.3963933,33.781749,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Academic/Common Areas</name>
+      <Placemark>
+        <name>Library</name>
+        <description>West Commons - Computer Cluster (B/W and Color), 2nd/3rd Floor (B/W and Color)</description>
+        <Point>
+          <coordinates>
+            -84.3958622,33.7743963,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Multimedia Studio</name>
+        <description>Basement/Bottom floor of Library - B/W, Color, and Plotter (Large Format)</description>
+        <Point>
+          <coordinates>
+            -84.3958676,33.7743049,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Clough</name>
+        <description>2nd Floor - Across from Room 273, 3rd Floor - Near Room 385, 4th Floor - Near Grand Stair</description>
+        <Point>
+          <coordinates>
+            -84.3963933,33.7747062,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Student Center</name>
+        <description>Computer Cluster, B/W and Color</description>
+        <Point>
+          <coordinates>
+            -84.3989226,33.7741934,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>CoC</name>
+        <description>Across from Room 130</description>
+        <Point>
+          <coordinates>
+            -84.3974125,33.7774953,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Klaus</name>
+        <description>Rooms 1446, 1448, 2440</description>
+        <Point>
+          <coordinates>
+            -84.3961278,33.7773705,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MRDC</name>
+        <description>2nd Floor - Computer Lab, 3rd Floor - Room 3328</description>
+        <Point>
+          <coordinates>
+            -84.4005775,33.7769179,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Scheller CoB</name>
+        <description><![CDATA[1st Floor - Computer Lab (B/W & Color) **Requires CoB Building BuzzCard Access**]]></description>
+        <Point>
+          <coordinates>
+            -84.3883681,33.7763984,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sustainable Education</name>
+        <description>Main Lobby</description>
+        <Point>
+          <coordinates>
+            -84.3988153,33.7762178,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Van Leer</name>
+        <description><![CDATA[Rooms C257, C348, C353, C356, C365, C383, C452 (Color & B/W), C448]]></description>
+        <Point>
+          <coordinates>
+            -84.397206,33.7758232,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Architecture</name>
+        <description><![CDATA[Industrial Design Studio (B/W & Color), Room 359 (B/W & Color), 2nd Floor Lobby (B/W & Color), Library]]></description>
+        <Point>
+          <coordinates>
+            -84.3955323,33.7761019,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cherry Emerson</name>
+        <description>2nd Floor - Computer Lab</description>
+        <Point>
+          <coordinates>
+            -84.3972597,33.7779613,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Whitaker</name>
+        <description>Basement and Top Floor **BuzzCard Access May Be Required**</description>
+        <Point>
+          <coordinates>
+            -84.3967366,33.7784651,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Love</name>
+        <description>1st Floor - Computer Lab (*Restricted Access*), 3rd Floor - Atrium</description>
+        <Point>
+          <coordinates>
+            -84.4017416,33.7765255,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Groseclose</name>
+        <description>Computer Lab (Room 118)</description>
+        <Point>
+          <coordinates>
+            -84.4019026,33.775821,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ISyE Annex</name>
+        <description>Graduate Computer Lab (Room 126), 3rd Floor PhD Lab</description>
+        <Point>
+          <coordinates>
+            -84.4019347,33.7752547,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Ford ES&T]]></name>
+        <description>2nd Floor</description>
+        <Point>
+          <coordinates>
+            -84.3959749,33.7788085,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Boggs</name>
+        <description>Room 301</description>
+        <Point>
+          <coordinates>
+            -84.3998212,33.7756605,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mason</name>
+        <description>First Floor - Computer Lab</description>
+        <Point>
+          <coordinates>
+            -84.3985498,33.7765924,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Hinman</name>
+        <description>B/W and Color</description>
+        <Point>
+          <coordinates>
+            -84.3951112,33.7746705,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Biltmore</name>
+        <description>Classroom Area between E110 and E111</description>
+        <Point>
+          <coordinates>
+            -84.3869895,33.7768644,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Language Institute</name>
+        <description>Room 113, 118, 218</description>
+        <Point>
+          <coordinates>
+            -84.3922842,33.7783938,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

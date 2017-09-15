@@ -20,12 +20,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.kml.KmlLayer;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.List;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap googleMap;
+
+    KmlLayer printersLayer;
+
     Button diningButton;
     Button printButton;
     Button parkingButton;
@@ -96,6 +103,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         googleMap.setMaxZoomPreference(24.0f);
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
+
+        try {
+            printersLayer = new KmlLayer(googleMap, R.raw.printers, getApplicationContext());
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         showDiningOverlay(); // TODO: default view for now
     }
 
@@ -124,19 +140,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     private void showPrinterOverlay() {
         googleMap.clear();
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.781806, -84.396332)).title("Graduate Living Center"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.778227, -84.403711)).title("Fitten Hall"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.779104, -84.406561)).title("Woodruff Hall"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.772458, -84.391261)).title("Brittain Rec"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.773712, -84.391283)).title("Glenn/Towers Connector"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.770510, -84.391205)).title("North Ave Apts"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.774256, -84.395736)).title("Library"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.774945, -84.396412)).title("Clough"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.774274, -84.398896)).title("Student Center"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.777435, -84.397342)).title("College of Computing"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.773712, -84.391283)).title("Klaus Building"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.777029, -84.400624)).title("MRDC"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(33.776366, -84.388415)).title("Scheller CoB"));
+        try {
+            printersLayer.addLayerToMap();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
         currView = "printers";
     }
 
