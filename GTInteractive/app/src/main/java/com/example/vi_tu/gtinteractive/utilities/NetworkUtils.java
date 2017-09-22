@@ -296,8 +296,8 @@ public class NetworkUtils {
                     if (d != null) {
                         d.setIsOpen(o.optBoolean("isOpen"));
                         d.setUpcomingStatusChange(!o.optString("upcomingStatusChange").equals("null") ? DateTime.parse(o.optString("upcomingStatusChange")) : null);
+                        diningsDB.update(d, id);
                     }
-                    diningsDB.update(d, id);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
