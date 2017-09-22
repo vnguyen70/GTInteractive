@@ -37,9 +37,9 @@ public class BuildingsTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buildings_test);
         tvBuildingsTest = (TextView) findViewById(R.id.tv_buildings_test);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);

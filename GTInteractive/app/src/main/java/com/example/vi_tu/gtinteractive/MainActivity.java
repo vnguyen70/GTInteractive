@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         buildingDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent buildingDetailIntent = new Intent(MainActivity.this, BuildingDetailActivity.class);
+                Intent buildingDetailIntent = new Intent(MainActivity.this, BuildingDetailsActivity.class);
                 startActivity(buildingDetailIntent);
             }
         });
