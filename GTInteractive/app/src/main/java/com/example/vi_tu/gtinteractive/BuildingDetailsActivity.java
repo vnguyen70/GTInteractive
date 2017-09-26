@@ -168,11 +168,16 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
                     Button viewInternalLayout = rootView.findViewById(R.id.viewInternalLayoutButton);
 
                     String hoursString = "n/a";
-                    LocalTime openTime = b.getOpenTimes()[1]; // TODO
-                    LocalTime closeTime = b.getCloseTimes()[1]; // TODO
-                    if (openTime != null && closeTime != null) {
-                        hoursString = openTime.toString("hh:mm a") + " - " + closeTime.toString("hh:mm a") + " (Monday)";
+                    LocalTime[] ot = b.getOpenTimes();
+                    LocalTime[] ct = b.getCloseTimes();
+                    if (ot != null && ot.length >= 1 && ct != null && ct.length >= 1) {
+                        LocalTime openTime = ot[1]; // TODO
+                        LocalTime closeTime = ct[1]; // TODO
+                        if (openTime != null && closeTime != null) {
+                            hoursString = openTime.toString("hh:mm a") + " - " + closeTime.toString("hh:mm a") + " (Monday)";
+                        }
                     }
+
 
                     nameText.setText(b.getName());
                     altNamesText.setText(b.getAltNames());
