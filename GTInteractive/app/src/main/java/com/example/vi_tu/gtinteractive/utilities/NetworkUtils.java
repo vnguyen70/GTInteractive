@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,6 +18,7 @@ import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -31,6 +33,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.deserializePolygons;
 
 public class NetworkUtils {
 
@@ -47,7 +51,8 @@ public class NetworkUtils {
     public void loadBuildingsFromAPI(final BuildingPersistence buildingsDB) {
         buildingsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadBuildingsFromAPI()...");
-        String buildingsURL = "https://m.gatech.edu/api/gtplaces/buildings";
+//        String buildingsURL = "https://m.gatech.edu/api/gtplaces/buildings";
+        String buildingsURL = "https://gtapp-api.rnoc.gatech.edu/api/v1/places";
         final JsonArrayRequest buildingsRequest = new JsonArrayRequest(Request.Method.GET, buildingsURL, new JSONObject(),
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -62,6 +67,7 @@ public class NetworkUtils {
                         Log.d("NETWORK_TEST", "failed response from Buildings API");
                         DialogFragment dialog = new NetworkErrorDialogFragment();
                         dialog.show(fragmentManager, "buildingsNetworkError");
+                        Toast.makeText(context, "ERROR: " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
 //        buildingsRequest.setTag(REQUEST_TAG);
@@ -152,20 +158,75 @@ public class NetworkUtils {
             try {
                 for (int i = 0; i < r.length(); i++) {
                     JSONObject o = r.getJSONObject(i);
-                    Building b = Building.builder()
-                            .buildingId(o.optString("b_id"))
+
+                    LocalTime[] openTimes = new LocalTime[Building.DAYS_PER_WEEK];
+                    LocalTime[] closeTimes = new LocalTime[Building.DAYS_PER_WEEK];
+                    String categoryTitle = null;
+                    String categoryColor = null;
+                    Double latitude = null;
+                    Double longitude = null;
+                    List<LatLng[]> polygons = null;
+
+                    // open and close times
+                    JSONArray timesJSON = o.optJSONArray("hours");
+                    if (timesJSON != null) {
+                        if (timesJSON.length() > 7) {
+                            // TODO: this shouldn't be possible - check to make sure
+                        }
+                        for (int j = 0; j < timesJSON.length(); j++) {
+                            JSONObject dayJSON = timesJSON.getJSONObject(j);
+                            JSONObject openTimeJSON = dayJSON.optJSONObject("open");
+                            JSONObject closeTimeJSON = dayJSON.optJSONObject("close");
+                            if (openTimeJSON != null) {
+                                openTimes[openTimeJSON.getInt("day")] = DateTime.parse(openTimeJSON.getString("time"), DateTimeFormat.forPattern("HHmm")).toLocalTime();
+                            }
+                            if (closeTimeJSON != null) {
+                                closeTimes[closeTimeJSON.getInt("day")] = DateTime.parse(closeTimeJSON.getString("time"), DateTimeFormat.forPattern("HHmm")).toLocalTime();
+                            }
+                        }
+                    }
+
+                    // category
+                    JSONObject categoryJSON = o.optJSONObject("category");
+                    if (categoryJSON != null) {
+                        categoryTitle = categoryJSON.optString("title");
+                        categoryColor = categoryJSON.optString("color");
+                    }
+
+                    // location
+                    JSONObject locationJSON = o.optJSONObject("location");
+                    if (locationJSON != null) {
+                        latitude = locationJSON.optDouble("latitude");
+                        longitude = locationJSON.optDouble("longitude");
+                        polygons = deserializePolygons(locationJSON.optJSONArray("shapeCoordinates"));
+                    }
+
+                    Building b = Building.builder() // TODO: check keys are correct; check default values for opt are null
+                            .buildingId(o.optString("id"))
                             .name(o.optString("name"))
-                            .address(o.optString("address"))
-                            .latitude(o.has("latitude") ? Double.parseDouble(o.getString("latitude")) : null)
-                            .longitude(o.has("longitude") ? Double.parseDouble(o.getString("longitude")) : null)
-                            .phoneNum(o.optString("phone_num"))
-                            .link("")
-                            .timeOpen(null)
-                            .timeClose(null)
+                            .imageURL(o.optString("imageURL"))
+                            .websiteURL(o.optString("websiteURL"))
+                            .phoneNum(o.optString("phone"))
+                            .description(o.optString("description"))
+                            .locatedIn(o.optString("locatedIn"))
+                            .yelpID(o.optString("yelpID"))
+                            .acceptsBuzzFunds(o.optBoolean("acceptsBuzzFunds"))
+                            .priceLevel(o.optInt("priceLevel"))
+                            .openTimes(openTimes)
+                            .closeTimes(closeTimes)
+                            .categoryTitle(categoryTitle)
+                            .categoryColor(categoryColor)
+                            .street(o.optString("street"))
+                            .city(o.optString("city"))
+                            .state(o.optString("state"))
+                            .postalCode(o.optString("postalCode"))
+                            .latitude(latitude)
+                            .longitude(longitude)
+                            .polygons(polygons)
+                            .altNames(null)
+                            .nameTokens(null)
+                            .addressTokens(null)
                             .numFloors(null)
-                            .altNames("")
-                            .nameTokens("")
-                            .addressTokens("")
                             .build();
                     bList.add(b);
                 }

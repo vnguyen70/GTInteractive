@@ -22,8 +22,7 @@ public class DiningPersistence extends BasePersistence<Dining> {
     private ListSerializer<Dining.Tag> tagSerializer;
 
     public DiningPersistence(SQLiteDatabase db) {
-        super(db, Dining.Contract.TABLE_NAME, Dining.Contract._ID,
-                "LENGTH(" + Dining.Contract.COLUMN_DINING_ID + ")," + Dining.Contract.COLUMN_DINING_ID);
+        super(db, Dining.Contract.TABLE_NAME, Dining.Contract._ID, Dining.Contract._ID);
         this.timeSerializer = new ListSerializer<>();
         this.exceptionSerializer = new ListSerializer<>();
         this.tagSerializer = new ListSerializer<>();

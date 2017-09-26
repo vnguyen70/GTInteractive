@@ -14,12 +14,14 @@ public class PersistenceHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "persistence.db";
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // Constructor
     public PersistenceHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -28,17 +30,29 @@ public class PersistenceHelper extends SQLiteOpenHelper {
                 Building.Contract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Building.Contract.COLUMN_BUILDING_ID + " TEXT, " +
                 Building.Contract.COLUMN_NAME + " TEXT, " +
-                Building.Contract.COLUMN_ADDRESS + " TEXT, " +
+                Building.Contract.COLUMN_IMAGE_URL + " TEXT, " +
+                Building.Contract.COLUMN_WEBSITE_URL + " TEXT, " +
+                Building.Contract.COLUMN_PHONE_NUM + " TEXT, " +
+                Building.Contract.COLUMN_DESCRIPTION + " TEXT, " +
+                Building.Contract.COLUMN_LOCATED_IN + " TEXT, " +
+                Building.Contract.COLUMN_YELP_ID + " TEXT, " +
+                Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS + " BOOLEAN, " +
+                Building.Contract.COLUMN_PRICE_LEVEL + " INTEGER, " +
+                Building.Contract.COLUMN_OPEN_TIMES + " TEXT, " +
+                Building.Contract.COLUMN_CLOSE_TIMES + " TEXT, " +
+                Building.Contract.COLUMN_CATEGORY_TITLE + " TEXT, " +
+                Building.Contract.COLUMN_CATEGORY_COLOR + " TEXT, " +
+                Building.Contract.COLUMN_STREET + " TEXT, " +
+                Building.Contract.COLUMN_CITY + " TEXT, " +
+                Building.Contract.COLUMN_STATE + " TEXT, " +
+                Building.Contract.COLUMN_POSTAL_CODE + " TEXT, " +
                 Building.Contract.COLUMN_LATITUDE + " DOUBLE, " +
                 Building.Contract.COLUMN_LONGITUDE + " DOUBLE, " +
-                Building.Contract.COLUMN_PHONE_NUM + " TEXT, " +
-                Building.Contract.COLUMN_LINK + " TEXT, " +
-                Building.Contract.COLUMN_TIME_OPEN + " TIME, " +
-                Building.Contract.COLUMN_TIME_CLOSE + " TIME, " +
-                Building.Contract.COLUMN_NUM_FLOORS + " INTEGER, " +
+                Building.Contract.COLUMN_POLYGONS + " TEXT, " +
                 Building.Contract.COLUMN_ALT_NAMES + " TEXT, " +
                 Building.Contract.COLUMN_NAME_TOKENS + " TEXT, " +
-                Building.Contract.COLUMN_ADDRESS_TOKENS + " TEXT " +
+                Building.Contract.COLUMN_ADDRESS_TOKENS + " TEXT, " +
+                Building.Contract.COLUMN_NUM_FLOORS + " INTEGER " +
                 "); ";
 
         final String SQL_CREATE_EVENTS_TABLE = "CREATE TABLE " + Event.Contract.TABLE_NAME + " (" +

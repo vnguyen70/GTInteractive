@@ -35,6 +35,8 @@ import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
+import org.joda.time.LocalTime;
+
 import java.util.List;
 
 public class BuildingDetailsActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
@@ -164,10 +166,18 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
                     TextView addressText = rootView.findViewById(R.id.addressText);
                     Button showInMap = rootView.findViewById(R.id.showInMapButton);
                     Button viewInternalLayout = rootView.findViewById(R.id.viewInternalLayoutButton);
+
+                    String hoursString = "n/a";
+                    LocalTime openTime = b.getOpenTimes()[1]; // TODO
+                    LocalTime closeTime = b.getCloseTimes()[1]; // TODO
+                    if (openTime != null && closeTime != null) {
+                        hoursString = openTime.toString("hh:mm a") + " - " + closeTime.toString("hh:mm a") + " (Monday)";
+                    }
+
                     nameText.setText(b.getName());
                     altNamesText.setText(b.getAltNames());
-                    hoursText.setText(b.getTimeOpen() + " - " + b.getTimeClose());
-                    addressText.setText(b.getAddress());
+                    hoursText.setText(hoursString);
+                    addressText.setText(b.getStreet());
                     showInMap.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

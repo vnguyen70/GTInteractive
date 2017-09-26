@@ -12,9 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.cursorIndexToInteger;
-import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.cursorIndexToTime;
-import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.timeToMillis;
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.deserializePolygons;
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.deserializeTimes;
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializePolygons;
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.isInteger;
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenize;
 import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenizeList;
@@ -22,8 +23,7 @@ import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenizeList
 public class BuildingPersistence extends BasePersistence<Building> {
 
     public BuildingPersistence(SQLiteDatabase db) {
-        super(db, Building.Contract.TABLE_NAME, Building.Contract._ID,
-                "LENGTH(" + Building.Contract.COLUMN_BUILDING_ID + ")," + Building.Contract.COLUMN_BUILDING_ID);
+        super(db, Building.Contract.TABLE_NAME, Building.Contract._ID, Building.Contract._ID);
     }
 
     /******** Search Functions ********************************************************************/
@@ -93,13 +93,10 @@ public class BuildingPersistence extends BasePersistence<Building> {
                 for (Building b : partialMatches) {
                     String bId = b.getBuildingId();
                     Integer oldScore = buildingScores.get(bId);
-                    int score = 8;
+                    int score = 7;
                     // TODO: create a better scoring system than this
                     if (isInteger(t)) {
                         score = 20; // number matches have highest weight in addresses
-                    }
-                    if (t.equals("atlanta") || t.equals("ga") || t.equals("georgia")) { // lowest weight - can apply to almost any address
-                        score = 1;
                     }
                     if (oldScore != null) {
                         score += oldScore;
@@ -171,17 +168,29 @@ public class BuildingPersistence extends BasePersistence<Building> {
         ContentValues cv = new ContentValues();
         cv.put(Building.Contract.COLUMN_BUILDING_ID, b.getBuildingId());
         cv.put(Building.Contract.COLUMN_NAME, b.getName());
-        cv.put(Building.Contract.COLUMN_ADDRESS, b.getAddress());
+        cv.put(Building.Contract.COLUMN_IMAGE_URL, b.getImageURL());
+        cv.put(Building.Contract.COLUMN_WEBSITE_URL, b.getWebsiteURL());
+        cv.put(Building.Contract.COLUMN_PHONE_NUM, b.getPhoneNum());
+        cv.put(Building.Contract.COLUMN_DESCRIPTION, b.getDescription());
+        cv.put(Building.Contract.COLUMN_LOCATED_IN, b.getLocatedIn());
+        cv.put(Building.Contract.COLUMN_YELP_ID, b.getYelpID());
+        cv.put(Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS, b.getAcceptsBuzzFunds());
+        cv.put(Building.Contract.COLUMN_PRICE_LEVEL, b.getPriceLevel());
+        cv.put(Building.Contract.COLUMN_OPEN_TIMES, serializeTimes(b.getOpenTimes()));
+        cv.put(Building.Contract.COLUMN_CLOSE_TIMES, serializeTimes(b.getCloseTimes()));
+        cv.put(Building.Contract.COLUMN_CATEGORY_TITLE, b.getCategoryTitle());
+        cv.put(Building.Contract.COLUMN_CATEGORY_COLOR, b.getCategoryColor());
+        cv.put(Building.Contract.COLUMN_STREET, b.getStreet());
+        cv.put(Building.Contract.COLUMN_CITY, b.getCity());
+        cv.put(Building.Contract.COLUMN_STATE, b.getState());
+        cv.put(Building.Contract.COLUMN_POSTAL_CODE, b.getPostalCode());
         cv.put(Building.Contract.COLUMN_LATITUDE, b.getLatitude());
         cv.put(Building.Contract.COLUMN_LONGITUDE, b.getLongitude());
-        cv.put(Building.Contract.COLUMN_PHONE_NUM, b.getPhoneNum());
-        cv.put(Building.Contract.COLUMN_LINK, b.getLink());
-        cv.put(Building.Contract.COLUMN_TIME_OPEN, timeToMillis(b.getTimeOpen()));
-        cv.put(Building.Contract.COLUMN_TIME_CLOSE, timeToMillis(b.getTimeClose()));
-        cv.put(Building.Contract.COLUMN_NUM_FLOORS, b.getNumFloors());
+        cv.put(Building.Contract.COLUMN_POLYGONS, serializePolygons(b.getPolygons()));
         cv.put(Building.Contract.COLUMN_ALT_NAMES, b.getAltNames());
         cv.put(Building.Contract.COLUMN_NAME_TOKENS, tokenize(b.getName()));
-        cv.put(Building.Contract.COLUMN_ADDRESS_TOKENS, tokenize(b.getName()));
+        cv.put(Building.Contract.COLUMN_ADDRESS_TOKENS, tokenize(b.getStreet())); // TODO
+        cv.put(Building.Contract.COLUMN_NUM_FLOORS, b.getNumFloors());
         return cv;
     }
 
@@ -191,17 +200,29 @@ public class BuildingPersistence extends BasePersistence<Building> {
                 .id(c.getInt(c.getColumnIndex(Building.Contract._ID)))
                 .buildingId(c.getString(c.getColumnIndex(Building.Contract.COLUMN_BUILDING_ID)))
                 .name(c.getString(c.getColumnIndex(Building.Contract.COLUMN_NAME)))
-                .address(c.getString(c.getColumnIndex(Building.Contract.COLUMN_ADDRESS)))
+                .imageURL(c.getString(c.getColumnIndex(Building.Contract.COLUMN_IMAGE_URL)))
+                .websiteURL(c.getString(c.getColumnIndex(Building.Contract.COLUMN_WEBSITE_URL)))
+                .phoneNum(c.getString(c.getColumnIndex(Building.Contract.COLUMN_PHONE_NUM)))
+                .description(c.getString(c.getColumnIndex(Building.Contract.COLUMN_DESCRIPTION)))
+                .locatedIn(c.getString(c.getColumnIndex(Building.Contract.COLUMN_LOCATED_IN)))
+                .yelpID(c.getString(c.getColumnIndex(Building.Contract.COLUMN_YELP_ID)))
+                .acceptsBuzzFunds(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS)) == 1)
+                .priceLevel(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_PRICE_LEVEL)))
+                .openTimes(deserializeTimes(c.getString(c.getColumnIndex(Building.Contract.COLUMN_OPEN_TIMES))))
+                .closeTimes(deserializeTimes(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CLOSE_TIMES))))
+                .categoryTitle(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CATEGORY_TITLE)))
+                .categoryColor(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CATEGORY_COLOR)))
+                .street(c.getString(c.getColumnIndex(Building.Contract.COLUMN_STREET)))
+                .city(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CITY)))
+                .state(c.getString(c.getColumnIndex(Building.Contract.COLUMN_STATE)))
+                .postalCode(c.getString(c.getColumnIndex(Building.Contract.COLUMN_POSTAL_CODE)))
                 .latitude(c.getDouble(c.getColumnIndex(Building.Contract.COLUMN_LATITUDE)))
                 .longitude(c.getDouble(c.getColumnIndex(Building.Contract.COLUMN_LONGITUDE)))
-                .phoneNum(c.getString(c.getColumnIndex(Building.Contract.COLUMN_PHONE_NUM)))
-                .link(c.getString(c.getColumnIndex(Building.Contract.COLUMN_LINK)))
-                .timeOpen(cursorIndexToTime(c, c.getColumnIndex(Building.Contract.COLUMN_TIME_OPEN)))
-                .timeClose(cursorIndexToTime(c, c.getColumnIndex(Building.Contract.COLUMN_TIME_CLOSE)))
-                .numFloors(cursorIndexToInteger(c, c.getColumnIndex(Building.Contract.COLUMN_NUM_FLOORS)))
+                .polygons(deserializePolygons(c.getString(c.getColumnIndex(Building.Contract.COLUMN_POLYGONS))))
                 .altNames(c.getString(c.getColumnIndex(Building.Contract.COLUMN_ALT_NAMES)))
                 .nameTokens(c.getString(c.getColumnIndex(Building.Contract.COLUMN_NAME_TOKENS)))
                 .addressTokens(c.getString(c.getColumnIndex(Building.Contract.COLUMN_ADDRESS_TOKENS)))
+                .numFloors(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_NUM_FLOORS)))
                 .build();
     }
 

@@ -102,7 +102,7 @@ public class BuildingsTestActivity extends AppCompatActivity implements NetworkE
         List<Building> bList = buildingsDB.getAll();
         String results = "";
         for (Building b : bList) {
-            results += b.getBuildingId() + " - " + b.getNameTokens() + " - " + b.getAddressTokens() + "\n";
+            results += b.getId() + ": " + b.getBuildingId() + " (" + b.getName() + ")\n";
         }
         tvBuildingsTest.setText("" + bList.size() + " buildings found:\n\n" + results);
     }

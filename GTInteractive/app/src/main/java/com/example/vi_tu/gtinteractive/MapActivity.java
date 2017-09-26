@@ -36,18 +36,25 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.kml.KmlLayer;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MapActivity extends FragmentActivity implements ListView.OnItemClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MapActivity extends FragmentActivity implements ListView.OnItemClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final int REQUEST_LOCATION_PERMISSION = 0;
     public static final int BUTTONS_HIDDEN = 0;
@@ -59,6 +66,10 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private GoogleMap googleMap;
 
+    Map<Integer, Marker> buildingMarkers;
+    Map<Integer, Marker> diningMarkers;
+    Map<Integer, Marker> eventMarkers;
+
     KmlLayer printersLayer;
     GroundOverlayOptions parkingLayer;
 
@@ -68,6 +79,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     FloatingActionButton parkingViewButton;
     FloatingActionButton printingViewButton;
     FloatingActionButton selectViewButton;
+    FloatingActionButton resetCameraButton;
 
     TextView buildingsViewLabel;
     TextView diningsViewLabel;
@@ -98,6 +110,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // persistence
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
@@ -107,6 +120,9 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         dList = diningsDB.getAll(); // TODO: move to AsyncTask
         eList = eventsDB.getAll(); // TODO: move to AsyncTask
 
+        // UI
+        searchBar = findViewById(R.id.searchBar);
+        drawerButton = findViewById(R.id.drawerButton);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerList = findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItems));
@@ -118,6 +134,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         parkingViewButton = findViewById(R.id.parkingViewButton);
         printingViewButton = findViewById(R.id.printingViewButton);
         selectViewButton = findViewById(R.id.selectViewButton);
+        resetCameraButton = findViewById(R.id.resetCameraButton);
 
         buildingsViewLabel = findViewById(R.id.buildingsViewLabel);
         diningsViewLabel = findViewById(R.id.diningsViewLabel);
@@ -125,11 +142,23 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         parkingViewLabel = findViewById(R.id.parkingViewLabel);
         printingViewLabel = findViewById(R.id.printingViewLabel);
 
-        searchBar = findViewById(R.id.searchBar);
-        drawerButton = findViewById(R.id.drawerButton);
-
-        buttonsState = BUTTONS_HIDDEN;
-
+        searchBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(MapActivity.this, BuildingSearchActivity.class);
+                startActivity(searchIntent);
+            }
+        });
+        drawerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerLayout.isDrawerOpen(drawerList)) {
+                    drawerLayout.closeDrawer(drawerList);
+                } else {
+                    drawerLayout.openDrawer(drawerList);
+                }
+            }
+        });
         buildingsViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,24 +199,20 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 }
             }
         });
+        resetCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                centerCampus();
+            }
+        });
 
-        searchBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent searchIntent = new Intent(MapActivity.this, BuildingSearchActivity.class);
-                startActivity(searchIntent);
-            }
-        });
-        drawerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
-                } else {
-                    drawerLayout.openDrawer(drawerList);
-                }
-            }
-        });
+        // TODO: risk of button being pressed before map is ready?
+
+        buttonsState = BUTTONS_HIDDEN;
+
+        buildingMarkers = new HashMap<>();
+        diningMarkers = new HashMap<>();
+        eventMarkers = new HashMap<>();
 
         parkingLayer = new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.parking_map))
@@ -210,6 +235,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         googleMap.setMinZoomPreference(14.0f);
         googleMap.setMaxZoomPreference(24.0f);
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnPolygonClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setPadding(0, 180, 0, 0); // leave room for search bar
         showUserLocation();
@@ -243,45 +269,42 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private void showBuildingsOverlay(int objectId) {
         googleMap.clear();
+        centerCampus();
+        for (Building building : bList) {
+            addBuildingPolygons(building); // TODO: transparent hitboxes?
+        }
         Building b = buildingsDB.get(objectId);
         if (b != null) {
             Marker m = addBuildingMarker(b);
             m.showInfoWindow();
             centerMarker(m);
-        } else {
-            for (Building building : bList) {
-                addBuildingMarker(building); // TODO: transparent hitboxes?
-            }
-            resetCamera();
         }
         setCurrView(ViewType.BUILDING);
     }
 
     private void showDiningsOverlay(int objectId) {
         googleMap.clear();
+        centerCampus();
+        for (Dining dining : dList) {
+            addDiningMarker(dining);
+        }
         Dining d = diningsDB.get(objectId);
         if (d != null) {
-            Marker m = addDiningMarker(d);
+            Marker m = diningMarkers.get(d.getId());
             m.showInfoWindow();
             centerMarker(m);
-        } else {
-            for (Dining dining : dList) {
-                addDiningMarker(dining);
-            }
-            resetCamera();
         }
         setCurrView(ViewType.DINING);
     }
 
     private void showEventsOverlay(int objectId) {
         googleMap.clear();
+        centerCampus();
         Event e = eventsDB.get(objectId);
         if (e != null) {
             Marker m = addEventMarker(e);
             m.showInfoWindow();
             centerMarker(m);
-        } else {
-            resetCamera();
         }
         setCurrView(ViewType.EVENT);
     }
@@ -289,9 +312,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     private void showParkingOverlay() {
         googleMap.clear();
         googleMap.addGroundOverlay(parkingLayer);
+        centerCampus();
         setCurrView(ViewType.PARKING);
     }
 
+    // TODO: change marker style to dots
     private void showPrintersOverlay() {
         googleMap.clear();
         try {
@@ -301,7 +326,23 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
+        centerCampus();
         setCurrView(ViewType.PRINTERS);
+    }
+
+    private List<Polygon> addBuildingPolygons(Building b) {
+        List<Polygon> added = new ArrayList<>();
+        List<LatLng[]> polygons = b.getPolygons();
+        for (LatLng[] polygon : polygons) {
+            Polygon p = googleMap.addPolygon(new PolygonOptions()
+                    .addAll(Arrays.asList(polygon))
+                    .visible(false)
+                    .clickable(true)
+            );
+            p.setTag(b.getId());
+            added.add(p);
+        }
+        return added;
     }
 
     private Marker addBuildingMarker(Building b) {
@@ -309,6 +350,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 .position(new LatLng(b.getLatitude(), b.getLongitude()))
                 .title(b.getName()));
         m.setTag(b.getId());
+        buildingMarkers.put(b.getId(), m);
         return m;
     }
 
@@ -318,6 +360,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 .title(d.getName())
                 .snippet(d.getLocationDetails()));
         m.setTag(d.getId());
+        diningMarkers.put(d.getId(), m);
         return m;
     }
 
@@ -334,6 +377,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 .title(e.getTitle())
                 .snippet(e.getLocation()));
         m.setTag(e.getId());
+        eventMarkers.put(e.getId(), m);
         return m;
     }
 
@@ -349,12 +393,15 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     private void centerMarker(Marker m) {
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(m.getPosition(), 18.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(m.getPosition(), 18.0f, 0, 0)));
+    }
+
+    private void centerCampus() {
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(33.777433, -84.398636), 14.6f, 0, 0))); // tech campus
     }
 
     private void resetCamera() {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.777433, -84.398636), 14.6f));
-//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.777433, -84.398636), 14.6f)); // tech campus
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(33.777433, -84.398636), 14.6f, 0, 0))); // tech campus
     }
 
     private void setCurrView(int v) {
@@ -410,8 +457,26 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     @Override
-    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        showUserLocation();
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch(i) {
+            case 0: // Buildings Test
+                drawerLayout.closeDrawer(drawerList);
+                Intent buildingsTestActivityIntent = new Intent(MapActivity.this, BuildingsTestActivity.class);
+                startActivity(buildingsTestActivityIntent);
+                break;
+            case 1: // Dinings Test
+                drawerLayout.closeDrawer(drawerList);
+                Intent diningsTestActivityIntent = new Intent(MapActivity.this, DiningsTestActivity.class);
+                startActivity(diningsTestActivityIntent);
+                break;
+            case 2: // Events Test
+                drawerLayout.closeDrawer(drawerList);
+                Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
+                startActivity(eventsTestActivityIntent);
+                break;
+            default:
+                // TODO: ?
+        }
     }
 
     @Override
@@ -419,6 +484,15 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         marker.showInfoWindow();
         centerMarker(marker);
         return false;
+    }
+
+    @Override
+    public void onPolygonClick(Polygon polygon) {
+        for (Marker m : buildingMarkers.values()) {
+            m.remove();
+        }
+        Marker m = addBuildingMarker(buildingsDB.get(Integer.parseInt(polygon.getTag().toString())));
+        m.showInfoWindow();
     }
 
     @Override
@@ -446,25 +520,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        switch(i) {
-            case 0: // Buildings Test
-                drawerLayout.closeDrawer(drawerList);
-                Intent buildingsTestActivityIntent = new Intent(MapActivity.this, BuildingsTestActivity.class);
-                startActivity(buildingsTestActivityIntent);
-                break;
-            case 1: // Dinings Test
-                drawerLayout.closeDrawer(drawerList);
-                Intent diningsTestActivityIntent = new Intent(MapActivity.this, DiningsTestActivity.class);
-                startActivity(diningsTestActivityIntent);
-                break;
-            case 2: // Events Test
-                drawerLayout.closeDrawer(drawerList);
-                Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
-                startActivity(eventsTestActivityIntent);
-                break;
-            default:
-                // TODO: ?
-        }
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        showUserLocation();
     }
+
 }
