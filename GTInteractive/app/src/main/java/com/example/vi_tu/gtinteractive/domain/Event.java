@@ -17,6 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Event {
 
+    public static final Event DEFAULT_EVENT = Event.builder()
+            .title("Event Info Not Available")
+            .location("n/a")
+            .buildingId("DEFAULT")
+            .build();
+
+    Integer id;
+
     // From RSS feed: http://www.calendar.gatech.edu/feeds/events.xml
     String title;
     String link;

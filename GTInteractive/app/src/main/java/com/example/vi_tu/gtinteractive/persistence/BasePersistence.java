@@ -47,23 +47,23 @@ public class BasePersistence<T> {
     }
 
     // returns number of rows affected (should be 1)
-    public int update(T t, String id) {
-        return db.update(tableName, toContentValues(t), idColumnName + " = " + id, null);
+    public int update(T t, int id) {
+        return db.update(tableName, toContentValues(t), idColumnName + " = " + id, null); // TODO: object primary keys are required to be type int
     }
 
     // returns number of rows affected (should be 1)
-    public int delete(String id) {
+    public int delete(int id) {
         return db.delete(tableName, idColumnName + " = " + id, null);
-    }
+    } // TODO: object primary keys are required to be type int
 
     // returns number of rows affected
     public int deleteAll() {
         return db.delete(tableName, null, null);
     }
 
-    public T get(String id) {
+    public T get(int id) {
         return findOne(idColumnName + " = " + id);
-    }
+    } // TODO: object primary keys are required to be type int
 
     public List<T> getAll() {
         return findMany(null);

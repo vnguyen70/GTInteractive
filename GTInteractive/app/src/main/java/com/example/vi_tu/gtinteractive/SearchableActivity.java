@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 
+import com.example.vi_tu.gtinteractive.constants.Arguments;
+import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.temp.SuggestionProvider;
+import com.example.vi_tu.gtinteractive.adapters.SuggestionProvider;
 
 import java.util.List;
 
@@ -32,9 +34,11 @@ public class SearchableActivity extends Activity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             List<Building> queryResults = buildingsDB.findByName(query);
             if (queryResults.size() == 1) {
-                Intent buildingDetailIntent = new Intent(SearchableActivity.this, BuildingDetailActivity.class);
-                buildingDetailIntent.putExtra("buildingId", queryResults.get(0).getBuildingId());
-                startActivity(buildingDetailIntent);
+                Building b = queryResults.get(0);
+                Intent mapActivityIntent = new Intent(SearchableActivity.this, MapActivity.class);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                mapActivityIntent.putExtra(Arguments.OBJECT_ID, b.getId());
+                startActivity(mapActivityIntent);
             }
             suggestions.saveRecentQuery(query, null);
         }

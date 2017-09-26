@@ -31,6 +31,10 @@ public class DiningPersistence extends BasePersistence<Dining> {
 
     /******** Search Functions ********************************************************************/
 
+    public Dining findByDiningId(String diningId) {
+        return findOne(Dining.Contract.COLUMN_DINING_ID + " = \"" + diningId + "\"");
+    }
+
     public List<Dining> findByBuildingId(String buildingId) {
         return findMany(Dining.Contract.COLUMN_BUILDING_ID + " = " + buildingId);
     }
@@ -61,10 +65,6 @@ public class DiningPersistence extends BasePersistence<Dining> {
 
     @Override
     protected ContentValues toContentValues(Dining d) {
-        String tagIds = " "; // TODO: surround with white space for SQL string-matching
-        for (Dining.Tag t : d.getTags()) {
-            tagIds += t.getTagId() + " ";
-        }
         ContentValues cv = new ContentValues();
         cv.put(Dining.Contract.COLUMN_DINING_ID, d.getDiningId());
         cv.put(Dining.Contract.COLUMN_BUILDING_ID, d.getBuildingId());
@@ -82,7 +82,7 @@ public class DiningPersistence extends BasePersistence<Dining> {
         cv.put(Dining.Contract.COLUMN_CLOSE_TIMES, timeSerializer.serializeTimeArray(d.getCloseTimes()));
         cv.put(Dining.Contract.COLUMN_EXCEPTIONS, exceptionSerializer.serialize(d.getExceptions()));
         cv.put(Dining.Contract.COLUMN_TAGS, tagSerializer.serialize(d.getTags()));
-        cv.put(Dining.Contract.COLUMN_TAG_IDS, tagIds);
+        cv.put(Dining.Contract.COLUMN_TAG_IDS, d.getTagIds());
         cv.put(Dining.Contract.COLUMN_IS_OPEN, d.getIsOpen());
         cv.put(Dining.Contract.COLUMN_UPCOMING_STATUS_CHANGE, dateTimeToMillis(d.getUpcomingStatusChange()));
         cv.put(Dining.Contract.COLUMN_NAME_TOKENS, tokenize(d.getName()));
@@ -92,6 +92,7 @@ public class DiningPersistence extends BasePersistence<Dining> {
     @Override
     protected Dining toDomain(Cursor c) {
         return Dining.builder()
+                .id(c.getInt(c.getColumnIndex(Dining.Contract._ID)))
                 .diningId(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_DINING_ID)))
                 .buildingId(c.getString(c.getColumnIndex(Dining.Contract.COLUMN_BUILDING_ID)))
                 .latitude(c.getDouble(c.getColumnIndex(Dining.Contract.COLUMN_LATITUDE)))

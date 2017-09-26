@@ -18,16 +18,58 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/hoursOfOpStatic"
+            android:id="@+id/generalInfoStatic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="General Information"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nameStatic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="Hours of Operation: "
+            android:text="Name: "
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/alternativeNamesStatic" />
+            app:layout_constraintTop_toBottomOf="@+id/generalInfoStatic" />
+
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="4dp"
+            android:text="TextView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/nameStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nameStatic" />
+
+        <TextView
+            android:id="@+id/alternativeNamesStatic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Alternative Names: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameStatic" />
 
         <TextView
             android:id="@+id/altNamesText"
@@ -44,16 +86,16 @@
             app:layout_constraintTop_toTopOf="@+id/alternativeNamesStatic" />
 
         <TextView
-            android:id="@+id/alternativeNamesStatic"
+            android:id="@+id/hoursOfOpStatic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="Alternative Names: "
+            android:text="Hours of Operation: "
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/generalInfoStatic" />
+            app:layout_constraintTop_toBottomOf="@+id/alternativeNamesStatic" />
 
         <TextView
             android:id="@+id/hoursText"
@@ -68,22 +110,6 @@
             app:layout_constraintLeft_toRightOf="@+id/hoursOfOpStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/hoursOfOpStatic" />
-
-        <TextView
-            android:id="@+id/generalInfoStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="General Information"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/addressStatic"
@@ -110,14 +136,29 @@
             app:layout_constraintLeft_toRightOf="@+id/addressStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/addressStatic" />
-    </android.support.constraint.ConstraintLayout>
 
-    <!--<TextView-->
-        <!--android:id="@+id/section_label"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Info works!"-->
-        <!--tools:layout_editor_absoluteY="0dp"-->
-        <!--tools:layout_editor_absoluteX="0dp" />-->
+        <Button
+            android:id="@+id/showInMapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Show in map"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addressStatic" />
+
+        <Button
+            android:id="@+id/viewInternalLayoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="View Internal Building Layout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/showInMapButton" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -48,6 +48,7 @@ public class EventPersistence extends BasePersistence<Event> {
     @Override
     protected Event toDomain(Cursor c) {
         return Event.builder()
+                .id(c.getInt(c.getColumnIndex(Event.Contract._ID)))
                 .title(c.getString(c.getColumnIndex(Event.Contract.COLUMN_TITLE)))
                 .link(c.getString(c.getColumnIndex(Event.Contract.COLUMN_LINK)))
                 .description(c.getString(c.getColumnIndex(Event.Contract.COLUMN_DESCRIPTION)))

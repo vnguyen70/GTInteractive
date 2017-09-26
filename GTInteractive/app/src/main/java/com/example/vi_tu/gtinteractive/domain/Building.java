@@ -25,6 +25,14 @@ public class Building {
                 put("Atlanta, GA", "ATLANTA_GA");
             }});
 
+    public static final Building DEFAULT_BUILDING = Building.builder()
+            .buildingId("DEFAULT")
+            .name("Building Info Not Available")
+            .address("n/a")
+            .build();
+
+    Integer id;
+
     // From API: http://gtjourney.gatech.edu/gt-devhub/apis/places
     String buildingId;
     String name;

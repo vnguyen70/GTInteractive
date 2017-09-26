@@ -1,5 +1,7 @@
 package com.example.vi_tu.gtinteractive.utilities;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -32,9 +34,17 @@ import java.util.List;
 
 public class NetworkUtils {
 
+    Context context;
+    FragmentManager fragmentManager;
+
+    public NetworkUtils(Context context, FragmentManager fragmentManager) {
+        this.context = context;
+        this.fragmentManager = fragmentManager;
+    }
+
     // TODO: upon any failure, set sharedPreferences so that database is reloaded next time activity starts
 
-    public static void loadBuildingsFromAPI(final BuildingPersistence buildingsDB, Context context) {
+    public void loadBuildingsFromAPI(final BuildingPersistence buildingsDB) {
         buildingsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadBuildingsFromAPI()...");
         String buildingsURL = "https://m.gatech.edu/api/gtplaces/buildings";
@@ -50,14 +60,15 @@ public class NetworkUtils {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("NETWORK_TEST", "failed response from Buildings API");
-                        // TODO: display Toast indicating error loading buildings
+                        DialogFragment dialog = new NetworkErrorDialogFragment();
+                        dialog.show(fragmentManager, "buildingsNetworkError");
                     }
                 });
 //        buildingsRequest.setTag(REQUEST_TAG);
         RequestQueueSingleton.getRequestQueue(context).add(buildingsRequest);
     }
 
-    public static void loadDiningsFromAPI(final DiningPersistence diningsDB, Context context) {
+    public void loadDiningsFromAPI(final DiningPersistence diningsDB) {
         diningsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadDiningsFromAPI()...");
         String diningsURL = "http://diningdata.itg.gatech.edu:80/api/DiningLocations";
@@ -73,14 +84,15 @@ public class NetworkUtils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("NETWORK_TEST", "failed response from Dinings API");
-                // TODO: display Toast indicating error loading dinings
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "diningsNetworkError");
             }
         });
 //        diningsRequest.setTag(REQUEST_TAG);
         RequestQueueSingleton.getRequestQueue(context).add(diningsRequest);
     }
 
-    public static void updateDiningStatus(final DiningPersistence diningsDB, Context context) {
+    public void updateDiningStatus(final DiningPersistence diningsDB) {
         Log.d("NETWORK_TEST", "updateDiningStatus()...");
         String diningURL = "http://diningdata.itg.gatech.edu:80/api/DiningLocations?type=dynamic";
         final JsonArrayRequest diningsRequest = new JsonArrayRequest(Request.Method.GET, diningURL, new JSONObject(),
@@ -94,14 +106,15 @@ public class NetworkUtils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("NETWORK_TEST", "failed response from Dinings API");
-                // TODO: display Toast indicating error loading dining
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "diningsNetworkError");
             }
         });
 //        diningsRequest.setTag(REQUEST_TAG);
         RequestQueueSingleton.getRequestQueue(context).add(diningsRequest);
     }
 
-    public static void loadEventsFromRSSFeed(final EventPersistence eventsDB, final BuildingPersistence buildingsDB, Context context) {
+    public void loadEventsFromRSSFeed(final EventPersistence eventsDB, final BuildingPersistence buildingsDB) {
         eventsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadEventsFromRSSFeed()...");
         String eventsURL = "http://www.calendar.gatech.edu/feeds/events.xml";
@@ -116,14 +129,15 @@ public class NetworkUtils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("NETWORK_TEST", "failed response from events RSS feed");
-                // TODO: display Toast indicating error loading events
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "eventsNetworkError");
             }
         });
 //        eventsRequest.setTag(REQUEST_TAG);
         RequestQueueSingleton.getRequestQueue(context).add(eventsRequest);
     }
 
-    private static class ProcessBuildingsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
+    private class ProcessBuildingsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
 
         private BuildingPersistence buildingsDB;
 
@@ -164,11 +178,14 @@ public class NetworkUtils {
 
         @Override
         protected void onPostExecute(Boolean wasSuccessful) {
-            // TODO: display Toast indicating success / failure
+            if (!wasSuccessful) {
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "buildingsNetworkError");
+            }
         }
     }
 
-    private static class ProcessDiningsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
+    private class ProcessDiningsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
 
         private DiningPersistence diningsDB;
 
@@ -273,11 +290,14 @@ public class NetworkUtils {
 
         @Override
         protected void onPostExecute(Boolean wasSuccessful) {
-            // TODO: display Toast indicating success / failure
+            if (!wasSuccessful) {
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "buildingsNetworkError");
+            }
         }
     }
 
-    private static class UpdateDiningStatusTask extends AsyncTask<JSONArray, Void, Boolean> {
+    private class UpdateDiningStatusTask extends AsyncTask<JSONArray, Void, Boolean> {
 
         private DiningPersistence diningsDB;
 
@@ -291,12 +311,12 @@ public class NetworkUtils {
             try {
                 for (int i = 0; i < r.length(); i++) {
                     JSONObject o = r.getJSONObject(i);
-                    String id = o.optString("ID");
-                    Dining d = diningsDB.get(id);
+                    String diningId = o.optString("ID");
+                    Dining d = diningsDB.findByDiningId(diningId);
                     if (d != null) {
                         d.setIsOpen(o.optBoolean("isOpen"));
                         d.setUpcomingStatusChange(!o.optString("upcomingStatusChange").equals("null") ? DateTime.parse(o.optString("upcomingStatusChange")) : null);
-                        diningsDB.update(d, id);
+                        diningsDB.update(d, d.getId());
                     }
                 }
             } catch (Exception e) {
@@ -308,12 +328,15 @@ public class NetworkUtils {
 
         @Override
         protected void onPostExecute(Boolean wasSuccessful) {
-            // TODO: update UI with new status
+            if (!wasSuccessful) {
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "buildingsNetworkError");
+            }
         }
 
     }
 
-    private static class ProcessEventsResponseTask extends AsyncTask<String, Void, Boolean> {
+    private class ProcessEventsResponseTask extends AsyncTask<String, Void, Boolean> {
 
         // TODO: guarantee that this task completes uninterrupted - what things can interrupt an Async task? screen orientation change? Minimizing app?
         // TODO: instead of using SQL WHERE LIKE to match strings (which doesn't take into account whitespace - inefficient), TOKENIZE name and address fields and store in building object; this way you can just match tokens
@@ -434,7 +457,10 @@ public class NetworkUtils {
 
         @Override
         protected void onPostExecute(Boolean wasSuccessful) {
-            // TODO: display Toast indicating success / failure
+            if (!wasSuccessful) {
+                DialogFragment dialog = new NetworkErrorDialogFragment();
+                dialog.show(fragmentManager, "buildingsNetworkError");
+            }
         }
     }
 

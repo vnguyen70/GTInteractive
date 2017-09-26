@@ -1,6 +1,8 @@
 package com.example.vi_tu.gtinteractive;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -15,8 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.vi_tu.gtinteractive.adapters.DiningAdapter;
+import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
+import com.example.vi_tu.gtinteractive.constants.Arguments;
+import com.example.vi_tu.gtinteractive.constants.TabType;
+import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Event;
@@ -24,14 +32,12 @@ import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.temp.DiningAdapter;
-import com.example.vi_tu.gtinteractive.temp.EventAdapter;
+import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
+import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
 import java.util.List;
 
-import static com.example.vi_tu.gtinteractive.utilities.NetworkUtils.updateDiningStatus;
-
-public class BuildingDetailsActivity extends AppCompatActivity {
+public class BuildingDetailsActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -40,7 +46,9 @@ public class BuildingDetailsActivity extends AppCompatActivity {
     private DiningPersistence diningsDB;
     private EventPersistence eventsDB;
 
-    private String buildingId;
+    private NetworkUtils networkUtils;
+
+    private int objectId;
     private static Building b; // building to display
 
     private static List<Event> eList;
@@ -67,14 +75,15 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         eventsDB = new EventPersistence(db);
 
         // building to display
-        buildingId = getIntent().getStringExtra("buildingId");
-        b = buildingsDB.findByBuildingId(buildingId);
-        if (b == null) {
-            buildingId = "166"; // CULC by default TODO
-            b = buildingsDB.findByBuildingId(buildingId);
+        b = Building.DEFAULT_BUILDING;
+        objectId = getIntent().getIntExtra(Arguments.OBJECT_ID, -1);
+        Building temp = buildingsDB.get(objectId);
+        if (temp != null) {
+            b = temp;
         }
 
-        updateDiningStatus(diningsDB, getApplicationContext()); // TODO: only update dinings associated with building?
+        networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
+        networkUtils.updateDiningStatus(diningsDB); // TODO: only update dinings associated with building?
 
         dList = diningsDB.getAll();
         eList = eventsDB.getAll();
@@ -86,6 +95,33 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        int tab = getIntent().getIntExtra(Arguments.DEFAULT_TAB, -1);
+        int position;
+        switch(tab) {
+            case TabType.INFO:
+                position = 0;
+                break;
+            case TabType.DINING:
+                position = 1;
+                break;
+            case TabType.EVENT:
+                position = 2;
+                break;
+            default:
+                position = 0; // info tab by default;
+        }
+        mViewPager.setCurrentItem(position); // info tab by default
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogInterface dialog) {
+        networkUtils.updateDiningStatus(diningsDB);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogInterface dialog) {
+        // TODO: show toast?
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -122,12 +158,35 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     break;
                 default: // info (e.g. sectionNum = 0)
                     rootView = inflater.inflate(R.layout.fragment_building_details_info, container, false);
+                    TextView nameText = rootView.findViewById(R.id.nameText);
                     TextView altNamesText = rootView.findViewById(R.id.altNamesText);
                     TextView hoursText = rootView.findViewById(R.id.hoursText);
                     TextView addressText = rootView.findViewById(R.id.addressText);
+                    Button showInMap = rootView.findViewById(R.id.showInMapButton);
+                    Button viewInternalLayout = rootView.findViewById(R.id.viewInternalLayoutButton);
+                    nameText.setText(b.getName());
                     altNamesText.setText(b.getAltNames());
                     hoursText.setText(b.getTimeOpen() + " - " + b.getTimeClose());
                     addressText.setText(b.getAddress());
+                    showInMap.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent mapActivityIntent = new Intent(context, MapActivity.class);
+                            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, b.getId());
+                            context.startActivity(mapActivityIntent);
+                        }
+                    });
+                    viewInternalLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent internalMapIntent = new Intent(context, InternalMapActivity.class);
+                            internalMapIntent.putExtra(Arguments.OBJECT_ID, b.getId());
+                            startActivity(internalMapIntent);
+                        }
+                    });
             }
             return rootView;
         }

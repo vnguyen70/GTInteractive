@@ -31,7 +31,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
     // TODO: improve performance by creating a new function that utilizes SQL full text search (pre-indexing)
     // TODO: filter against building nicknames
     public Building findByBuildingId(String buildingId) {
-        return findOne(Building.Contract.COLUMN_BUILDING_ID + " = " + buildingId);
+        return findOne(Building.Contract.COLUMN_BUILDING_ID + " = \"" + buildingId + "\"");
     }
 
     public List<Building> findByName(String query) {
@@ -188,6 +188,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
     @Override
     protected Building toDomain(Cursor c) {
         return Building.builder()
+                .id(c.getInt(c.getColumnIndex(Building.Contract._ID)))
                 .buildingId(c.getString(c.getColumnIndex(Building.Contract.COLUMN_BUILDING_ID)))
                 .name(c.getString(c.getColumnIndex(Building.Contract.COLUMN_NAME)))
                 .address(c.getString(c.getColumnIndex(Building.Contract.COLUMN_ADDRESS)))

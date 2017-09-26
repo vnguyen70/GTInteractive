@@ -15,7 +15,7 @@ import android.view.View;
 import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.temp.BuildingAdapter;
+import com.example.vi_tu.gtinteractive.adapters.BuildingAdapter;
 
 import java.util.List;
 

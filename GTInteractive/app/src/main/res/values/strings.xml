@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">GTInteractive</string>
+    <string name="title_activity_map">Map</string>
     <string name="title_activity_buildings_test">Buildings Test</string>
     <string name="title_activity_events_test">Events Test</string>
     <string name="title_activity_dinings_test">Dinings Test</string>
-    <string name="title_activity_map">Map</string>
-    <string name="title_activity_building_detail">Building Detail</string>
     <string name="title_activity_building_details">Building Details</string>
+    <string name="title_activity_dining_details">Dining Details</string>
+    <string name="title_activity_event_details">Event Details</string>
     <string name="title_activity_internal_map">Internal map</string>
     <string name="title_activity_building_search">Building Search</string>
 

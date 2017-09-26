@@ -20,7 +20,18 @@ public class Dining {
 
     public final static int DAYS_PER_WEEK = 7;
 
+    public static final Dining DEFAULT_DINING = Dining.builder()
+            .diningId("DEFAULT")
+            .buildingId("DEFAULT")
+            .name("Dining Info Not Available")
+            .description("n/a")
+            .locationDetails("n/a")
+            .promotionMessage("n/a")
+            .build();
+
     // From API: http://diningdata.itg.gatech.edu:80/api/DiningLocations
+
+    Integer id;
 
     // Object info
     String diningId;
