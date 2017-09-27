@@ -71,9 +71,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Buildings"
+            android:padding="4dp"
+            android:text="@string/buildings_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"
             app:layout_constraintBottom_toBottomOf="@+id/buildingsViewButton"
             app:layout_constraintRight_toLeftOf="@+id/buildingsViewButton"
             app:layout_constraintTop_toTopOf="@+id/buildingsViewButton" />
@@ -96,9 +99,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Dining"
+            android:padding="4dp"
+            android:text="@string/dining_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"
             app:layout_constraintBottom_toBottomOf="@+id/diningsViewButton"
             app:layout_constraintRight_toLeftOf="@+id/diningsViewButton"
             app:layout_constraintTop_toTopOf="@+id/diningsViewButton" />
@@ -121,9 +127,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Events"
+            android:padding="4dp"
+            android:text="@string/events_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"
             app:layout_constraintBottom_toBottomOf="@+id/eventsViewButton"
             app:layout_constraintRight_toLeftOf="@+id/eventsViewButton"
             app:layout_constraintTop_toTopOf="@+id/eventsViewButton" />
@@ -146,9 +155,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Parking"
+            android:padding="4dp"
+            android:text="@string/parking_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"
             app:layout_constraintBottom_toBottomOf="@+id/parkingViewButton"
             app:layout_constraintRight_toLeftOf="@+id/parkingViewButton"
             app:layout_constraintTop_toTopOf="@+id/parkingViewButton" />
@@ -171,9 +183,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Printers"
+            android:padding="4dp"
+            android:text="@string/printers_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"
             app:layout_constraintBottom_toBottomOf="@+id/printingViewButton"
             app:layout_constraintRight_toLeftOf="@+id/printingViewButton"
             app:layout_constraintTop_toTopOf="@+id/printingViewButton" />
@@ -211,10 +226,51 @@
             android:clickable="true"
             app:backgroundTint="@android:color/white"
             app:fabSize="mini"
-            app:rippleColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/places_ic_search"/>
+            app:rippleColor="@android:color/black"
+            app:srcCompat="@android:color/transparent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/toggleTrafficButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            app:backgroundTint="@android:color/darker_gray"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/resetCameraButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:rippleColor="@android:color/black"
+            app:srcCompat="@android:color/transparent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/togglePolygonsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/holo_red_light"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/toggleTrafficButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:rippleColor="@android:color/black"
+            app:srcCompat="@android:color/transparent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/toggleOverlayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/holo_green_light"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/toggleTrafficButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:rippleColor="@android:color/black"
+            app:srcCompat="@android:color/transparent" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -38,5 +38,10 @@
     <string name="general_information">General Information</string>
     <string name="address">Address:</string>
     <string name="action_clear">Clear</string>
+    <string name="printers_view_button_label">Printers</string>
+    <string name="parking_view_button_label">Parking</string>
+    <string name="events_view_button_label">Events</string>
+    <string name="dining_view_button_label">Dining</string>
+    <string name="buildings_view_button_label">Buildings</string>
 
 </resources>
