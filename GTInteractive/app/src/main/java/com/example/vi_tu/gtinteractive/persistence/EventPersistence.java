@@ -25,6 +25,18 @@ public class EventPersistence extends BasePersistence<Event> {
 
     /******** Search Functions ********************************************************************/
 
+    public List<Event> findByEventId(String eventId) {
+        return findMany(Event.Contract.COLUMN_EVENT_ID + " = " + eventId);
+    }
+
+    public List<Event> findByTitle(String query) {
+        return findMany("(LOWER(" + Event.Contract.COLUMN_TITLE + ") LIKE \"%" + query.toLowerCase() + "%\")");
+    }
+
+    public List<Event> findByCategory(Event.Category category) {
+        return findMany(Event.Contract.COLUMN_CATEGORIES + " LIKE \"%" + category.name() + "%\""); // TODO: whole word matching
+    }
+
     public List<Event> findByBuildingId(String buildingId) {
         return findMany(Event.Contract.COLUMN_BUILDING_ID + " = " + buildingId);
     }

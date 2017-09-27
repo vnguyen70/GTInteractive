@@ -42,6 +42,10 @@ public class BuildingPersistence extends BasePersistence<Building> {
         return findMany("(LOWER(" + Building.Contract.COLUMN_ADDRESS_TOKENS + ") LIKE \"%" + query.toLowerCase() + "%\")"); // TODO: optimization - assume addressTokens is already lowercase
     }
 
+    public List<Building> findByCategory(Building.Category category) {
+        return findMany(Building.Contract.COLUMN_CATEGORY + " = " + category.name()); // TODO: doesn't find "Other" category
+    }
+
     public String findBuildingIdByLocation(String location) {
 
         Map<String, Integer> buildingScores = new HashMap<>();
