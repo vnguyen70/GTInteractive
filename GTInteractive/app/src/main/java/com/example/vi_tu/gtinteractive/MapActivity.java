@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vi_tu.gtinteractive.constants.Arguments;
+import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
@@ -242,9 +243,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
         try {
             printersLayer = new KmlLayer(googleMap, R.raw.printers, getApplicationContext());
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 
@@ -367,7 +366,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     private Marker addEventMarker(Event e) {
         String buildingId = e.getBuildingId();
         Building b = buildingsDB.findByBuildingId(buildingId);
-        LatLng ll = new LatLng(33.774637, -84.397321); // Tech Green by default
+        LatLng ll = new LatLng(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
         if (b != null) {
             ll = new LatLng(b.getLatitude(), b.getLongitude());
 
@@ -389,7 +388,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         googleMap.setMyLocationEnabled(true);
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(new Criteria(), true));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 18.0f));
+        if (location != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 18.0f));
+        } else {
+            Toast.makeText(this, "Location services unavailable on your device", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void centerMarker(Marker m) {
@@ -397,11 +400,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     private void centerCampus() {
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(33.777433, -84.398636), 14.6f, 0, 0))); // tech campus
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(Constants.GATECH_LATITUDE, Constants.GATECH_LONGITUDE), 14.6f, 0, 0))); // tech campus
     }
 
     private void resetCamera() {
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(33.777433, -84.398636), 14.6f, 0, 0))); // tech campus
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(Constants.GATECH_LATITUDE, Constants.GATECH_LONGITUDE), 14.6f, 0, 0))); // tech campus
     }
 
     private void setCurrView(int v) {

@@ -60,7 +60,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         long eventsCacheExpiredMS = sharedPreferences.getLong("eventsCacheExpiredMS", 0);
 
         if (nowMS >= eventsCacheExpiredMS) {
-            networkUtils.loadEventsFromRSSFeed(eventsDB, buildingsDB);
+            networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("eventsCacheExpiredMS", nowMS + EVENTS_CACHE_DURATION_MS);
             editor.apply();
@@ -88,7 +88,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
-                networkUtils.loadEventsFromRSSFeed(eventsDB, buildingsDB);
+                networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
                 return true;
             case R.id.action_clear:
                 eventsDB.deleteAll();
@@ -123,7 +123,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     @Override
     public void onDialogPositiveClick(DialogInterface dialog) {
         tvEventsTest.setText("");
-        networkUtils.loadEventsFromRSSFeed(eventsDB, buildingsDB);
+        networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
     }
 
     @Override

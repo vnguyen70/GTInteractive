@@ -59,12 +59,18 @@ public class BuildingPersistence extends BasePersistence<Building> {
 
         boolean hasAddress = false;
 
+        boolean skipFlag = false;
+
         List<String> tokensTemp = tokenizeList(location);
-        List<String> tokens = new ArrayList<>(tokensTemp);
+        List<String> tokens = new ArrayList<>();
         // TODO: create more filters like this; find a cleaner solution
         // TODO: presence of "dr", "drive", "st", or "street" indicates address; perhaps flag location for address matching?
         for (String t : tokensTemp) {
-            if (t.equals("bldg")) {
+            if (skipFlag) {
+                skipFlag = false;
+            } else if (t.equals("room")) {
+                skipFlag = true; // skip this token and skip next token as well (room number)
+            } else if (t.equals("bldg")) {
                 tokens.add("building");
             } else if (t.equals("dr")) {
                 tokens.add("drive");
@@ -81,6 +87,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
             } else if (t.equals("way")) {
                 hasAddress = true;
             }
+            tokens.add(t);
         }
 
 //        Log.d("LOCATION_TOKENS", tokens.toString());
@@ -126,6 +133,8 @@ public class BuildingPersistence extends BasePersistence<Building> {
                     score = 3;
                 } else if (t.equals("house") || t.equals("deck") || t.equals("apartments") || t.equals("center")) { // medium weight - can apply to some buildings / locations
                     score = 5;
+                } else if (t.equals("conference")) {
+                    score = 7;
                 }
                 if (oldScore != null) {
                     score += oldScore;
@@ -133,6 +142,8 @@ public class BuildingPersistence extends BasePersistence<Building> {
                 buildingScores.put(bId, score);
             }
         }
+
+        // TODO: if still multiple matches, give more weight correct sequence of tokens (e.g. "student center" vs "student SUCCESS center"); match strings of multiple tokens at a time;
 
         // Step 5: get bestMatches and return a buildingId
 
@@ -171,15 +182,6 @@ public class BuildingPersistence extends BasePersistence<Building> {
         cv.put(Building.Contract.COLUMN_IMAGE_URL, b.getImageURL());
         cv.put(Building.Contract.COLUMN_WEBSITE_URL, b.getWebsiteURL());
         cv.put(Building.Contract.COLUMN_PHONE_NUM, b.getPhoneNum());
-        cv.put(Building.Contract.COLUMN_DESCRIPTION, b.getDescription());
-        cv.put(Building.Contract.COLUMN_LOCATED_IN, b.getLocatedIn());
-        cv.put(Building.Contract.COLUMN_YELP_ID, b.getYelpID());
-        cv.put(Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS, b.getAcceptsBuzzFunds());
-        cv.put(Building.Contract.COLUMN_PRICE_LEVEL, b.getPriceLevel());
-        cv.put(Building.Contract.COLUMN_OPEN_TIMES, serializeTimes(b.getOpenTimes()));
-        cv.put(Building.Contract.COLUMN_CLOSE_TIMES, serializeTimes(b.getCloseTimes()));
-        cv.put(Building.Contract.COLUMN_CATEGORY_TITLE, b.getCategoryTitle());
-        cv.put(Building.Contract.COLUMN_CATEGORY_COLOR, b.getCategoryColor());
         cv.put(Building.Contract.COLUMN_STREET, b.getStreet());
         cv.put(Building.Contract.COLUMN_CITY, b.getCity());
         cv.put(Building.Contract.COLUMN_STATE, b.getState());
@@ -187,6 +189,14 @@ public class BuildingPersistence extends BasePersistence<Building> {
         cv.put(Building.Contract.COLUMN_LATITUDE, b.getLatitude());
         cv.put(Building.Contract.COLUMN_LONGITUDE, b.getLongitude());
         cv.put(Building.Contract.COLUMN_POLYGONS, serializePolygons(b.getPolygons()));
+        cv.put(Building.Contract.COLUMN_CATEGORY, b.getCategory().name());
+        cv.put(Building.Contract.COLUMN_DESCRIPTION, b.getDescription());
+        cv.put(Building.Contract.COLUMN_LOCATED_IN, b.getLocatedIn());
+        cv.put(Building.Contract.COLUMN_YELP_ID, b.getYelpID());
+        cv.put(Building.Contract.COLUMN_OPEN_TIMES, serializeTimes(b.getOpenTimes()));
+        cv.put(Building.Contract.COLUMN_CLOSE_TIMES, serializeTimes(b.getCloseTimes()));
+        cv.put(Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS, b.getAcceptsBuzzFunds());
+        cv.put(Building.Contract.COLUMN_PRICE_LEVEL, b.getPriceLevel());
         cv.put(Building.Contract.COLUMN_ALT_NAMES, b.getAltNames());
         cv.put(Building.Contract.COLUMN_NAME_TOKENS, tokenize(b.getName()));
         cv.put(Building.Contract.COLUMN_ADDRESS_TOKENS, tokenize(b.getStreet())); // TODO
@@ -203,15 +213,6 @@ public class BuildingPersistence extends BasePersistence<Building> {
                 .imageURL(c.getString(c.getColumnIndex(Building.Contract.COLUMN_IMAGE_URL)))
                 .websiteURL(c.getString(c.getColumnIndex(Building.Contract.COLUMN_WEBSITE_URL)))
                 .phoneNum(c.getString(c.getColumnIndex(Building.Contract.COLUMN_PHONE_NUM)))
-                .description(c.getString(c.getColumnIndex(Building.Contract.COLUMN_DESCRIPTION)))
-                .locatedIn(c.getString(c.getColumnIndex(Building.Contract.COLUMN_LOCATED_IN)))
-                .yelpID(c.getString(c.getColumnIndex(Building.Contract.COLUMN_YELP_ID)))
-                .acceptsBuzzFunds(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS)) == 1)
-                .priceLevel(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_PRICE_LEVEL)))
-                .openTimes(deserializeTimes(c.getString(c.getColumnIndex(Building.Contract.COLUMN_OPEN_TIMES))))
-                .closeTimes(deserializeTimes(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CLOSE_TIMES))))
-                .categoryTitle(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CATEGORY_TITLE)))
-                .categoryColor(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CATEGORY_COLOR)))
                 .street(c.getString(c.getColumnIndex(Building.Contract.COLUMN_STREET)))
                 .city(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CITY)))
                 .state(c.getString(c.getColumnIndex(Building.Contract.COLUMN_STATE)))
@@ -219,6 +220,14 @@ public class BuildingPersistence extends BasePersistence<Building> {
                 .latitude(c.getDouble(c.getColumnIndex(Building.Contract.COLUMN_LATITUDE)))
                 .longitude(c.getDouble(c.getColumnIndex(Building.Contract.COLUMN_LONGITUDE)))
                 .polygons(deserializePolygons(c.getString(c.getColumnIndex(Building.Contract.COLUMN_POLYGONS))))
+                .category(Building.Category.valueOf(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CATEGORY))))
+                .description(c.getString(c.getColumnIndex(Building.Contract.COLUMN_DESCRIPTION)))
+                .locatedIn(c.getString(c.getColumnIndex(Building.Contract.COLUMN_LOCATED_IN)))
+                .yelpID(c.getString(c.getColumnIndex(Building.Contract.COLUMN_YELP_ID)))
+                .openTimes(deserializeTimes(c.getString(c.getColumnIndex(Building.Contract.COLUMN_OPEN_TIMES))))
+                .closeTimes(deserializeTimes(c.getString(c.getColumnIndex(Building.Contract.COLUMN_CLOSE_TIMES))))
+                .acceptsBuzzFunds(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS)) == 1)
+                .priceLevel(c.getInt(c.getColumnIndex(Building.Contract.COLUMN_PRICE_LEVEL)))
                 .altNames(c.getString(c.getColumnIndex(Building.Contract.COLUMN_ALT_NAMES)))
                 .nameTokens(c.getString(c.getColumnIndex(Building.Contract.COLUMN_NAME_TOKENS)))
                 .addressTokens(c.getString(c.getColumnIndex(Building.Contract.COLUMN_ADDRESS_TOKENS)))

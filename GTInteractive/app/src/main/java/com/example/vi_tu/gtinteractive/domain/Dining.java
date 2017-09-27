@@ -18,11 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Dining {
 
-    public final static int DAYS_PER_WEEK = 7;
-
     public static final Dining DEFAULT_DINING = Dining.builder()
-            .diningId("DEFAULT")
-            .buildingId("DEFAULT")
+            .diningId("DUMMY")
+            .buildingId("DUMMY")
             .name("Dining Info Not Available")
             .description("n/a")
             .locationDetails("n/a")
@@ -60,7 +58,7 @@ public class Dining {
     List<Dining.Tag> tags;
     String tagIds; // tagIds separated by spaces for easy searching
 
-    // Dynamic status (updated regularly)
+    // Dynamic status (real-time)
     Boolean isOpen;
     DateTime upcomingStatusChange; // upcoming date and time when status changes (e.g. from open to closed, or from closed to open) // TODO: schedule device to fetch fresh data from dining API at this datetime
 

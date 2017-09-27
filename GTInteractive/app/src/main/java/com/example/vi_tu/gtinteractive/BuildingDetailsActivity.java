@@ -77,7 +77,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
         eventsDB = new EventPersistence(db);
 
         // building to display
-        b = Building.DEFAULT_BUILDING;
+        b = Building.DUMMY;
         objectId = getIntent().getIntExtra(Arguments.OBJECT_ID, -1);
         Building temp = buildingsDB.get(objectId);
         if (temp != null) {

@@ -2,6 +2,7 @@ package com.example.vi_tu.gtinteractive.utilities;
 
 import android.database.Cursor;
 
+import com.example.vi_tu.gtinteractive.domain.Event;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersistenceUtils {
+
+    public static final String DELIMITER = " ";
 
     public static Long timeToMillis(LocalTime input) {
         DateTime epoch = new DateTime(0);
@@ -47,20 +50,18 @@ public class PersistenceUtils {
 
     public static String serializeTimes(LocalTime[] times) {
         String result = "";
-        if (times != null) {
-            for (LocalTime lt : times) {
-                if (lt != null) {
-                    result += lt.toString("HHmm") + " ";
-                } else {
-                    result += "NULL "; // TODO: refactor "NULL" into variable
-                }
+        for (LocalTime lt : times) {
+            if (lt != null) {
+                result += lt.toString("HHmm") + DELIMITER;
+            } else {
+                result += "NULL" + DELIMITER; // TODO: refactor "NULL" into variable
             }
         }
         return result.trim();
     }
 
     public static LocalTime[] deserializeTimes(String s) {
-        String[] timeStrings = s.split("\\s+");
+        String[] timeStrings = s.split(DELIMITER);
         LocalTime[] times = new LocalTime[timeStrings.length];
         for (int i = 0; i < timeStrings.length; i++) {
             if (!timeStrings[i].equals("NULL")) { // TODO: refactor "NULL" into variable
@@ -74,21 +75,19 @@ public class PersistenceUtils {
 
     public static String serializePolygons(List<LatLng[]> polygons) {
         JSONArray polygonsJSON = new JSONArray();
-        if (polygons != null) {
-            for (LatLng[] polygon : polygons) {
-                JSONArray polygonJSON = new JSONArray();
-                for (LatLng vertex : polygon) {
-                    JSONArray vertexJSON = new JSONArray();
-                    try {
-                        vertexJSON.put(0, vertex.latitude);
-                        vertexJSON.put(1, vertex.longitude);
-                        polygonJSON.put(vertexJSON);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        for (LatLng[] polygon : polygons) {
+            JSONArray polygonJSON = new JSONArray();
+            for (LatLng vertex : polygon) {
+                JSONArray vertexJSON = new JSONArray();
+                try {
+                    vertexJSON.put(0, vertex.latitude);
+                    vertexJSON.put(1, vertex.longitude);
+                    polygonJSON.put(vertexJSON);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                polygonsJSON.put(polygonJSON);
             }
+            polygonsJSON.put(polygonJSON);
         }
         return polygonsJSON.toString();
     }
@@ -123,6 +122,25 @@ public class PersistenceUtils {
             }
         }
         return polygons;
+    }
+
+    public static String serializeCategories(List<Event.Category> categories) {
+        String result = "";
+        for (Event.Category c : categories) {
+            result += c.name() + DELIMITER;
+        }
+        return result.trim();
+    }
+
+    public static List<Event.Category> deserializeCategories(String str) {
+        List<Event.Category> categories = new ArrayList<>();
+        String[] categoryStrings = str.split(DELIMITER);
+        for (String s : categoryStrings) {
+            if (s.length() > 0) {
+                categories.add(Event.Category.valueOf(s));
+            }
+        }
+        return categories;
     }
 
 }

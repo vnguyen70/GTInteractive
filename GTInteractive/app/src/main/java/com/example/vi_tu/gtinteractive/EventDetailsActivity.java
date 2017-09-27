@@ -33,7 +33,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         eventsDB = new EventPersistence(db);
 
         // dining to display
-        e = Event.DEFAULT_EVENT;
+        e = Event.DUMMY;
         objectId = getIntent().getIntExtra(Arguments.OBJECT_ID, -1);
         Event temp = eventsDB.get(objectId);
         if (temp != null) {
