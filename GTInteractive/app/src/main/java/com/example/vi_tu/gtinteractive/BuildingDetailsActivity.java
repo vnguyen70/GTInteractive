@@ -15,9 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,17 +35,23 @@ import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+//import com.squareup.picasso.Picasso;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
+
 import org.joda.time.LocalTime;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 public class BuildingDetailsActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+
+    private ImageView buildingImageView;
 
     private BuildingPersistence buildingsDB;
     private DiningPersistence diningsDB;
@@ -68,6 +76,8 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        buildingImageView = (ImageView) findViewById(R.id.buildingImageView);
+
         context = this;
 
         // persistence
@@ -84,8 +94,11 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
         if (temp != null) {
             b = temp;
         }
-
-
+//        Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
+//        URL imageURL = new URL(b.getImageURL());
+//        URI imageURI = imageURL.toURI();
+//        buildingImageView.setImageURI(imageURI);
+        Log.d("BuildingDetailsActivity", "hello " + b.getBuildingId());
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
         networkUtils.updateDiningStatus(diningsDB); // TODO: only update dinings associated with building?
 

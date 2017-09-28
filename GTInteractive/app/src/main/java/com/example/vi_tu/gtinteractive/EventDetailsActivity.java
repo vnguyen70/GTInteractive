@@ -42,9 +42,20 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         // UI
         TextView idTextView = (TextView) findViewById(R.id.eventIdText);
+        TextView titleTextView = (TextView) findViewById(R.id.titleText);
+        TextView startDateTextView = (TextView) findViewById(R.id.startDateText);
+        TextView endDateTextView = (TextView) findViewById(R.id.endDateText);
+        TextView descriptionTextView = (TextView) findViewById(R.id.descriptionText);
+        TextView locationTextView = (TextView) findViewById(R.id.locationText);
         Button showInMapButton = (Button) findViewById(R.id.showInMapButton);
 
         idTextView.setText(String.valueOf(e.getId()));
+        titleTextView.setText(String.valueOf(e.getTitle()));
+        startDateTextView.setText(String.valueOf(e.getStartDate()));
+        endDateTextView.setText(String.valueOf(e.getEndDate()));
+        descriptionTextView.setText(String.valueOf(e.getDescription()));
+        locationTextView.setText(String.valueOf(e.getLocation()));
+
         showInMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

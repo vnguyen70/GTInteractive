@@ -42,9 +42,20 @@ public class DiningDetailsActivity extends AppCompatActivity {
 
         // UI
         TextView idTextView = (TextView) findViewById(R.id.diningIdText);
+        TextView nameTextView = (TextView) findViewById(R.id.nameText);
+        TextView hoursTextView = (TextView) findViewById(R.id.hoursText);
+        TextView locationTextView = (TextView) findViewById(R.id.locationText);
+        TextView descriptionTextView = (TextView) findViewById(R.id.descriptionText);
+        TextView menuURLTextView = (TextView) findViewById(R.id.menuURLText);
         Button showInMapButton = (Button) findViewById(R.id.showInMapButton);
 
         idTextView.setText(String.valueOf(d.getId()));
+        nameTextView.setText(String.valueOf(d.getName()));
+//        hoursTextView.setText(String.valueOf(d.get));
+        locationTextView.setText(String.valueOf(d.getLocationDetails()));
+        descriptionTextView.setText(String.valueOf(d.getDescription()));
+        menuURLTextView.setText(String.valueOf(d.getMenuLinkURL()));
+
         showInMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

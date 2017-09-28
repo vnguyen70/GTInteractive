@@ -58,7 +58,6 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
->>>>>>> Stashed changes
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
