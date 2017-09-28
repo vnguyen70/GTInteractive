@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -84,8 +85,16 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
             b = temp;
         }
 
+
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
         networkUtils.updateDiningStatus(diningsDB); // TODO: only update dinings associated with building?
+
+        // Initializing animated scroll for the toolbar
+        CollapsingToolbarLayout collapsingToolBarLayout
+                = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        collapsingToolBarLayout.setTitle(b.getName());
+
+//        updateDiningStatus(diningsDB, getApplicationContext()); // TODO: only update dinings associated with building?
 
         dList = diningsDB.getAll();
         eList = eventsDB.getAll();
