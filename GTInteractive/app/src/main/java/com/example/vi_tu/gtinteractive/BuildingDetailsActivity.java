@@ -17,10 +17,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.adapters.DiningAdapter;
@@ -35,16 +36,14 @@ import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-//import com.squareup.picasso.Picasso;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
-
 import org.joda.time.LocalTime;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
+
+//import com.squareup.picasso.Picasso;
 
 public class BuildingDetailsActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
@@ -136,6 +135,15 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
                 position = 0; // info tab by default;
         }
         mViewPager.setCurrentItem(position); // info tab by default
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

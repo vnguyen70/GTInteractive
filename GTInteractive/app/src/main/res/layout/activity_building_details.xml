@@ -12,29 +12,8 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-<!--<<<<<<< Updated upstream-->
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-<!--=======-->
-
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--android:background="?attr/colorPrimary"-->
-            <!--app:layout_scrollFlags="scroll|enterAlways"-->
-            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
-
-        <!--</android.support.v7.widget.Toolbar>-->
-        <!---->
-        <!--<ImageView-->
-            <!--android:id="@+id/buildingImageView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="223dp"-->
-            <!--app:srcCompat="@drawable/clough" />-->
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
@@ -44,9 +23,10 @@
             <ImageView
                 android:id="@+id/buildingImageView"
                 android:layout_width="match_parent"
-                android:layout_height="202dp"
+                android:layout_height="200dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/clough" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"

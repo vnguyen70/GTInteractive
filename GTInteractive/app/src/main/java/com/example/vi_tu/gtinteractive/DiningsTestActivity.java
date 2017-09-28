@@ -77,6 +77,9 @@ public class DiningsTestActivity extends AppCompatActivity implements NetworkErr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
