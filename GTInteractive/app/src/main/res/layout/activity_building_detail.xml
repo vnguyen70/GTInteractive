@@ -193,7 +193,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/phoneNumberStatic" />
 
             <TextView
-                android:id="@+id/hoursText"
+                android:id="@+id/startDateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
