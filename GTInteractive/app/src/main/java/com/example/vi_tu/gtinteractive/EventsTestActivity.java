@@ -1,5 +1,6 @@
 package com.example.vi_tu.gtinteractive;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -16,19 +17,21 @@ import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
+import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
 import org.joda.time.DateTime;
 
 import java.util.List;
 
-import static com.example.vi_tu.gtinteractive.utilities.NetworkUtils.loadEventsFromRSSFeed;
-
-public class EventsTestActivity extends AppCompatActivity {
+public class EventsTestActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
     private TextView tvEventsTest;
 
     private EventPersistence eventsDB;
     private BuildingPersistence buildingsDB;
+
+    private NetworkUtils networkUtils;
 
     public static final String REQUEST_TAG = "EventsTestActivity";
 
@@ -49,13 +52,15 @@ public class EventsTestActivity extends AppCompatActivity {
         eventsDB = new EventPersistence(db);
         buildingsDB = new BuildingPersistence(db);
 
+        networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         long nowMS = DateTime.now().getMillis();
         long eventsCacheExpiredMS = sharedPreferences.getLong("eventsCacheExpiredMS", 0);
 
         if (nowMS >= eventsCacheExpiredMS) {
-            loadEventsFromRSSFeed(eventsDB, buildingsDB, getApplicationContext());
+            networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("eventsCacheExpiredMS", nowMS + EVENTS_CACHE_DURATION_MS);
             editor.apply();
@@ -83,7 +88,7 @@ public class EventsTestActivity extends AppCompatActivity {
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
-                loadEventsFromRSSFeed(eventsDB, buildingsDB, getApplicationContext());
+                networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
                 return true;
             case R.id.action_clear:
                 eventsDB.deleteAll();
@@ -115,4 +120,14 @@ public class EventsTestActivity extends AppCompatActivity {
         tvEventsTest.setText("" + eList.size() + " events found:\n\nbuildingId matches:\n - none: " + none + "\n - single: " + single + "\n - multiple: " + multiple + "\n\n" + results);
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogInterface dialog) {
+        tvEventsTest.setText("");
+        networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogInterface dialog) {
+        // TODO: display toast?
+    }
 }

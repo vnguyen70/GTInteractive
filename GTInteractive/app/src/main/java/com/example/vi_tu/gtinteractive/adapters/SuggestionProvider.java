@@ -1,4 +1,4 @@
-package com.example.vi_tu.gtinteractive.temp;
+package com.example.vi_tu.gtinteractive.adapters;
 
 import android.content.SearchRecentSuggestionsProvider;
 

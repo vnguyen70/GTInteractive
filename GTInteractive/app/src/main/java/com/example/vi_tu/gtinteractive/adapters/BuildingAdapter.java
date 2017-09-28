@@ -1,4 +1,4 @@
-package com.example.vi_tu.gtinteractive.temp;
+package com.example.vi_tu.gtinteractive.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.vi_tu.gtinteractive.BuildingDetailActivity;
+import com.example.vi_tu.gtinteractive.MapActivity;
 import com.example.vi_tu.gtinteractive.R;
+import com.example.vi_tu.gtinteractive.constants.Arguments;
+import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
     public void onBindViewHolder(BuildingViewHolder holder, int position) {
         Building b = bList.get(position);
         holder.buildingNameView.setText(b.getName());
-        holder.setBuildingId(b.getBuildingId());
+        holder.setObjectId(b.getId());
     }
 
     @Override
@@ -52,24 +54,26 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
     public class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView buildingNameView;
-        public String buildingId;
+        public int objectId;
 
         public BuildingViewHolder(View view) {
             super(view);
             buildingNameView = view.findViewById(R.id.tv_building_data);
-            buildingId = "";
+            objectId = -1;
             view.setOnClickListener(this);
         }
 
+        @Override
         public void onClick(View view) {
             Context context = view.getContext();
-            Intent buildingDetailsActivityIntent = new Intent(context, BuildingDetailActivity.class);
-            buildingDetailsActivityIntent.putExtra("buildingId", buildingId);
-            context.startActivity(buildingDetailsActivityIntent);
+            Intent mapActivityIntent = new Intent(context, MapActivity.class);
+            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+            mapActivityIntent.putExtra(Arguments.OBJECT_ID,objectId);
+            context.startActivity(mapActivityIntent);
         }
 
-        public void setBuildingId(String buildingId) {
-            this.buildingId = buildingId;
+        public void setObjectId(int objectId) {
+            this.objectId = objectId;
         }
     }
 

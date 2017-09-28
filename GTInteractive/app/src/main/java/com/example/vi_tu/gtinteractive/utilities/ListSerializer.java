@@ -25,7 +25,7 @@ public class ListSerializer<T> {
         List<T> list = new ArrayList<>();
         try {
             JSONObject json = new JSONObject(str);
-            JSONArray array = json.optJSONArray("items");
+            JSONArray array = json.getJSONArray("items");
             for (int i = 0; i < array.length(); i++) {
                 list.add((T) array.opt(i));
             }

@@ -1,5 +1,6 @@
 package com.example.vi_tu.gtinteractive;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -15,18 +16,20 @@ import android.widget.TextView;
 import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
+import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
 import org.joda.time.DateTime;
 
 import java.util.List;
 
-import static com.example.vi_tu.gtinteractive.utilities.NetworkUtils.loadDiningsFromAPI;
-
-public class DiningsTestActivity extends AppCompatActivity {
+public class DiningsTestActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
     private TextView tvDiningsTest;
 
     private DiningPersistence diningsDB;
+
+    private NetworkUtils networkUtils;
 
     public static final String REQUEST_TAG = "DiningsTestActivity";
 
@@ -46,13 +49,15 @@ public class DiningsTestActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         diningsDB = new DiningPersistence(db);
 
+        networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         long nowMS = DateTime.now().getMillis();
         long diningsCacheExpiredMS = sharedPreferences.getLong("diningsCacheExpiredMS", 0);
 
         if (nowMS >= diningsCacheExpiredMS) {
-            loadDiningsFromAPI(diningsDB, getApplicationContext());
+            networkUtils.loadDiningsFromAPI(diningsDB);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("diningsCacheExpiredMS", nowMS + DININGS_CACHE_DURATION_MS);
             editor.apply();
@@ -80,7 +85,7 @@ public class DiningsTestActivity extends AppCompatActivity {
                 return true;
             case R.id.action_reload:
                 tvDiningsTest.setText("");
-                loadDiningsFromAPI(diningsDB, getApplicationContext());
+                networkUtils.loadDiningsFromAPI(diningsDB);
                 return true;
             case R.id.action_clear:
                 diningsDB.deleteAll();
@@ -102,4 +107,14 @@ public class DiningsTestActivity extends AppCompatActivity {
         tvDiningsTest.setText("" + dList.size() + " dinings found:\n\n" + results);
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogInterface dialog) {
+        tvDiningsTest.setText("");
+        networkUtils.loadDiningsFromAPI(diningsDB);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogInterface dialog) {
+        // TODO: display toast?
+    }
 }

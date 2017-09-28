@@ -18,9 +18,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Dining {
 
-    public final static int DAYS_PER_WEEK = 7;
+    public static final Dining DEFAULT_DINING = Dining.builder()
+            .diningId("DUMMY")
+            .buildingId("DUMMY")
+            .name("Dining Info Not Available")
+            .description("n/a")
+            .locationDetails("n/a")
+            .promotionMessage("n/a")
+            .build();
 
     // From API: http://diningdata.itg.gatech.edu:80/api/DiningLocations
+
+    Integer id;
 
     // Object info
     String diningId;
@@ -49,7 +58,7 @@ public class Dining {
     List<Dining.Tag> tags;
     String tagIds; // tagIds separated by spaces for easy searching
 
-    // Dynamic status (updated regularly)
+    // Dynamic status (real-time)
     Boolean isOpen;
     DateTime upcomingStatusChange; // upcoming date and time when status changes (e.g. from open to closed, or from closed to open) // TODO: schedule device to fetch fresh data from dining API at this datetime
 
