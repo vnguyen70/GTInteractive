@@ -3,7 +3,6 @@ package com.example.vi_tu.gtinteractive;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -74,11 +73,6 @@ public class BuildingDetailsActivity extends AppCompatActivity {
             buildingId = "166"; // CULC by default TODO
             b = buildingsDB.findByBuildingId(buildingId);
         }
-
-        // Initializing animated scroll for the toolbar
-        CollapsingToolbarLayout collapsingToolBarLayout
-                = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
-        collapsingToolBarLayout.setTitle(b.getName());
 
         updateDiningStatus(diningsDB, getApplicationContext()); // TODO: only update dinings associated with building?
 
