@@ -337,7 +337,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                     .strokeWidth(5)
                     .strokeColor(0x9900254c) // TODO: refactor colors into colors.xml
                     .fillColor(0x9900254c)
-                    .clickable(true)
+                    .clickable(false)
                     .visible(false)
             );
             p.setTag(b.getId());
@@ -456,6 +456,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         for (List<Polygon> pList : buildingPolygons.values()) {
             for (Polygon p : pList) {
                 p.setVisible(true);
+                p.setClickable(true);
             }
         }
         polygonsShown = true;
@@ -465,6 +466,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         for (List<Polygon> pList : buildingPolygons.values()) {
             for (Polygon p : pList) {
                 p.setVisible(false);
+                p.setClickable(false);
             }
         }
         polygonsShown = false;
