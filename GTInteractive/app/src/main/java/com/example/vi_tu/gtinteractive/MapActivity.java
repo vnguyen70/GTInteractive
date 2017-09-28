@@ -58,7 +58,7 @@ import java.util.Map;
 
 public class MapActivity extends FragmentActivity implements ListView.OnItemClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public static final String[] drawerItems = {"Buildings Test", "Dinings Test", "Events Test"};
+    public static final String[] drawerItems = {"Buildings Test", "Dinings Test", "Events Test", "Building List", "Dining List", "Event List"};
 
     public static final int REQUEST_LOCATION_PERMISSION = 0;
 
@@ -163,7 +163,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent searchIntent = new Intent(MapActivity.this, BuildingSearchActivity.class);
+                Intent searchIntent = new Intent(MapActivity.this, AllSearchActivity.class);
                 startActivity(searchIntent);
             }
         });
@@ -639,6 +639,21 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 drawerLayout.closeDrawer(drawerList);
                 Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
                 startActivity(eventsTestActivityIntent);
+                break;
+            case 3: // Buildings List
+                drawerLayout.closeDrawer(drawerList);
+                Intent buildingListActivityIntent = new Intent(MapActivity.this, BuildingListActivity.class);
+                startActivity(buildingListActivityIntent);
+                break;
+            case 4: // Dining List
+                drawerLayout.closeDrawer(drawerList);
+                Intent diningListActivityIntent = new Intent(MapActivity.this, DiningListActivity.class);
+                startActivity(diningListActivityIntent);
+                break;
+            case 5:
+                drawerLayout.closeDrawer(drawerList);
+                Intent eventListActivityIntent = new Intent(MapActivity.this, EventListActivity.class);
+                startActivity(eventListActivityIntent);
                 break;
             default:
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();

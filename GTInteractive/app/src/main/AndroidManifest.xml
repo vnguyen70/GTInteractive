@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -67,19 +68,32 @@
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".BuildingListActivity"
+            android:label="Building List"
+            android:parentActivityName=".MapActivity" />
+        <activity
             android:name=".DiningDetailsActivity"
             android:label="@string/title_activity_dining_details"
             android:parentActivityName=".MapActivity" />
         <activity
+            android:name=".DiningListActivity"
+            android:label="Dining List"
+            android:parentActivityName=".MapActivity" />
+        <activity
             android:name=".EventDetailsActivity"
             android:label="@string/title_activity_event_details"
+            android:parentActivityName=".MapActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".EventListActivity"
+            android:label="Event List"
             android:parentActivityName=".MapActivity" />
         <activity
             android:name=".InternalMapActivity"
             android:label="@string/title_activity_internal_map"
             android:parentActivityName=".BuildingDetailsActivity" />
         <activity
-            android:name=".BuildingSearchActivity"
+            android:name=".AllSearchActivity"
             android:label="@string/title_activity_building_search"
             android:parentActivityName=".MapActivity" />
         <activity android:name=".SearchableActivity">

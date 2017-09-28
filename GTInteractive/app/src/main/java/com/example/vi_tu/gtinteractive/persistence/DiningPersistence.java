@@ -39,7 +39,7 @@ public class DiningPersistence extends BasePersistence<Dining> {
     }
 
     public List<Dining> findByName(String name) {
-        return findMany(Dining.Contract.COLUMN_NAME_TOKENS + " LIKE \"%" + name + "%\")");
+        return findMany(Dining.Contract.COLUMN_NAME_TOKENS + " LIKE \"%" + name + "%\"");
     }
 
     public List<Dining> findByTagId(String tagId) {
