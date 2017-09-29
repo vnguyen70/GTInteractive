@@ -38,6 +38,7 @@ import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -94,10 +95,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
         if (temp != null) {
             b = temp;
         }
-//        Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
-//        URL imageURL = new URL(b.getImageURL());
-//        URI imageURI = imageURL.toURI();
-//        buildingImageView.setImageURI(imageURI);
+        Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
         Log.d("BuildingDetailsActivity", "hello " + b.getBuildingId());
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
         networkUtils.updateDiningStatus(diningsDB); // TODO: only update dinings associated with building?
