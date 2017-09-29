@@ -39,9 +39,10 @@ import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 
-import org.joda.time.LocalTime;
-
 import java.util.List;
+
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializePolygons;
+import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 
 //import com.squareup.picasso.Picasso;
 
@@ -190,40 +191,73 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
                     break;
                 default: // info (e.g. sectionNum = 0)
                     rootView = inflater.inflate(R.layout.fragment_building_details_info, container, false);
-                    TextView nameText = rootView.findViewById(R.id.nameText);
-                    TextView altNamesText = rootView.findViewById(R.id.altNamesText);
-                    TextView hoursText = rootView.findViewById(R.id.hoursText);
-                    TextView addressText = rootView.findViewById(R.id.addressText);
-                    Button showInMap = rootView.findViewById(R.id.showInMapButton);
-                    Button viewInternalLayout = rootView.findViewById(R.id.viewInternalLayoutButton);
 
-                    String hoursString = "n/a";
-                    LocalTime[] ot = b.getOpenTimes();
-                    LocalTime[] ct = b.getCloseTimes();
-                    if (ot != null && ot.length >= 1 && ct != null && ct.length >= 1) {
-                        LocalTime openTime = ot[1]; // TODO
-                        LocalTime closeTime = ct[1]; // TODO
-                        if (openTime != null && closeTime != null) {
-                            hoursString = openTime.toString("hh:mm a") + " - " + closeTime.toString("hh:mm a") + " (Monday)";
-                        }
-                    }
+                    TextView idTextView = rootView.findViewById(R.id.idText);
+                    TextView buildingIdTextView = rootView.findViewById(R.id.buildingIdText);
+                    TextView nameTextView = rootView.findViewById(R.id.nameText);
+                    TextView imageURLTextView = rootView.findViewById(R.id.imageURLText);
+                    TextView websiteURLTextView = rootView.findViewById(R.id.websiteURLText);
+                    TextView phoneNumTextView = rootView.findViewById(R.id.phoneNumText);
+                    TextView streetTextView = rootView.findViewById(R.id.streetText);
+                    TextView cityTextView = rootView.findViewById(R.id.cityText);
+                    TextView stateTextView = rootView.findViewById(R.id.stateText);
+                    TextView postalCodeTextView = rootView.findViewById(R.id.postalCodeText);
+                    TextView latitudeTextView = rootView.findViewById(R.id.latitudeText);
+                    TextView longitudeTextView = rootView.findViewById(R.id.longitudeText);
+                    TextView polygonsTextView = rootView.findViewById(R.id.polygonsText);
+                    TextView descriptionTextView = rootView.findViewById(R.id.descriptionText);
+                    TextView locatedInTextView = rootView.findViewById(R.id.locatedInText);
+                    TextView yelpIDTextView = rootView.findViewById(R.id.yelpIDText);
+                    TextView openTimesTextView = rootView.findViewById(R.id.openTimesText);
+                    TextView closeTimesTextView = rootView.findViewById(R.id.closeTimesText);
+                    TextView acceptsBuzzFundsTextView = rootView.findViewById(R.id.acceptsBuzzFundsText);
+                    TextView priceLevelTextView = rootView.findViewById(R.id.priceLevelText);
+                    TextView categoryTextVew = rootView.findViewById(R.id.categoryText);
+                    TextView altNamesTextVew = rootView.findViewById(R.id.altNamesText);
+                    TextView nameTokensTextView = rootView.findViewById(R.id.nameTokensText);
+                    TextView addressTokensTextVew = rootView.findViewById(R.id.addressTokensText);
+                    TextView numFloorsTextView = rootView.findViewById(R.id.numFloorsText);
+                    Button showInMapButton = rootView.findViewById(R.id.showInMapButton);
+                    Button viewInternalLayoutButton = rootView.findViewById(R.id.viewInternalLayoutButton);
 
+                    idTextView.setText(String.valueOf(b.getId()));
+                    buildingIdTextView.setText(b.getBuildingId());
+                    nameTextView.setText(b.getName());
+                    imageURLTextView.setText(b.getImageURL());
+                    websiteURLTextView.setText(b.getWebsiteURL());
+                    phoneNumTextView.setText(b.getPhoneNum());
+                    streetTextView.setText(b.getStreet());
+                    cityTextView.setText(b.getCity());
+                    stateTextView.setText(b.getState());
+                    postalCodeTextView.setText(b.getPostalCode());
+                    latitudeTextView.setText(String.valueOf(b.getLatitude()));
+                    longitudeTextView.setText(String.valueOf(b.getLongitude()));
+                    polygonsTextView.setText(serializePolygons(b.getPolygons()));
+                    descriptionTextView.setText(b.getDescription());
+                    locatedInTextView.setText(b.getLocatedIn());
+                    yelpIDTextView.setText(b.getYelpID());
+                    openTimesTextView.setText(serializeTimes(b.getOpenTimes()));
+                    closeTimesTextView.setText(serializeTimes(b.getCloseTimes()));
+                    acceptsBuzzFundsTextView.setText(String.valueOf(b.getAcceptsBuzzFunds()));
+                    priceLevelTextView.setText(String.valueOf(b.getPriceLevel()));
+                    categoryTextVew.setText(b.getCategory().name());
+                    altNamesTextVew.setText(b.getAltNames());
+                    nameTokensTextView.setText(b.getNameTokens());
+                    addressTokensTextVew.setText(b.getAddressTokens());
+                    numFloorsTextView.setText(String.valueOf(b.getNumFloors()));
 
-                    nameText.setText(b.getName());
-                    altNamesText.setText(b.getAltNames());
-                    hoursText.setText(hoursString);
-                    addressText.setText(b.getStreet());
-                    showInMap.setOnClickListener(new View.OnClickListener() {
+                    final Building finalB = b;
+                    showInMapButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
                             Intent mapActivityIntent = new Intent(context, MapActivity.class);
                             mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
-                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, b.getId());
-                            context.startActivity(mapActivityIntent);
+                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, finalB.getId());
+                            startActivity(mapActivityIntent);
                         }
                     });
-                    viewInternalLayout.setOnClickListener(new View.OnClickListener() {
+                    viewInternalLayoutButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();

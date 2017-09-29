@@ -43,6 +43,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
 
         // UI
+        TextView idTextView = (TextView) findViewById(R.id.idText);
         TextView eventIdTextView = (TextView) findViewById(R.id.eventIdText);
         TextView titleTextView = (TextView) findViewById(R.id.titleText);
         TextView locationTextView = (TextView) findViewById(R.id.locationText);
@@ -62,13 +63,14 @@ public class EventDetailsActivity extends AppCompatActivity {
             categories += c.getLabel() + " ";
         }
 
-        eventIdTextView.setText(String.valueOf(e.getId()));
+        idTextView.setText(String.valueOf(e.getId()));
+        eventIdTextView.setText(String.valueOf(e.getEventId()));
         titleTextView.setText(e.getTitle());
         locationTextView.setText(e.getLocation());
         descriptionTextView.setText(e.getDescription());
         imageURLTextView.setText(e.getImageURL());
         startDateTextView.setText(e.getStartDate() != null ? e.getStartDate().toString("MM/dd/yy hh:mm a") : "n/a");
-        endDateTextView.setText(e.getEndDate() != null ? e.getEndDate().toString("MM/dd/yy hh:mm a") : "");
+        endDateTextView.setText(e.getEndDate() != null ? e.getEndDate().toString("MM/dd/yy hh:mm a") : "n/a");
         allDayTextView.setText(String.valueOf(e.getAllDay()));
         recurringTextView.setText(String.valueOf(e.getRecurring()));
         categoriesTextView.setText(categories);
