@@ -81,6 +81,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     EditText searchBar;
     ImageButton drawerButton;
+    ImageButton searchOptionsButton;
 
     FloatingActionButton buildingsViewButton;
     FloatingActionButton diningsViewButton;
@@ -134,17 +135,26 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         // UI
         searchBar = findViewById(R.id.searchBar);
         drawerButton = findViewById(R.id.drawerButton);
+        drawerButton.setImageResource(R.drawable.ic_menu_black_24dp);
+        searchOptionsButton = findViewById(R.id.searchOptionsButton);
+        searchOptionsButton.setImageResource(R.drawable.ic_more_vert_black_24dp);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerList = findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItems));
         drawerList.setOnItemClickListener(this);
 
         buildingsViewButton = findViewById(R.id.buildingsViewButton);
+        buildingsViewButton.setImageResource(R.drawable.ic_business_black_24dp);
         diningsViewButton = findViewById(R.id.diningsViewButton);
+        diningsViewButton.setImageResource(R.drawable.ic_local_dining_black_24dp);
         eventsViewButton = findViewById(R.id.eventsViewButton);
+        eventsViewButton.setImageResource(R.drawable.ic_today_black_24dp);
         parkingViewButton = findViewById(R.id.parkingViewButton);
+        parkingViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
         printingViewButton = findViewById(R.id.printingViewButton);
+        printingViewButton.setImageResource(R.drawable.ic_print_black_24dp);
         selectViewButton = findViewById(R.id.selectViewButton);
+        selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
 
         resetCameraButton = findViewById(R.id.resetCameraButton);
         toggleTrafficButton = findViewById(R.id.toggleTrafficButton);
@@ -182,6 +192,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 if (currView != ViewType.BUILDING) {
                     showBuildingsOverlay();
+                    selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
                 }
                 hideButtons();
             }
@@ -191,6 +202,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 if (currView != ViewType.DINING) {
                     showDiningsOverlay();
+                    selectViewButton.setImageResource(R.drawable.ic_local_dining_black_24dp);
                 }
                 hideButtons();
             }
@@ -200,6 +212,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 if (currView != ViewType.EVENT) {
                     showEventsOverlay();
+                    selectViewButton.setImageResource(R.drawable.ic_today_black_24dp);
                 }
                 hideButtons();
             }
@@ -209,6 +222,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 if (currView != ViewType.PARKING) {
                     showParkingOverlay();
+                    selectViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
                 }
                 hideButtons();
             }
@@ -218,6 +232,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 if (currView != ViewType.PRINTERS) {
                     showPrintersOverlay();
+                    selectViewButton.setImageResource(R.drawable.ic_print_black_24dp);
                 }
                 hideButtons();
             }
