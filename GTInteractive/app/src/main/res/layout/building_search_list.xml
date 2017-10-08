@@ -25,64 +25,55 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/artFilterButton"
+                android:id="@+id/foodFilterButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="toggleArtFilter"
-                android:text="A" />
+                android:onClick="toggleFoodFilter"
+                android:text="F" />
 
             <Button
-                android:id="@+id/careerFilterButton"
+                android:id="@+id/housingFilterButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="toggleCareerFilter"
-                android:text="CA" />
+                android:onClick="toggleHousingFilter"
+                android:text="H" />
 
             <Button
-                android:id="@+id/conferenceFilterButton"
+                android:id="@+id/sportsFilterButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="toggleConferenceFilter"
-                android:text="CO" />
+                android:onClick="toggleSportsFilter"
+                android:text="S" />
 
             <Button
-                android:id="@+id/otherFilterButton"
+                android:id="@+id/greekFilterButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="toggleOtherFilter"
-                android:text="O" />
+                android:onClick="toggleGreekFilter"
+                android:text="G" />
 
             <Button
                 android:id="@+id/button8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Se" />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/button7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="SP" />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/button6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ST" />
+                android:layout_weight="1" />
 
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="T" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

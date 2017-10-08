@@ -4,14 +4,17 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
@@ -20,7 +23,9 @@ import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.utilities.EventFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,29 +37,28 @@ public class EventListActivity extends AppCompatActivity {
 
     private RecyclerView eventsListView;
     private List<Event> eList;
+    private EventFilter eFilter;
+    private EventFilter eFilter2;
+    private List<Event.Category> activeFilters = new ArrayList<>();
+    private String userInput;
     private EventListAdapter eAdapter;
-    private Button artFilterButton;
-    private Button careerFilterButton;
-    private Button conferenceFilterButton;
-    private Button otherFilterButton;
 
     private SearchManager searchManager;
     private SearchView searchView;
     private MenuItem searchItem;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_list);
-        artFilterButton = (Button) findViewById(R.id.artFilterButton);
-        careerFilterButton = (Button) findViewById(R.id.careerFilterButton);
-        conferenceFilterButton = (Button) findViewById(R.id.conferenceFilterButton);
-        otherFilterButton = (Button) findViewById(R.id.otherFilterButton);
+        setContentView(R.layout.event_search_list);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
         eList = eventsDB.getAll();
-
+        eFilter = new EventFilter(eventsDB.getAll());
+        eFilter2 = new EventFilter(eventsDB.getAll());
         eAdapter = new EventListAdapter(eList);
         eventsListView = (RecyclerView) findViewById(R.id.recyclerview_search);
         eventsListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
@@ -62,6 +66,7 @@ public class EventListActivity extends AppCompatActivity {
 
         eventsListView.setAdapter(eAdapter);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the options menu from XML
@@ -76,7 +81,7 @@ public class EventListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                List<Event> queryResults = eventsDB.findByTitle(query);
+                List<Event> queryResults = eFilter2.filterByTitle(query).getList();
                 // always return first building in queryResults
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
                 mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
@@ -87,7 +92,8 @@ public class EventListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String input) {
-                eAdapter.setData(eventsDB.findByTitle(input)); // TODO: implement filtering methods, because this is somewhat inefficient
+                userInput = input;
+                eAdapter.setData(eFilter2.filterByTitle(userInput).getList()); // TODO: implement filtering methods, because this is somewhat inefficient
                 return true;
             }
         });
@@ -104,4 +110,55 @@ public class EventListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void toggleArtFilter(View view) {
+        if (activeFilters.contains(Event.Category.ARTS)) {
+            activeFilters.remove(Event.Category.ARTS);
+            view.setBackgroundColor(Color.LTGRAY);
+        } else {
+            activeFilters.add(Event.Category.ARTS);
+            view.setBackgroundColor(Color.WHITE);
+        }
+        updateFilters();
+    }
+
+    public void toggleCareerFilter(View view) {
+        if (activeFilters.contains(Event.Category.CAREER)) {
+            activeFilters.remove(Event.Category.CAREER);
+            view.setBackgroundColor(Color.LTGRAY);
+        } else {
+            activeFilters.add(Event.Category.CAREER);
+            view.setBackgroundColor(Color.WHITE);
+        }
+        updateFilters();
+    }
+
+    public void toggleConferenceFilter(View view) {
+        if (activeFilters.contains(Event.Category.CONFERENCE)) {
+            activeFilters.remove(Event.Category.CONFERENCE);
+            view.setBackgroundColor(Color.LTGRAY);
+        } else {
+            activeFilters.add(Event.Category.CONFERENCE);
+            view.setBackgroundColor(Color.WHITE);
+        }
+        updateFilters();
+
+    }
+
+    public void toggleOtherFilter(View view) {
+        if (activeFilters.contains(Event.Category.OTHER)) {
+            activeFilters.remove(Event.Category.OTHER);
+            view.setBackgroundColor(Color.LTGRAY);
+        } else {
+            activeFilters.add(Event.Category.OTHER);
+            view.setBackgroundColor(Color.WHITE);
+        }
+        updateFilters();
+
+    }
+
+    public void updateFilters() {
+        eFilter2 = new EventFilter(eFilter.filterByCategories(activeFilters).getList());
+        List<Event> filteredList = eFilter2.filterByTitle(userInput).getList();
+        eAdapter.setData(filteredList);
+    }
 }
