@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.example.vi_tu.gtinteractive.adapters.DiningAdapter;
 import com.example.vi_tu.gtinteractive.adapters.DiningListAdapter;
@@ -33,14 +34,23 @@ public class DiningListActivity extends AppCompatActivity {
     private RecyclerView diningListView;
     private List<Dining> dList;
     private DiningListAdapter dAdapter;
+    private Button filterOpenButton;
+    private Button filterFundsButton;
+
+    private boolean filterOpen = false;
+    private boolean filterFunds = false;
 
     private SearchManager searchManager;
     private SearchView searchView;
     private MenuItem searchItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_list);
+        setContentView(R.layout.dining_search_list);
+        filterOpenButton = (Button) findViewById(R.id.filterOpenButton);
+        filterFundsButton = (Button) findViewById(R.id.filterFundsButton);
+
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         diningDB = new DiningPersistence(db);
@@ -84,6 +94,15 @@ public class DiningListActivity extends AppCompatActivity {
                 return true;
             }
         });
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
+    }
+
+    public void setFilterOpen() {
+        filterOpen = !filterOpen;
+    }
+
+    public void setFilterFunds() {
+        filterFunds = !filterFunds;
     }
 }

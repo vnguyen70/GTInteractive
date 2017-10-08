@@ -5,13 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.vi_tu.gtinteractive.adapters.BuildingListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -41,6 +46,7 @@ public class BuildingListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_list);
+
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
@@ -82,6 +88,8 @@ public class BuildingListActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
 }

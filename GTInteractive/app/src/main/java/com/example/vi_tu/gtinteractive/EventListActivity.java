@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
 import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
@@ -33,6 +34,10 @@ public class EventListActivity extends AppCompatActivity {
     private RecyclerView eventsListView;
     private List<Event> eList;
     private EventListAdapter eAdapter;
+    private Button artFilterButton;
+    private Button careerFilterButton;
+    private Button conferenceFilterButton;
+    private Button otherFilterButton;
 
     private SearchManager searchManager;
     private SearchView searchView;
@@ -41,6 +46,11 @@ public class EventListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_list);
+        artFilterButton = (Button) findViewById(R.id.artFilterButton);
+        careerFilterButton = (Button) findViewById(R.id.careerFilterButton);
+        conferenceFilterButton = (Button) findViewById(R.id.conferenceFilterButton);
+        otherFilterButton = (Button) findViewById(R.id.otherFilterButton);
+
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
@@ -82,6 +92,9 @@ public class EventListActivity extends AppCompatActivity {
                 return true;
             }
         });
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
+
+
 }
