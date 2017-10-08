@@ -53,7 +53,7 @@ public class Event {
      *  Custom fields
      */
 
-    String buildingId;
+    @NonNull String buildingId;
 
     public enum Category { // TODO: choose our own colors
         ARTS("arts and performance", "812990"),

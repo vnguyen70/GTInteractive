@@ -81,6 +81,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     EditText searchBar;
     ImageButton drawerButton;
+    ImageButton searchOptionsButton;
 
     FloatingActionButton buildingsViewButton;
     FloatingActionButton diningsViewButton;
@@ -134,6 +135,9 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         // UI
         searchBar = findViewById(R.id.searchBar);
         drawerButton = findViewById(R.id.drawerButton);
+        drawerButton.setImageResource(R.drawable.ic_menu_black_24dp);
+        searchOptionsButton = findViewById(R.id.searchOptionsButton);
+        searchOptionsButton.setImageResource(R.drawable.ic_more_vert_black_24dp);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerList = findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItems));
@@ -145,6 +149,13 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         parkingViewButton = findViewById(R.id.parkingViewButton);
         printingViewButton = findViewById(R.id.printingViewButton);
         selectViewButton = findViewById(R.id.selectViewButton);
+
+        buildingsViewButton.setImageResource(R.drawable.ic_business_black_24dp);
+        diningsViewButton.setImageResource(R.drawable.ic_local_dining_black_24dp);
+        eventsViewButton.setImageResource(R.drawable.ic_today_black_24dp);
+        parkingViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
+        printingViewButton.setImageResource(R.drawable.ic_print_black_24dp);
+        selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
 
         resetCameraButton = findViewById(R.id.resetCameraButton);
         toggleTrafficButton = findViewById(R.id.toggleTrafficButton);
@@ -584,18 +595,23 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         switch(v) {
             case ViewType.BUILDING:
                 selectViewButton.setBackgroundTintList(buildingsViewButton.getBackgroundTintList());
+                selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
                 break;
             case ViewType.DINING:
                 selectViewButton.setBackgroundTintList(diningsViewButton.getBackgroundTintList());
+                selectViewButton.setImageResource(R.drawable.ic_local_dining_black_24dp);
                 break;
             case ViewType.EVENT:
                 selectViewButton.setBackgroundTintList(eventsViewButton.getBackgroundTintList());
+                selectViewButton.setImageResource(R.drawable.ic_today_black_24dp);
                 break;
             case ViewType.PARKING:
                 selectViewButton.setBackgroundTintList(parkingViewButton.getBackgroundTintList());
+                selectViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
                 break;
             case ViewType.PRINTERS:
                 selectViewButton.setBackgroundTintList(printingViewButton.getBackgroundTintList());
+                selectViewButton.setImageResource(R.drawable.ic_print_black_24dp);
                 break;
             default:
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();

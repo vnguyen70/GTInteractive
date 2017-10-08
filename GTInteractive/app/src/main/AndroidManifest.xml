@@ -82,8 +82,7 @@
         <activity
             android:name=".EventDetailsActivity"
             android:label="@string/title_activity_event_details"
-            android:parentActivityName=".MapActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:parentActivityName=".MapActivity" />
         <activity
             android:name=".EventListActivity"
             android:label="Event List"

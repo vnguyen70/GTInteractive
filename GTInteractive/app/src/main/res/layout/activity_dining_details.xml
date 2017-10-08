@@ -1,37 +1,481 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.vi_tu.gtinteractive.DiningDetailsActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/diningIdStatic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dining ID:"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.vi_tu.gtinteractive.DiningDetailsActivity">
 
-    <TextView
-        android:id="@+id/diningIdText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/diningIdStatic"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 
-    <Button
-        android:id="@+id/showInMapButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show in map"
-        app:layout_constraintTop_toBottomOf="@+id/diningIdText"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <TextView
+            android:id="@+id/idStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="id: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/idText"
+            app:layout_constraintBottom_toBottomOf="@+id/idText" />
+        <TextView
+            android:id="@+id/idText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/idStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/diningIdStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="diningId: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/diningIdText"
+            app:layout_constraintBottom_toBottomOf="@+id/diningIdText" />
+        <TextView
+            android:id="@+id/diningIdText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/diningIdStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idText" />
+
+
+        <TextView
+            android:id="@+id/buildingIdStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="buildingId: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buildingIdText"
+            app:layout_constraintBottom_toBottomOf="@+id/buildingIdText" />
+        <TextView
+            android:id="@+id/buildingIdText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/buildingIdStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/diningIdText" />
+
+
+        <TextView
+            android:id="@+id/latitudeStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="latitude: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/latitudeText"
+            app:layout_constraintBottom_toBottomOf="@+id/latitudeText" />
+        <TextView
+            android:id="@+id/latitudeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/latitudeStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buildingIdText" />
+
+
+        <TextView
+            android:id="@+id/longitudeStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="longitude: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/longitudeText"
+            app:layout_constraintBottom_toBottomOf="@+id/longitudeText" />
+        <TextView
+            android:id="@+id/longitudeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/longitudeStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/latitudeText" />
+
+
+        <TextView
+            android:id="@+id/nameStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="name: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nameText"
+            app:layout_constraintBottom_toBottomOf="@+id/nameText" />
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/nameStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/longitudeText" />
+
+
+        <TextView
+            android:id="@+id/descriptionStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="description: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/descriptionText"
+            app:layout_constraintBottom_toBottomOf="@+id/descriptionText" />
+        <TextView
+            android:id="@+id/descriptionText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/descriptionStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameText" />
+
+
+        <TextView
+            android:id="@+id/locationDetailsStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="locationDetails: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/locationDetailsText"
+            app:layout_constraintBottom_toBottomOf="@+id/locationDetailsText" />
+        <TextView
+            android:id="@+id/locationDetailsText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/locationDetailsStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+
+
+        <TextView
+            android:id="@+id/logoURLStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="logoURL: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/logoURLText"
+            app:layout_constraintBottom_toBottomOf="@+id/logoURLText" />
+        <TextView
+            android:id="@+id/logoURLText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/logoURLStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locationDetailsText" />
+
+
+        <TextView
+            android:id="@+id/menuLinkURLStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="menuLinkURL: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/menuLinkURLText"
+            app:layout_constraintBottom_toBottomOf="@+id/menuLinkURLText" />
+        <TextView
+            android:id="@+id/menuLinkURLText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/menuLinkURLStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoURLText" />
+
+
+        <TextView
+            android:id="@+id/promotionMessageStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="promotionMessage: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/promotionMessageText"
+            app:layout_constraintBottom_toBottomOf="@+id/promotionMessageText" />
+        <TextView
+            android:id="@+id/promotionMessageText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/promotionMessageStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/menuLinkURLText" />
+
+
+        <TextView
+            android:id="@+id/promotionStartDateStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="promotionStartDate: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/promotionStartDateText"
+            app:layout_constraintBottom_toBottomOf="@+id/promotionStartDateText" />
+        <TextView
+            android:id="@+id/promotionStartDateText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/promotionStartDateStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/promotionMessageText" />
+
+
+        <TextView
+            android:id="@+id/promotionEndDateStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="promotionEndDate: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/promotionEndDateText"
+            app:layout_constraintBottom_toBottomOf="@+id/promotionEndDateText" />
+        <TextView
+            android:id="@+id/promotionEndDateText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/promotionEndDateStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/promotionStartDateText" />
+
+
+        <TextView
+            android:id="@+id/openTimesStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="openTimes: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/openTimesText"
+            app:layout_constraintBottom_toBottomOf="@+id/openTimesText" />
+        <TextView
+            android:id="@+id/openTimesText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/openTimesStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/promotionEndDateText" />
+
+
+        <TextView
+            android:id="@+id/closeTimesStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="closeTimes: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/closeTimesText"
+            app:layout_constraintBottom_toBottomOf="@+id/closeTimesText" />
+        <TextView
+            android:id="@+id/closeTimesText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/closeTimesStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/openTimesText" />
+
+
+        <TextView
+            android:id="@+id/exceptionsStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="exceptions: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/exceptionsText"
+            app:layout_constraintBottom_toBottomOf="@+id/exceptionsText" />
+        <TextView
+            android:id="@+id/exceptionsText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/exceptionsStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/closeTimesText" />
+
+
+        <TextView
+            android:id="@+id/tagsStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="tags: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tagsText"
+            app:layout_constraintBottom_toBottomOf="@+id/tagsText" />
+        <TextView
+            android:id="@+id/tagsText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/tagsStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exceptionsText" />
+
+
+        <TextView
+            android:id="@+id/tagIdsStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="tagIds: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tagIdsText"
+            app:layout_constraintBottom_toBottomOf="@+id/tagIdsText" />
+        <TextView
+            android:id="@+id/tagIdsText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/tagIdsStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tagsText" />
+
+
+        <TextView
+            android:id="@+id/isOpenStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="isOpen: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/isOpenText"
+            app:layout_constraintBottom_toBottomOf="@+id/isOpenText" />
+        <TextView
+            android:id="@+id/isOpenText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/isOpenStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tagIdsText" />
+
+
+        <TextView
+            android:id="@+id/upcomingStatusChangeStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="upcomingStatusChange: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/upcomingStatusChangeText"
+            app:layout_constraintBottom_toBottomOf="@+id/upcomingStatusChangeText" />
+        <TextView
+            android:id="@+id/upcomingStatusChangeText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/upcomingStatusChangeStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/isOpenText" />
+
+
+        <TextView
+            android:id="@+id/nameTokensStatic"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="nameTokens: "
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nameTokensText"
+            app:layout_constraintBottom_toBottomOf="@+id/nameTokensText" />
+        <TextView
+            android:id="@+id/nameTokensText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="TextView"
+            app:layout_constraintLeft_toRightOf="@+id/nameTokensStatic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upcomingStatusChangeText" />
+
+
+        <Button
+            android:id="@+id/openBuildingDetailsButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Open Building Details"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameTokensStatic" />
+
+
+        <Button
+            android:id="@+id/showInMapButton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Show in Map"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/openBuildingDetailsButton" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

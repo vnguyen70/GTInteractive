@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-import com.example.vi_tu.gtinteractive.adapters.DiningAdapter;
 import com.example.vi_tu.gtinteractive.adapters.DiningListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
@@ -104,5 +103,15 @@ public class DiningListActivity extends AppCompatActivity {
 
     public void setFilterFunds() {
         filterFunds = !filterFunds;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }
