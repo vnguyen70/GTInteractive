@@ -12,19 +12,16 @@ import java.util.List;
  * Created by Rayner on 10/8/17.
  */
 
-public class EventFilter {
+public class EventFilter extends BaseFilter<Event> {
 
-    List<Event> eList;
-
-    public EventFilter() {}
-    public EventFilter(List<Event> eList) { setList(eList); }
+    public EventFilter(List<Event> eList) { super(eList); }
 
     public EventFilter filterByTitle(String title) {
         if (null == title) {
-            return new EventFilter(eList);
+            return new EventFilter(list);
         }
         List<Event> results = new ArrayList<>();
-        for (Event e : eList) {
+        for (Event e : list) {
             if (e.getTitle().toLowerCase().contains(title.trim().toLowerCase())) {
                 results.add(e);
             }
@@ -34,10 +31,10 @@ public class EventFilter {
 
     public EventFilter filterByCategories(List<Event.Category> categories) {
         if (null == categories || categories.size() == 0) {
-            return new EventFilter(eList);
+            return new EventFilter(list);
         }
         List<Event> results = new ArrayList<>();
-        for (Event e : eList) {
+        for (Event e : list) {
             boolean added = false;
             for (Event.Category category : e.getCategories()) {
                 if (categories.contains(category) && !added) {
@@ -48,13 +45,4 @@ public class EventFilter {
         }
         return new EventFilter(results);
     }
-
-    public void setList(List<Event> eList) {
-        this.eList = eList;
-    }
-
-    public List<Event> getList() {
-        return eList;
-    }
-
 }

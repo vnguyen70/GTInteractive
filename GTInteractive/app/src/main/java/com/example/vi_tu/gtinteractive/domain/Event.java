@@ -18,7 +18,7 @@ import lombok.NonNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event {
+public class Event extends Entity {
 
     public static final Event DUMMY = Event.builder()
             .eventId("DUMMY")

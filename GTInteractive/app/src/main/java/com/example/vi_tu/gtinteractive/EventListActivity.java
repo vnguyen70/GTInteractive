@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,22 +35,27 @@ public class EventListActivity extends AppCompatActivity {
     private EventPersistence eventsDB;
 
     private RecyclerView eventsListView;
+    private EventListAdapter eAdapter;
     private List<Event> eList;
     private EventFilter eFilter;
     private EventFilter eFilter2;
     private List<Event.Category> activeFilters = new ArrayList<>();
     private String userInput;
-    private EventListAdapter eAdapter;
+
 
     private SearchManager searchManager;
     private SearchView searchView;
     private MenuItem searchItem;
 
+    private Button artFilterButton;
+    private Button careerFilterButton;
+    private Button conferenceFilterButton;
+    private Button otherFilterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_search_list);
+        setContentView(R.layout.activity_event_list);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -65,6 +69,35 @@ public class EventListActivity extends AppCompatActivity {
         eventsListView.setHasFixedSize(true);
 
         eventsListView.setAdapter(eAdapter);
+
+        artFilterButton = (Button) findViewById(R.id.artFilterButton);
+        artFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleArtFilter(view);
+            }
+        });
+        careerFilterButton = (Button) findViewById(R.id.careerFilterButton);
+        careerFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleCareerFilter(view);
+            }
+        });
+        conferenceFilterButton = (Button) findViewById(R.id.conferenceFilterButton);
+        conferenceFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleConferenceFilter(view);
+            }
+        });
+        otherFilterButton = (Button) findViewById(R.id.otherFilterButton);
+        otherFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleOtherFilter(view);
+            }
+        });
     }
 
     @Override
@@ -157,7 +190,7 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     public void updateFilters() {
-        eFilter2 = new EventFilter(eFilter.filterByCategories(activeFilters).getList());
+        eFilter2 = eFilter.filterByCategories(activeFilters);
         List<Event> filteredList = eFilter2.filterByTitle(userInput).getList();
         eAdapter.setData(filteredList);
     }

@@ -2,6 +2,7 @@ package com.example.vi_tu.gtinteractive.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,8 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     public void onBindViewHolder(BuildingViewHolder holder, int position) {
         Building b = bList.get(position);
         holder.buildingNameView.setText(b.getName());
+        holder.categoryView.setText(b.getCategory().toString());
+        holder.categoryView.setTextColor(Color.parseColor("#" + b.getCategory().getColor()));
         holder.setObjectId(b.getId());
     }
 
@@ -54,11 +57,13 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     public class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView buildingNameView;
+        public TextView categoryView;
         public int objectId;
 
         public BuildingViewHolder(View view) {
             super(view);
             buildingNameView = view.findViewById(R.id.tv_building_data);
+            categoryView = view.findViewById(R.id.tv_category);
             objectId = -1;
             view.setOnClickListener(this);
         }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +19,7 @@ import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.domain.Dining;
+import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
@@ -88,9 +90,9 @@ public class AllSearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // always return first building in queryResults
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.DINING);
-//                mapActivityIntent.putExtra(Arguments.OBJECT_ID, matchingObjects.get(0).getId());
-                mapActivityIntent.putExtra(Arguments.OBJECT_ID, -1);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING); // TODO: Check for ViewType
+                Log.d("allserachactivity", String.valueOf(((Entity) matchingObjects.get(0)).getId()));
+                mapActivityIntent.putExtra(Arguments.OBJECT_ID, ((Entity) matchingObjects.get(0)).getId());
                 startActivity(mapActivityIntent);
 
                 return true;

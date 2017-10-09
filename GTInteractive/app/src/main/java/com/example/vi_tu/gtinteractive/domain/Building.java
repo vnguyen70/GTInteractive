@@ -24,7 +24,7 @@ import lombok.NonNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Building {
+public class Building extends Entity {
 
     public static final Map<String, String> shortcuts = Collections.unmodifiableMap(
             new HashMap<String, String>() {{
@@ -60,6 +60,11 @@ public class Building {
             .build();
 
     Integer id; // default = null
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
 
     /**
      * From API: https://gtapp-api.rnoc.gatech.edu/api/v1/places

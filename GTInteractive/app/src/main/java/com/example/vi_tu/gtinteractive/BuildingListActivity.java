@@ -6,18 +6,15 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.vi_tu.gtinteractive.adapters.BuildingListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -38,20 +35,26 @@ public class BuildingListActivity extends AppCompatActivity {
     private BuildingPersistence buildingsDB;
 
     private RecyclerView buildingsListView;
-    private List<Building> bList;
     private BuildingListAdapter bAdapter;
+    private List<Building> bList;
     private BuildingFilter bFilter;
     private BuildingFilter bFilter2;
     private List<Building.Category> activeFilters = new ArrayList<>();
     private String userInput;
+
     private SearchManager searchManager;
     private SearchView searchView;
     private MenuItem searchItem;
 
+    private Button foodFilterButton;
+    private Button housingFilterButton;
+    private Button sportsFilterButton;
+    private Button greekFilterButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.building_search_list);
+        setContentView(R.layout.activity_building_list);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -65,6 +68,35 @@ public class BuildingListActivity extends AppCompatActivity {
         buildingsListView.setHasFixedSize(true);
 
         buildingsListView.setAdapter(bAdapter);
+
+        foodFilterButton = (Button) findViewById(R.id.foodFilterButton);
+        foodFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleFoodFilter(view);
+            }
+        });
+        housingFilterButton = (Button) findViewById(R.id.housingFilterButton);
+        housingFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleHousingFilter(view);
+            }
+        });
+        sportsFilterButton = (Button) findViewById(R.id.sportsFilterButton);
+        sportsFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSportsFilter(view);
+            }
+        });
+        greekFilterButton = (Button) findViewById(R.id.greekFilterButton);
+        greekFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleGreekFilter(view);
+            }
+        });
     }
 
     @Override
@@ -158,7 +190,7 @@ public class BuildingListActivity extends AppCompatActivity {
     }
 
     public void updateFilters() {
-        bFilter2 = new BuildingFilter(bFilter.filterByCategories(activeFilters).getList());
+        bFilter2 = bFilter.filterByCategories(activeFilters);
         List<Building> filteredList = bFilter2.filterByName(userInput).getList();
         bAdapter.setData(filteredList);
     }

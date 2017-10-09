@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dining {
+public class Dining extends Entity {
 
     public static final Dining DEFAULT_DINING = Dining.builder()
             .diningId("DUMMY")

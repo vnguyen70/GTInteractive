@@ -46,7 +46,7 @@ public class DiningListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dining_search_list);
+        setContentView(R.layout.activity_dining_list);
         filterOpenButton = (Button) findViewById(R.id.filterOpenButton);
         filterFundsButton = (Button) findViewById(R.id.filterFundsButton);
 

@@ -2,8 +2,10 @@ package com.example.vi_tu.gtinteractive.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public void onBindViewHolder(EventViewHolder holder, int position) {
         Event e = eList.get(position);
         holder.eventNameView.setText(e.getTitle());
+        if (e.getCategories().size() > 0) {
+            holder.categoryView.setText(e.getCategories().toString());
+            holder.categoryView.setTextColor(Color.parseColor("#" + e.getCategories().get(0).getColor()));
+        }
         holder.setObjectId(e.getId());
     }
 
@@ -53,11 +59,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView eventNameView;
+        public TextView categoryView;
         public int objectId;
 
         public EventViewHolder(View view) {
             super(view);
             eventNameView = view.findViewById(R.id.tv_building_data);
+            categoryView = view.findViewById(R.id.tv_category);
             objectId = -1;
             view.setOnClickListener(this);
         }
