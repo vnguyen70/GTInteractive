@@ -26,10 +26,8 @@ import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
-import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,22 +56,19 @@ import java.util.Map;
 
 public class MapActivity extends FragmentActivity implements ListView.OnItemClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public static final String[] drawerItems = {"Buildings Test", "Dinings Test", "Events Test", "Building List", "Dining List", "Event List"};
+    public static final String[] drawerItems = {"Buildings Test", "Events Test", "Building List", "Event List"};
 
     public static final int REQUEST_LOCATION_PERMISSION = 0;
 
     BuildingPersistence buildingsDB;
-    DiningPersistence diningsDB;
     EventPersistence eventsDB;
 
     List<Building> bList;
-    List<Dining> dList;
     List<Event> eList;
 
     GoogleMap googleMap;
     Map<Integer, List<Polygon>> buildingPolygons;
     Map<Integer, Marker> buildingMarkers;
-    Map<Integer, Marker> diningMarkers;
     Map<Integer, Marker> eventMarkers;
     KmlLayer printersLayer;
     GroundOverlay parkingOverlay;
@@ -84,7 +79,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     ImageButton searchOptionsButton;
 
     FloatingActionButton buildingsViewButton;
-    FloatingActionButton diningsViewButton;
     FloatingActionButton eventsViewButton;
     FloatingActionButton parkingViewButton;
     FloatingActionButton printingViewButton;
@@ -95,7 +89,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     FloatingActionButton toggleOverlayButton;
 
     TextView buildingsViewLabel;
-    TextView diningsViewLabel;
     TextView eventsViewLabel;
     TextView parkingViewLabel;
     TextView printingViewLabel;
@@ -121,10 +114,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
-        diningsDB = new DiningPersistence(db);
         eventsDB = new EventPersistence(db);
         bList = buildingsDB.getAll(); // TODO: move to AsyncTask
-        dList = diningsDB.getAll(); // TODO: move to AsyncTask
         eList = eventsDB.getAll(); // TODO: move to AsyncTask
 
         // context
@@ -143,7 +134,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         drawerButton = findViewById(R.id.drawerButton);
         searchOptionsButton = findViewById(R.id.searchOptionsButton);
         buildingsViewButton = findViewById(R.id.buildingsViewButton);
-        diningsViewButton = findViewById(R.id.diningsViewButton);
         eventsViewButton = findViewById(R.id.eventsViewButton);
         parkingViewButton = findViewById(R.id.parkingViewButton);
         printingViewButton = findViewById(R.id.printingViewButton);
@@ -155,7 +145,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
         // button labels
         buildingsViewLabel = findViewById(R.id.buildingsViewLabel);
-        diningsViewLabel = findViewById(R.id.diningsViewLabel);
         eventsViewLabel = findViewById(R.id.eventsViewLabel);
         parkingViewLabel = findViewById(R.id.parkingViewLabel);
         printingViewLabel = findViewById(R.id.printingViewLabel);
@@ -164,7 +153,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         drawerButton.setImageResource(R.drawable.ic_menu_black_24dp);
         searchOptionsButton.setImageResource(R.drawable.ic_more_vert_black_24dp);
         buildingsViewButton.setImageResource(R.drawable.ic_business_black_24dp);
-        diningsViewButton.setImageResource(R.drawable.ic_local_dining_black_24dp);
         eventsViewButton.setImageResource(R.drawable.ic_today_black_24dp);
         parkingViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
         printingViewButton.setImageResource(R.drawable.ic_print_black_24dp);
@@ -195,15 +183,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 if (currView != ViewType.BUILDING) {
                     showBuildingsOverlay();
-                }
-                hideButtons();
-            }
-        });
-        diningsViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currView != ViewType.DINING) {
-                    showDiningsOverlay();
                 }
                 hideButtons();
             }
@@ -298,16 +277,12 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
         buildingPolygons = new HashMap<>();
         buildingMarkers = new HashMap<>();
-        diningMarkers = new HashMap<>();
         eventMarkers = new HashMap<>();
         highlighted = new ArrayList<>();
 
         for (Building b : bList) {
             addBuildingPolygons(b);
             addBuildingMarker(b);
-        }
-        for (Dining d : dList) {
-            addDiningMarker(d);
         }
         for (Event e : eList) {
             addEventMarker(e);
@@ -325,9 +300,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         switch (view) {
             case ViewType.BUILDING:
                 showBuildingsOverlay();
-                break;
-            case ViewType.DINING:
-                showDiningsOverlay();
                 break;
             case ViewType.EVENT:
                 showEventsOverlay();
@@ -370,17 +342,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         return m;
     }
 
-    private Marker addDiningMarker(Dining d) {
-        Marker m = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(d.getLatitude(), d.getLongitude()))
-                .title(d.getName())
-                .snippet(d.getLocationDetails())
-                .visible(false));
-        m.setTag(d.getId());
-        diningMarkers.put(d.getId(), m);
-        return m;
-    }
-
     private Marker addEventMarker(Event e) {
         String buildingId = e.getBuildingId();
         Building b = buildingsDB.findByBuildingId(buildingId);
@@ -414,21 +375,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         }
         togglePolygonsButton.setVisibility(View.VISIBLE);
         setCurrView(ViewType.BUILDING);
-    }
-
-    private void showDiningsOverlay() {
-        clearMap();
-        showDiningMarkers();
-        if (view == ViewType.DINING && objectId != -1) {
-            Marker m = diningMarkers.get(objectId);
-            m.showInfoWindow();
-            centerMarkerZoom(m);
-            view = -1;
-            objectId = -1;
-        } else {
-            centerCampus();
-        }
-        setCurrView(ViewType.DINING);
     }
 
     private void showEventsOverlay() {
@@ -497,18 +443,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         }
     }
 
-    private void showDiningMarkers() {
-        for (Marker m : diningMarkers.values()) {
-            m.setVisible(true);
-        }
-    }
-
-    private void hideDiningMarkers() {
-        for (Marker m : diningMarkers.values()) {
-            m.setVisible(false);
-        }
-    }
-
     private void showEventMarkers() {
         for (Marker m : eventMarkers.values()) {
             m.setVisible(true);
@@ -525,7 +459,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         resetPolygonColors();
         hideBuildingPolygons();
         hideBuildingMarkers();
-        hideDiningMarkers();
         hideEventMarkers();
         printersLayer.removeLayerFromMap();
         parkingOverlay.setVisible(false);
@@ -567,12 +500,10 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private void showButtons() {
         buildingsViewButton.setVisibility(View.VISIBLE);
-        diningsViewButton.setVisibility(View.VISIBLE);
         eventsViewButton.setVisibility(View.VISIBLE);
         parkingViewButton.setVisibility(View.VISIBLE);
         printingViewButton.setVisibility(View.VISIBLE);
         buildingsViewLabel.setVisibility(View.VISIBLE);
-        diningsViewLabel.setVisibility(View.VISIBLE);
         eventsViewLabel.setVisibility(View.VISIBLE);
         parkingViewLabel.setVisibility(View.VISIBLE);
         printingViewLabel.setVisibility(View.VISIBLE);
@@ -581,12 +512,10 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private void hideButtons() {
         buildingsViewButton.setVisibility(View.GONE);
-        diningsViewButton.setVisibility(View.GONE);
         eventsViewButton.setVisibility(View.GONE);
         parkingViewButton.setVisibility(View.GONE);
         printingViewButton.setVisibility(View.GONE);
         buildingsViewLabel.setVisibility(View.GONE);
-        diningsViewLabel.setVisibility(View.GONE);
         eventsViewLabel.setVisibility(View.GONE);
         parkingViewLabel.setVisibility(View.GONE);
         printingViewLabel.setVisibility(View.GONE);
@@ -598,10 +527,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             case ViewType.BUILDING:
                 selectViewButton.setBackgroundTintList(buildingsViewButton.getBackgroundTintList());
                 selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
-                break;
-            case ViewType.DINING:
-                selectViewButton.setBackgroundTintList(diningsViewButton.getBackgroundTintList());
-                selectViewButton.setImageResource(R.drawable.ic_local_dining_black_24dp);
                 break;
             case ViewType.EVENT:
                 selectViewButton.setBackgroundTintList(eventsViewButton.getBackgroundTintList());
@@ -650,27 +575,17 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 Intent buildingsTestActivityIntent = new Intent(MapActivity.this, BuildingsTestActivity.class);
                 startActivity(buildingsTestActivityIntent);
                 break;
-            case 1: // Dinings Test
-                drawerLayout.closeDrawer(drawerList);
-                Intent diningsTestActivityIntent = new Intent(MapActivity.this, DiningsTestActivity.class);
-                startActivity(diningsTestActivityIntent);
-                break;
-            case 2: // Events Test
+            case 1: // Events Test
                 drawerLayout.closeDrawer(drawerList);
                 Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
                 startActivity(eventsTestActivityIntent);
                 break;
-            case 3: // Buildings List
+            case 2: // Buildings List
                 drawerLayout.closeDrawer(drawerList);
                 Intent buildingListActivityIntent = new Intent(MapActivity.this, BuildingListActivity.class);
                 startActivity(buildingListActivityIntent);
                 break;
-            case 4: // Dining List
-                drawerLayout.closeDrawer(drawerList);
-                Intent diningListActivityIntent = new Intent(MapActivity.this, DiningListActivity.class);
-                startActivity(diningListActivityIntent);
-                break;
-            case 5:
+            case 3: // Events List
                 drawerLayout.closeDrawer(drawerList);
                 Intent eventListActivityIntent = new Intent(MapActivity.this, EventListActivity.class);
                 startActivity(eventListActivityIntent);
@@ -707,11 +622,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 buildingDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
                 buildingDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
                 startActivity(buildingDetailIntent);
-                break;
-            case ViewType.DINING:
-                Intent diningDetailIntent = new Intent(MapActivity.this, DiningDetailsActivity.class);
-                diningDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
-                startActivity(diningDetailIntent);
                 break;
             case ViewType.EVENT:
                 Intent eventDetailIntent = new Intent(MapActivity.this, EventDetailsActivity.class);

@@ -24,16 +24,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vi_tu.gtinteractive.adapters.DiningAdapter;
 import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
-import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
@@ -47,7 +44,7 @@ import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.seriali
 
 //import com.squareup.picasso.Picasso;
 
-public class BuildingDetailsActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
+public class BuildingDetailsActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -55,7 +52,6 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
     private ImageView buildingImageView;
 
     private BuildingPersistence buildingsDB;
-    private DiningPersistence diningsDB;
     private EventPersistence eventsDB;
 
     private NetworkUtils networkUtils;
@@ -64,7 +60,6 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
     private static Building b; // building to display
 
     private static List<Event> eList;
-    private static List<Dining> dList;
 
     private static Context context;
 
@@ -85,7 +80,6 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
-        diningsDB = new DiningPersistence(db);
         eventsDB = new EventPersistence(db);
 
         // building to display
@@ -98,22 +92,18 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
         Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
         Log.d("BuildingDetailsActivity", "hello " + b.getBuildingId());
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
-        networkUtils.updateDiningStatus(diningsDB); // TODO: only update dinings associated with building?
 
         // Initializing animated scroll for the toolbar
         CollapsingToolbarLayout collapsingToolBarLayout
                 = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
         collapsingToolBarLayout.setTitle(b.getName());
 
-//        updateDiningStatus(diningsDB, getApplicationContext()); // TODO: only update dinings associated with building?
-
-        dList = diningsDB.getAll();
         eList = eventsDB.getAll();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -124,11 +114,8 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
             case TabType.INFO:
                 position = 0;
                 break;
-            case TabType.DINING:
-                position = 1;
-                break;
             case TabType.EVENT:
-                position = 2;
+                position = 1;
                 break;
             default:
                 position = 0; // info tab by default;
@@ -143,16 +130,6 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogInterface dialog) {
-        networkUtils.updateDiningStatus(diningsDB);
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogInterface dialog) {
-        // TODO: show toast?
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -175,13 +152,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
             int sectionNum = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView;
             switch (sectionNum) {
-                case 1: // dining
-                    rootView = inflater.inflate(R.layout.fragment_building_details_dining, container, false);
-                    RecyclerView diningsView = rootView.findViewById(R.id.diningsRecyclerView);
-                    diningsView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                    diningsView.setAdapter(new DiningAdapter(dList));
-                    break;
-                case 2: // events
+                case 1: // events
                     rootView = inflater.inflate(R.layout.fragment_building_details_events, container, false);
                     RecyclerView eventsView = rootView.findViewById(R.id.eventsRecyclerView);
                     eventsView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -282,7 +253,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -291,8 +262,6 @@ public class BuildingDetailsActivity extends AppCompatActivity implements Networ
                 case 0:
                     return "Info";
                 case 1:
-                    return "Dining";
-                case 2:
                     return "Events";
             }
             return null;

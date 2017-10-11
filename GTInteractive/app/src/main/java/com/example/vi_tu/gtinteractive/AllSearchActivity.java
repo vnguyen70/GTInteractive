@@ -18,11 +18,9 @@ import com.example.vi_tu.gtinteractive.adapters.SearchAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
-import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 
@@ -32,14 +30,12 @@ import java.util.List;
 public class AllSearchActivity extends AppCompatActivity {
 
     private BuildingPersistence buildingsDB;
-    private DiningPersistence diningDB;
     private EventPersistence eventsDB;
 
     private RecyclerView searchListView;
     private SearchAdapter sAdapter;
 
     private List<Building> bList;
-    private List<Dining> dList;
     private List<Event> eList;
     private List<Object> searchList = new ArrayList<Object>();
     private List<Object> matchingObjects;
@@ -57,11 +53,9 @@ public class AllSearchActivity extends AppCompatActivity {
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
-        diningDB = new DiningPersistence(db);
         eventsDB = new EventPersistence(db);
 
         searchList.addAll(buildingsDB.getAll());
-        searchList.addAll(diningDB.getAll());
         searchList.addAll(eventsDB.getAll());
 
 
@@ -101,7 +95,6 @@ public class AllSearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String input) {
                 ArrayList tempList = new ArrayList<Object>();
-                tempList.addAll(diningDB.findByName(input));
                 tempList.addAll(eventsDB.findByTitle(input));
                 tempList.addAll(buildingsDB.findByName(input));
                 sAdapter.setData(tempList);

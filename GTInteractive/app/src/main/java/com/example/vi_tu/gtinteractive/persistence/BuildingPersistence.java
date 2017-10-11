@@ -23,7 +23,7 @@ import static com.example.vi_tu.gtinteractive.utilities.StringUtils.tokenizeList
 public class BuildingPersistence extends BasePersistence<Building> {
 
     public BuildingPersistence(SQLiteDatabase db) {
-        super(db, Building.Contract.TABLE_NAME, Building.Contract._ID, Building.Contract._ID);
+        super(db, Building.Contract.TABLE_NAME, Building.Contract._ID, Building.Contract.COLUMN_BUILDING_ID);
     }
 
     /******** Search Functions ********************************************************************/

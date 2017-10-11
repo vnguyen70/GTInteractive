@@ -6,6 +6,5 @@ package com.example.vi_tu.gtinteractive.constants;
 
 public class TabType {
     public static final int INFO = 0;
-    public static final int DINING = 1;
-    public static final int EVENT = 2;
+    public static final int EVENT = 1;
 }

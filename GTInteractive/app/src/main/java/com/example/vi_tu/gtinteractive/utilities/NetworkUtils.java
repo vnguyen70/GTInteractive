@@ -13,10 +13,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
-import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 
 import org.joda.time.DateTime;
@@ -67,52 +65,6 @@ public class NetworkUtils {
                 });
 //        buildingsRequest.setTag(REQUEST_TAG);
         RequestQueueSingleton.getRequestQueue(context).add(buildingsRequest);
-    }
-
-    public void loadDiningsFromAPI(final DiningPersistence diningsDB) {
-        diningsDB.deleteAll();
-        Log.d("NETWORK_TEST", "loadDiningsFromAPI()...");
-        String diningsURL = "http://diningdata.itg.gatech.edu:80/api/DiningLocations";
-        final JsonArrayRequest diningsRequest = new JsonArrayRequest(Request.Method.GET, diningsURL, new JSONObject(),
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray r) {
-                        Log.d("NETWORK_TEST", "successful response from Dinings API");
-                        Log.d("NETWORK_TEST", "dinings found: " + r.length());
-                        new ProcessDiningsResponseTask(diningsDB).execute(r);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("NETWORK_TEST", "failed response from Dinings API");
-                DialogFragment dialog = new NetworkErrorDialogFragment();
-                dialog.show(fragmentManager, "diningsNetworkError");
-            }
-        });
-//        diningsRequest.setTag(REQUEST_TAG);
-        RequestQueueSingleton.getRequestQueue(context).add(diningsRequest);
-    }
-
-    public void updateDiningStatus(final DiningPersistence diningsDB) {
-        Log.d("NETWORK_TEST", "updateDiningStatus()...");
-        String diningURL = "http://diningdata.itg.gatech.edu:80/api/DiningLocations?type=dynamic";
-        final JsonArrayRequest diningsRequest = new JsonArrayRequest(Request.Method.GET, diningURL, new JSONObject(),
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray r) {
-                        Log.d("NETWORK_TEST", "successful response from Dinings API");
-                        new UpdateDiningStatusTask(diningsDB).execute(r);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("NETWORK_TEST", "failed response from Dinings API");
-                DialogFragment dialog = new NetworkErrorDialogFragment();
-                dialog.show(fragmentManager, "diningsNetworkError");
-            }
-        });
-//        diningsRequest.setTag(REQUEST_TAG);
-        RequestQueueSingleton.getRequestQueue(context).add(diningsRequest);
     }
 
     public void loadEventsFromAPI(final EventPersistence eventsDB, final BuildingPersistence buildingsDB) {
@@ -220,157 +172,6 @@ public class NetworkUtils {
                 dialog.show(fragmentManager, "buildingsNetworkError");
             }
         }
-    }
-
-    private class ProcessDiningsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
-
-        private DiningPersistence diningsDB;
-
-        ProcessDiningsResponseTask(DiningPersistence diningsDB) {
-            this.diningsDB = diningsDB;
-        }
-
-        @Override
-        protected Boolean doInBackground(JSONArray... jsonArrays) {
-            JSONArray r = jsonArrays[0];
-            List<Dining> dList = new ArrayList<>();
-            try {
-                for (int i = 0; i < r.length(); i++) {
-                    JSONObject o = r.getJSONObject(i);
-
-                    // tags
-                    List<Dining.Tag> tags = new ArrayList<>();
-                    JSONArray tagsArray = o.optJSONArray("Tags");
-                    for (int j = 0; j < tagsArray.length(); j++) {
-                        JSONObject tagObject = tagsArray.getJSONObject(j);
-                        Dining.Tag t = Dining.Tag.builder()
-                                .tagId(tagObject.optString("TagID"))
-                                .name(tagObject.optString("Name"))
-                                .helpText(tagObject.optString("HelpText"))
-                                .build();
-                        tags.add(t);
-                    }
-
-                    // open and close times
-                    LocalTime[] openTimes= new LocalTime[Constants.DAYS_OF_WEEK];
-                    LocalTime[] closeTimes= new LocalTime[Constants.DAYS_OF_WEEK];
-                    JSONArray timesArray = o.optJSONArray("HoursOfOperations");
-                    if (timesArray.length() > 7) {
-                        // TODO: this shouldn't be possible - check to make sure
-                    }
-                    for (int j = 0; j < timesArray.length(); j++) {
-                        JSONObject timesObject = timesArray.getJSONObject(j);
-                        JSONObject openTimeObject = timesObject.optJSONObject("Open");
-                        JSONObject closeTimeObject = timesObject.optJSONObject("Close");
-                        openTimes[openTimeObject.optInt("Day")] = DateTime.parse(openTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                        closeTimes[closeTimeObject.optInt("Day")] = DateTime.parse(closeTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                    }
-
-                    // exceptions
-                    List<Dining.Exception> exceptions = new ArrayList<>();
-                    JSONArray exceptionsArray = o.optJSONArray("Exceptions");
-                    for (int j = 0; j < exceptionsArray.length(); j++) {
-                        JSONObject exceptionObject = exceptionsArray.getJSONObject(j).optJSONObject("Exception");
-
-                        LocalTime[] exceptionOpenTimes= new LocalTime[Constants.DAYS_OF_WEEK];
-                        LocalTime[] exceptionCloseTimes= new LocalTime[Constants.DAYS_OF_WEEK];
-                        JSONArray exceptionTimesArray = exceptionObject.optJSONArray("HoursOfExceptions");
-                        if (exceptionTimesArray.length() > 7) {
-                            // TODO: this shouldn't be possible - check to make sure
-                        }
-                        for (int k = 0; k < exceptionTimesArray.length(); k++) {
-                            JSONObject timesObject = exceptionTimesArray.getJSONObject(k);
-                            JSONObject openTimeObject = timesObject.optJSONObject("Open");
-                            JSONObject closeTimeObject = timesObject.optJSONObject("Close");
-                            exceptionOpenTimes[openTimeObject.optInt("Day")] = DateTime.parse(openTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                            exceptionCloseTimes[closeTimeObject.optInt("Day")] = DateTime.parse(closeTimeObject.optString("Time"), DateTimeFormat.forPattern("HH:mm:ss")).toLocalTime(); // TODO: null check?
-                        }
-
-                        Dining.Exception e = Dining.Exception.builder()
-                                .openTimes(exceptionOpenTimes)
-                                .closeTimes(exceptionCloseTimes)
-                                .startDateTime(DateTime.parse(exceptionObject.optString("StartDateTime"))) // TODO: null check?
-                                .endDateTime(DateTime.parse(exceptionObject.optString("EndDateTime"))) // TODO: null check?
-                                .build();
-                        exceptions.add(e);
-                    }
-
-                    // build Dining object
-                    Dining d = Dining.builder()
-                            .diningId(o.optString("ID"))
-                            .buildingId(Integer.toString(o.optJSONObject("Building").optInt("BuildingID")))
-                            .latitude(o.has("Latitude") ? Double.parseDouble(o.getString("Latitude")) : null)
-                            .longitude(o.has("Longitude") ? Double.parseDouble(o.getString("Longitude")) : null)
-                            .name(o.optString("Name"))
-                            .description(o.optString("Description"))
-                            .locationDetails(o.optString("LocationDetails"))
-                            .logoURL(o.optString("LogoURL"))
-                            .menuLinkURL(o.optString("MenuLinkURL"))
-                            .promotionMessage(o.optString("PromotionMessage"))
-                            .promotionStartDate(o.optString("PromotionStartDate") != "null" ? DateTime.parse(o.optString("PromotionStartDate")) : null)
-                            .promotionEndDate(o.optString("PromotionEndDate") != "null" ? DateTime.parse(o.optString("PromotionEndDate")) : null)
-                            .openTimes(openTimes)
-                            .closeTimes(closeTimes)
-                            .exceptions(exceptions)
-                            .tags(tags)
-                            .isOpen(o.optBoolean("isOpen"))
-                            .upcomingStatusChange(o.optString("upcomingStatusChange") != "null" ? DateTime.parse(o.optString("upcomingStatusChange")) : null)
-                            .build();
-                    dList.add(d);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return diningsDB.createMany(dList);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean wasSuccessful) {
-            if (!wasSuccessful) {
-                DialogFragment dialog = new NetworkErrorDialogFragment();
-                dialog.show(fragmentManager, "buildingsNetworkError");
-            }
-        }
-    }
-
-    private class UpdateDiningStatusTask extends AsyncTask<JSONArray, Void, Boolean> {
-
-        private DiningPersistence diningsDB;
-
-        UpdateDiningStatusTask(DiningPersistence diningsDB) {
-            this.diningsDB = diningsDB;
-        }
-
-        @Override
-        protected Boolean doInBackground(JSONArray... jsonArrays) {
-            JSONArray r = jsonArrays[0];
-            try {
-                for (int i = 0; i < r.length(); i++) {
-                    JSONObject o = r.getJSONObject(i);
-                    String diningId = o.optString("ID");
-                    Dining d = diningsDB.findByDiningId(diningId);
-                    if (d != null) {
-                        d.setIsOpen(o.optBoolean("isOpen"));
-                        d.setUpcomingStatusChange(!o.optString("upcomingStatusChange").equals("null") ? DateTime.parse(o.optString("upcomingStatusChange")) : null);
-                        diningsDB.update(d, d.getId());
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean wasSuccessful) {
-            if (!wasSuccessful) {
-                DialogFragment dialog = new NetworkErrorDialogFragment();
-                dialog.show(fragmentManager, "buildingsNetworkError");
-            }
-        }
-
     }
 
     private class ProcessEventsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {

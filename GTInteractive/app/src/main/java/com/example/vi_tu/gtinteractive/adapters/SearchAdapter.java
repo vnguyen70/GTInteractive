@@ -9,13 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.vi_tu.gtinteractive.BuildingDetailsActivity;
 import com.example.vi_tu.gtinteractive.MapActivity;
 import com.example.vi_tu.gtinteractive.R;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_TYPE_BUILDING = 0;
     private static final int ITEM_TYPE_EVENT = 1;
-    private static final int ITEM_TYPE_DINING = 2;
     private List<Object> searchList;
 
     public SearchAdapter() {
@@ -68,23 +65,14 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private static class DiningViewHolder extends RecyclerView.ViewHolder {
-        public TextView diningNameView;
-        public DiningViewHolder (View view) {
-            super(view);
-            diningNameView = view.findViewById(R.id.nameText);
-        }
-    }
-
     @Override
     public int getItemViewType(int position) {
         if (searchList.get(position) instanceof Building) {
             return ITEM_TYPE_BUILDING;
         } else if (searchList.get(position) instanceof Event) {
             return ITEM_TYPE_EVENT;
-        } else {
-            return ITEM_TYPE_DINING;
         }
+        return -1;
     }
 
     @Override
@@ -95,9 +83,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return new BuildingViewHolder(layoutInflater.inflate(R.layout.search_list_item, parent, false));
         } else if (viewType == ITEM_TYPE_EVENT){
             return new EventViewHolder(layoutInflater.inflate(R.layout.event_card, parent, false));
-        } else {
-            return new DiningViewHolder(layoutInflater.inflate(R.layout.dining_card, parent, false));
         }
+        return null;
     }
 
     @Override
@@ -110,9 +97,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         } else if (viewHolder instanceof EventViewHolder) {
             Event event = (Event) item;
             ((EventViewHolder) viewHolder).eventNameView.setText(event.getTitle());
-        } else {
-            Dining dining = (Dining) item;
-            ((DiningViewHolder) viewHolder).diningNameView.setText(dining.getName());
         }
     }
 
