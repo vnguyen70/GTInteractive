@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -17,6 +18,7 @@ import com.example.vi_tu.gtinteractive.domain.Dining;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.DiningPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.squareup.picasso.Picasso;
 
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 
@@ -43,6 +45,10 @@ public class DiningDetailsActivity extends AppCompatActivity {
         if (temp != null) {
             d = temp;
         }
+
+        // Sets up event image TODO: Need to verify URLs for events (currently displays nothing)
+        ImageView eventImageView = (ImageView) findViewById(R.id.logoImageView);
+        Picasso.with(this).load(d.getLogoURL()).fit().into(eventImageView);
 
         // UI
         TextView idTextView = (TextView) findViewById(R.id.idText);

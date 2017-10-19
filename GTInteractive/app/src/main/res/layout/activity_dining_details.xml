@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true">
@@ -14,20 +16,23 @@
 
         <TextView
             android:id="@+id/idStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="id: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/idText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/idText"
-            app:layout_constraintBottom_toBottomOf="@+id/idText" />
+            app:layout_constraintTop_toTopOf="@+id/idText" />
+
         <TextView
             android:id="@+id/idText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/idStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,20 +40,23 @@
 
         <TextView
             android:id="@+id/diningIdStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="diningId: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/diningIdText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/diningIdText"
-            app:layout_constraintBottom_toBottomOf="@+id/diningIdText" />
+            app:layout_constraintTop_toTopOf="@+id/diningIdText" />
+
         <TextView
             android:id="@+id/diningIdText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/diningIdStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idText" />
@@ -56,20 +64,23 @@
 
         <TextView
             android:id="@+id/buildingIdStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="buildingId: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/buildingIdText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buildingIdText"
-            app:layout_constraintBottom_toBottomOf="@+id/buildingIdText" />
+            app:layout_constraintTop_toTopOf="@+id/buildingIdText" />
+
         <TextView
             android:id="@+id/buildingIdText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/buildingIdStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/diningIdText" />
@@ -77,20 +88,23 @@
 
         <TextView
             android:id="@+id/latitudeStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="latitude: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/latitudeText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/latitudeText"
-            app:layout_constraintBottom_toBottomOf="@+id/latitudeText" />
+            app:layout_constraintTop_toTopOf="@+id/latitudeText" />
+
         <TextView
             android:id="@+id/latitudeText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/latitudeStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buildingIdText" />
@@ -98,20 +112,23 @@
 
         <TextView
             android:id="@+id/longitudeStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="longitude: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/longitudeText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/longitudeText"
-            app:layout_constraintBottom_toBottomOf="@+id/longitudeText" />
+            app:layout_constraintTop_toTopOf="@+id/longitudeText" />
+
         <TextView
             android:id="@+id/longitudeText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/longitudeStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/latitudeText" />
@@ -119,23 +136,30 @@
 
         <TextView
             android:id="@+id/nameStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="name: "
+            android:textSize="24sp"
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/nameText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameText"
-            app:layout_constraintBottom_toBottomOf="@+id/nameText" />
+            app:layout_constraintTop_toTopOf="@+id/nameText" />
+
         <TextView
             android:id="@+id/nameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
             android:text="TextView"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/nameStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/longitudeText" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -143,20 +167,26 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="description: "
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:text="Description"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/descriptionText"
-            app:layout_constraintBottom_toBottomOf="@+id/descriptionText" />
+            app:layout_constraintTop_toBottomOf="@+id/locationDetailsText" />
         <TextView
             android:id="@+id/descriptionText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/descriptionStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameText" />
+            app:layout_constraintLeft_toLeftOf="@+id/descriptionStatic"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionStatic"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
 
         <TextView
@@ -164,38 +194,48 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="locationDetails: "
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Location"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/locationDetailsText"
-            app:layout_constraintBottom_toBottomOf="@+id/locationDetailsText" />
+            app:layout_constraintTop_toBottomOf="@+id/nameText" />
         <TextView
             android:id="@+id/locationDetailsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/locationDetailsStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+            app:layout_constraintLeft_toLeftOf="@+id/locationDetailsStatic"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/locationDetailsStatic"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
 
         <TextView
             android:id="@+id/logoURLStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="logoURL: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/logoURLText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/logoURLText"
-            app:layout_constraintBottom_toBottomOf="@+id/logoURLText" />
+            app:layout_constraintTop_toTopOf="@+id/logoURLText" />
+
         <TextView
             android:id="@+id/logoURLText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/logoURLStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/locationDetailsText" />
@@ -206,20 +246,26 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="menuLinkURL: "
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Menu"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/menuLinkURLText"
-            app:layout_constraintBottom_toBottomOf="@+id/menuLinkURLText" />
+            app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
         <TextView
             android:id="@+id/menuLinkURLText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/menuLinkURLStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoURLText" />
+            android:layout_marginRight="16dp"
+            app:layout_constraintLeft_toLeftOf="@+id/menuLinkURLStatic"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/menuLinkURLStatic"
+            android:layout_marginEnd="16dp" />
 
 
         <TextView
@@ -227,80 +273,96 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="promotionMessage: "
+            android:layout_marginTop="16dp"
+            android:text="Promotion(s)"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/promotionMessageText"
-            app:layout_constraintBottom_toBottomOf="@+id/promotionMessageText" />
+            app:layout_constraintTop_toBottomOf="@+id/menuLinkURLText" />
         <TextView
             android:id="@+id/promotionMessageText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/promotionMessageStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/menuLinkURLText" />
+            android:layout_marginRight="16dp"
+            app:layout_constraintLeft_toLeftOf="@+id/promotionMessageStatic"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/promotionMessageStatic" />
 
 
         <TextView
             android:id="@+id/promotionStartDateStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="promotionStartDate: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/promotionStartDateText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/promotionStartDateText"
-            app:layout_constraintBottom_toBottomOf="@+id/promotionStartDateText" />
+            app:layout_constraintTop_toTopOf="@+id/promotionStartDateText" />
+
         <TextView
             android:id="@+id/promotionStartDateText"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="TextView"
             app:layout_constraintLeft_toRightOf="@+id/promotionStartDateStatic"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/promotionMessageText" />
 
 
-        <TextView
-            android:id="@+id/promotionEndDateStatic"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="promotionEndDate: "
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/promotionEndDateText"
-            app:layout_constraintBottom_toBottomOf="@+id/promotionEndDateText" />
+        <!--<TextView-->
+            <!--android:id="@+id/promotionEndDateStatic"-->
+            <!--android:layout_width="160dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:text="promotionEndDate: "-->
+            <!--android:textStyle="bold"-->
+            <!--android:visibility="gone"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--tools:layout_editor_absoluteY="296dp" />-->
+
         <TextView
             android:id="@+id/promotionEndDateText"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
             android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/promotionEndDateStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/promotionStartDateText" />
+            app:layout_constraintTop_toTopOf="@+id/promotionStartDateText"
+            app:layout_constraintLeft_toRightOf="@+id/promoDash"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.0" />
 
 
         <TextView
             android:id="@+id/openTimesStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="openTimes: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/openTimesText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/openTimesText"
-            app:layout_constraintBottom_toBottomOf="@+id/openTimesText" />
+            app:layout_constraintTop_toTopOf="@+id/openTimesText" />
+
         <TextView
             android:id="@+id/openTimesText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/openTimesStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/promotionEndDateText" />
@@ -308,20 +370,22 @@
 
         <TextView
             android:id="@+id/closeTimesStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="closeTimes: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/closeTimesText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/closeTimesText"
-            app:layout_constraintBottom_toBottomOf="@+id/closeTimesText" />
+            app:layout_constraintTop_toTopOf="@+id/closeTimesText" />
+
         <TextView
             android:id="@+id/closeTimesText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/closeTimesStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/openTimesText" />
@@ -329,20 +393,23 @@
 
         <TextView
             android:id="@+id/exceptionsStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="exceptions: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/exceptionsText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/exceptionsText"
-            app:layout_constraintBottom_toBottomOf="@+id/exceptionsText" />
+            app:layout_constraintTop_toTopOf="@+id/exceptionsText" />
+
         <TextView
             android:id="@+id/exceptionsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/exceptionsStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/closeTimesText" />
@@ -350,20 +417,23 @@
 
         <TextView
             android:id="@+id/tagsStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="tags: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tagsText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tagsText"
-            app:layout_constraintBottom_toBottomOf="@+id/tagsText" />
+            app:layout_constraintTop_toTopOf="@+id/tagsText" />
+
         <TextView
             android:id="@+id/tagsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/tagsStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exceptionsText" />
@@ -371,20 +441,23 @@
 
         <TextView
             android:id="@+id/tagIdsStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="tagIds: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tagIdsText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tagIdsText"
-            app:layout_constraintBottom_toBottomOf="@+id/tagIdsText" />
+            app:layout_constraintTop_toTopOf="@+id/tagIdsText" />
+
         <TextView
             android:id="@+id/tagIdsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/tagIdsStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tagsText" />
@@ -395,38 +468,48 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="isOpen: "
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Is it Open? "
+            android:textColor="@color/common_google_signin_btn_text_light_default"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/isOpenText"
-            app:layout_constraintBottom_toBottomOf="@+id/isOpenText" />
+            app:layout_constraintTop_toBottomOf="@+id/promotionEndDateText" />
         <TextView
             android:id="@+id/isOpenText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/isOpenStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagIdsText" />
+            app:layout_constraintLeft_toLeftOf="@+id/isOpenStatic"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/isOpenStatic"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
 
         <TextView
             android:id="@+id/upcomingStatusChangeStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="upcomingStatusChange: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/upcomingStatusChangeText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/upcomingStatusChangeText"
-            app:layout_constraintBottom_toBottomOf="@+id/upcomingStatusChangeText" />
+            app:layout_constraintTop_toTopOf="@+id/upcomingStatusChangeText" />
+
         <TextView
             android:id="@+id/upcomingStatusChangeText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/upcomingStatusChangeStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/isOpenText" />
@@ -434,20 +517,23 @@
 
         <TextView
             android:id="@+id/nameTokensStatic"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="nameTokens: "
             android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/nameTokensText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameTokensText"
-            app:layout_constraintBottom_toBottomOf="@+id/nameTokensText" />
+            app:layout_constraintTop_toTopOf="@+id/nameTokensText" />
+
         <TextView
             android:id="@+id/nameTokensText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/nameTokensStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upcomingStatusChangeText" />
@@ -455,26 +541,54 @@
 
         <Button
             android:id="@+id/openBuildingDetailsButton"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="8dp"
             android:text="Open Building Details"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameTokensStatic" />
+            app:layout_constraintLeft_toRightOf="@+id/showInMapButton"
+            app:layout_constraintTop_toTopOf="@+id/showInMapButton"
+            android:layout_marginStart="8dp" />
 
 
         <Button
             android:id="@+id/showInMapButton"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="16dp"
             android:text="Show in Map"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/openBuildingDetailsButton" />
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/nameTokensText"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginStart="16dp" />
+
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.73"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+        <TextView
+            android:id="@+id/promoDash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            app:layout_constraintLeft_toRightOf="@+id/promotionStartDateText"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintTop_toTopOf="@+id/promotionStartDateText"
+            android:layout_marginTop="0dp" />
 
 
     </android.support.constraint.ConstraintLayout>
