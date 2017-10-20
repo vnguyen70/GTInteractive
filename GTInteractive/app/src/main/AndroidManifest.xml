@@ -77,7 +77,7 @@
             android:label="@string/title_activity_internal_map"
             android:parentActivityName=".BuildingDetailsActivity" />
         <activity
-            android:name=".AllSearchActivity"
+            android:name=".EntityListActivity"
             android:label="@string/title_activity_building_search"
             android:parentActivityName=".MapActivity" />
         <activity android:name=".SearchableActivity">

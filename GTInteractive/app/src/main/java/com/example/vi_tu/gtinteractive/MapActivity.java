@@ -12,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -29,7 +28,6 @@ import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
@@ -168,7 +166,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent searchIntent = new Intent(MapActivity.this, AllSearchActivity.class);
+                Intent searchIntent = new Intent(MapActivity.this, EntityListActivity.class);
                 startActivity(searchIntent);
             }
         });

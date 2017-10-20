@@ -14,6 +14,7 @@ import com.example.vi_tu.gtinteractive.R;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
 import java.util.ArrayList;
@@ -23,15 +24,15 @@ import java.util.List;
  * Created by raynerkristanto on 9/19/17.
  */
 
-public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_TYPE_BUILDING = 0;
     private static final int ITEM_TYPE_EVENT = 1;
-    private List<Object> searchList;
+    private List<Entity> searchList;
 
-    public SearchAdapter() {
+    public EntityAdapter() {
         this.searchList = new ArrayList<>();
     }
-    public SearchAdapter(List<Object> searchList) { this.searchList = searchList; }
+    public EntityAdapter(List<Entity> searchList) { this.searchList = searchList; }
 
     private static class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView buildingNameView;
@@ -78,7 +79,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        Log.d("SearchAdapter", "onCreateViewHolder");
+        Log.d("EntityAdapter", "onCreateViewHolder");
         if (viewType == ITEM_TYPE_BUILDING) {
             return new BuildingViewHolder(layoutInflater.inflate(R.layout.search_list_item, parent, false));
         } else if (viewType == ITEM_TYPE_EVENT){
@@ -105,9 +106,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return searchList.size();
     }
 
-    public void setData(List<Object> searchList) {
+    public void setData(List<Entity> searchList) {
         this.searchList = searchList;
-        Log.d("SearchAdapter", "setData");
+        Log.d("EntityAdapter", "setData");
         notifyDataSetChanged();
     }
 }

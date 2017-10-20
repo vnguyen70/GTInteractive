@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,33 +21,35 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.vi_tu.gtinteractive.adapters.BuildingListAdapter;
+import com.example.vi_tu.gtinteractive.adapters.EntityAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Entity;
+import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.utilities.BuildingFilter;
+import com.example.vi_tu.gtinteractive.utilities.EntityFilter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Rayner on 9/27/17.
- */
+public class EntityListActivity extends AppCompatActivity implements ListView.OnItemClickListener   {
 
-public class BuildingListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
-
-    public static final String[] drawerItems = {"Food", "Housing", "Sports", "Greek", "Parking", "Academic", "Other"};
+    public static final String[] drawerItems = {"Places", "Events"};
 
     private BuildingPersistence buildingsDB;
+    private EventPersistence eventsDB;
 
-    private RecyclerView buildingsListView;
-    private BuildingListAdapter bAdapter;
-    private List<Building> bList;
-    private BuildingFilter bFilter;
-    private BuildingFilter bFilter2;
-    private List<Building.Category> activeFilters = new ArrayList<>();
+    private RecyclerView entityListView;
+    private EntityAdapter eAdapter;
+
+    private List<Entity> entityList = new ArrayList<Entity>();
+    private List<Entity> matchingObjects;
+    private EntityFilter eFilter;
+    private EntityFilter eFilter2;
+    private List<Class> activeFilters = new ArrayList<>();
     private String userInput;
 
     private SearchManager searchManager;
@@ -61,20 +63,22 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_building_list);
+        setContentView(R.layout.search_list);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
-        bList = buildingsDB.getAll();
-        bFilter = new BuildingFilter(buildingsDB.getAll());
-        bFilter2 = new BuildingFilter(buildingsDB.getAll());
-        bAdapter = new BuildingListAdapter(bList);
-        buildingsListView = (RecyclerView) findViewById(R.id.recyclerview_search);
-        buildingsListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        buildingsListView.setHasFixedSize(true);
+        eventsDB = new EventPersistence(db);
 
-        buildingsListView.setAdapter(bAdapter);
+        entityList.addAll(buildingsDB.getAll());
+        entityList.addAll(eventsDB.getAll());
+        eFilter = new EntityFilter(entityList);
+        eFilter2 = new EntityFilter(entityList);
+        eAdapter = new EntityAdapter(entityList);
+        entityListView = (RecyclerView) findViewById(R.id.recyclerview_search);
+        entityListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        entityListView.setHasFixedSize(true);
+        entityListView.setAdapter(eAdapter);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -104,29 +108,36 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconified(false);
         searchView.setIconifiedByDefault(false);
+        searchView.requestFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                List<Building> queryResults = bFilter2.filterByName(query).getList();
                 // always return first building in queryResults
+                List<Entity> queryResults = eFilter2.filterByName(query).getList();
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING); // TODO: Check for ViewType
                 mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
                 startActivity(mapActivityIntent);
+
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String input) {
+//                ArrayList tempList = new ArrayList<Object>();
+//                tempList.addAll(eventsDB.findByTitle(input));
+//                tempList.addAll(buildingsDB.findByName(input));
+//                eAdapter.setData(tempList);
+//                matchingObjects = tempList;
                 userInput = input;
-                bAdapter.setData(bFilter2.filterByName(userInput).getList()); // TODO: implement filtering methods, because this is somewhat inefficient
+                eAdapter.setData(eFilter2.filterByName(userInput).getList());
                 return true;
             }
         });
-
-//        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
 
@@ -138,99 +149,39 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public void toggleFoodFilter(View view) {
-        if (activeFilters.contains(Building.Category.FOOD)) {
-            activeFilters.remove(Building.Category.FOOD);
+    public void togglePlacesFilter(View view) {
+        if (activeFilters.contains(Building.class)) {
+            activeFilters.remove(Building.class);
         } else {
-            activeFilters.add(Building.Category.FOOD);
+            activeFilters.add(Building.class);
         }
         updateFilters();
     }
-
-    public void toggleHousingFilter(View view) {
-        if (activeFilters.contains(Building.Category.HOUSING)) {
-            activeFilters.remove(Building.Category.HOUSING);
+    public void toggleEventsFilter(View view) {
+        if (activeFilters.contains(Event.class)) {
+            activeFilters.remove(Event.class);
         } else {
-            activeFilters.add(Building.Category.HOUSING);
+            activeFilters.add(Event.class);
         }
         updateFilters();
     }
-
-    public void toggleSportsFilter(View view) {
-        if (activeFilters.contains(Building.Category.SPORTS)) {
-            activeFilters.remove(Building.Category.SPORTS);
-        } else {
-            activeFilters.add(Building.Category.SPORTS);
-        }
-        updateFilters();
-    }
-
-    public void toggleGreekFilter(View view) {
-        if (activeFilters.contains(Building.Category.GREEK)) {
-            activeFilters.remove(Building.Category.GREEK);
-        } else {
-            activeFilters.add(Building.Category.GREEK);
-        }
-        updateFilters();
-    }
-    public void toggleParkingFilter(View view) {
-        if (activeFilters.contains(Building.Category.PARKING)) {
-            activeFilters.remove(Building.Category.PARKING);
-        } else {
-            activeFilters.add(Building.Category.PARKING);
-        }
-        updateFilters();
-    }
-    public void toggleAcademicFilter(View view) {
-        if (activeFilters.contains(Building.Category.ACADEMIC)) {
-            activeFilters.remove(Building.Category.ACADEMIC);
-        } else {
-            activeFilters.add(Building.Category.ACADEMIC);
-        }
-        updateFilters();
-    }
-    public void toggleOtherFilter(View view) {
-        if (activeFilters.contains(Building.Category.OTHER)) {
-            activeFilters.remove(Building.Category.OTHER);
-        } else {
-            activeFilters.add(Building.Category.OTHER);
-        }
-        updateFilters();
-    }
-
     public void updateFilters() {
-        bFilter2 = bFilter.filterByCategories(activeFilters);
-        List<Building> filteredList = bFilter2.filterByName(userInput).getList();
-        bAdapter.setData(filteredList);
+        eFilter2 = eFilter.filterByClass(activeFilters);
+        List<Entity> filteredList = eFilter2.filterByName(userInput).getList();
+        eAdapter.setData(filteredList);
     }
-
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        switch(i) {
-            case 0: // Food
-                toggleFoodFilter(view);
+        switch (i) {
+            case 0: // Places
+                togglePlacesFilter(view);
                 break;
-            case 1: // Housing
-                toggleHousingFilter(view);
-                break;
-            case 2: // Sports
-                toggleSportsFilter(view);
-                break;
-            case 3: // Greek
-                toggleGreekFilter(view);
-                break;
-            case 4: // Parking
-                toggleParkingFilter(view);
-                break;
-            case 5: // Academic
-                toggleAcademicFilter(view);
-                break;
-            case 6: // Other
-                toggleOtherFilter(view);
+            case 1: // Events
+                toggleEventsFilter(view);
                 break;
             default:
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
         }
     }
 }
