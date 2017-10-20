@@ -196,7 +196,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     websiteURLTextView.setText(b.getWebsiteURL());
                     phoneNumTextView.setText(b.getPhoneNum());
                     streetTextView.setText(b.getStreet());
-                    cityTextView.setText(b.getCity());
+                    cityTextView.setText(b.getCity() + ",");
                     stateTextView.setText(b.getState());
                     postalCodeTextView.setText(b.getPostalCode());
                     latitudeTextView.setText(String.valueOf(b.getLatitude()));

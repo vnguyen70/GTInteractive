@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -17,6 +18,7 @@ import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.squareup.picasso.Picasso;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
@@ -42,6 +44,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             e = temp;
         }
 
+        // Sets up event image TODO: Need to verify URLs for events (currently displays nothing)
+        ImageView eventImageView = (ImageView) findViewById(R.id.eventImageView);
+        Picasso.with(this).load(e.getImageURL()).fit().into(eventImageView);
+
         // UI
         TextView idTextView = (TextView) findViewById(R.id.idText);
         TextView eventIdTextView = (TextView) findViewById(R.id.eventIdText);
@@ -63,7 +69,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             categories += c.getLabel() + " ";
         }
 
-        idTextView.setText(String.valueOf(e.getId()));
+//        idTextView.setText(String.valueOf(e.getId()));
         eventIdTextView.setText(String.valueOf(e.getEventId()));
         titleTextView.setText(e.getTitle());
         locationTextView.setText(e.getLocation());
