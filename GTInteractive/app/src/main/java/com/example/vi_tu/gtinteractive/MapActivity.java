@@ -12,7 +12,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
@@ -166,6 +170,17 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             public void onClick(View view) {
                 Intent searchIntent = new Intent(MapActivity.this, AllSearchActivity.class);
                 startActivity(searchIntent);
+            }
+        });
+        searchBar.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_NULL
+                        && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+
+                }
+                return true;
             }
         });
         drawerButton.setOnClickListener(new View.OnClickListener() {

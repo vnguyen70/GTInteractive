@@ -102,6 +102,7 @@ public class AllSearchActivity extends AppCompatActivity {
                 return true;
             }
         });
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
 

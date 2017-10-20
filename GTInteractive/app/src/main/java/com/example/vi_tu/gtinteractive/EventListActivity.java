@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,11 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -31,7 +36,9 @@ import java.util.List;
  * Created by Rayner on 9/27/17.
  */
 
-public class EventListActivity extends AppCompatActivity {
+public class EventListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
+
+    public static final String[] drawerItems = {"Art", "Career", "Conference", "Other", "Seminar", "Special Event", "Sports", "Student Sponsored", "Training"};
     private EventPersistence eventsDB;
 
     private RecyclerView eventsListView;
@@ -47,10 +54,9 @@ public class EventListActivity extends AppCompatActivity {
     private SearchView searchView;
     private MenuItem searchItem;
 
-    private Button artFilterButton;
-    private Button careerFilterButton;
-    private Button conferenceFilterButton;
-    private Button otherFilterButton;
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private Button filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,32 +76,21 @@ public class EventListActivity extends AppCompatActivity {
 
         eventsListView.setAdapter(eAdapter);
 
-        artFilterButton = (Button) findViewById(R.id.artFilterButton);
-        artFilterButton.setOnClickListener(new View.OnClickListener() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
+        drawerList.setOnItemClickListener(this);
+        drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        filterButton = (Button) findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleArtFilter(view);
-            }
-        });
-        careerFilterButton = (Button) findViewById(R.id.careerFilterButton);
-        careerFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleCareerFilter(view);
-            }
-        });
-        conferenceFilterButton = (Button) findViewById(R.id.conferenceFilterButton);
-        conferenceFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleConferenceFilter(view);
-            }
-        });
-        otherFilterButton = (Button) findViewById(R.id.otherFilterButton);
-        otherFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleOtherFilter(view);
+                if (drawerLayout.isDrawerOpen(drawerList)) {
+                    drawerLayout.closeDrawer(drawerList);
+                } else {
+                    drawerLayout.openDrawer(drawerList);
+                }
             }
         });
     }
@@ -146,10 +141,8 @@ public class EventListActivity extends AppCompatActivity {
     public void toggleArtFilter(View view) {
         if (activeFilters.contains(Event.Category.ARTS)) {
             activeFilters.remove(Event.Category.ARTS);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Event.Category.ARTS);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
     }
@@ -157,10 +150,8 @@ public class EventListActivity extends AppCompatActivity {
     public void toggleCareerFilter(View view) {
         if (activeFilters.contains(Event.Category.CAREER)) {
             activeFilters.remove(Event.Category.CAREER);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Event.Category.CAREER);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
     }
@@ -168,30 +159,105 @@ public class EventListActivity extends AppCompatActivity {
     public void toggleConferenceFilter(View view) {
         if (activeFilters.contains(Event.Category.CONFERENCE)) {
             activeFilters.remove(Event.Category.CONFERENCE);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Event.Category.CONFERENCE);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
-
     }
 
     public void toggleOtherFilter(View view) {
         if (activeFilters.contains(Event.Category.OTHER)) {
             activeFilters.remove(Event.Category.OTHER);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Event.Category.OTHER);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
 
+    }
+
+    public void toggleSeminarFilter(View view) {
+        if (activeFilters.contains(Event.Category.SEMINAR)) {
+            activeFilters.remove(Event.Category.SEMINAR);
+        } else {
+            activeFilters.add(Event.Category.SEMINAR);
+        }
+        updateFilters();
+    }
+
+    public void toggleSpecialEventFilter(View view) {
+        if (activeFilters.contains(Event.Category.SPECIAL)) {
+            activeFilters.remove(Event.Category.SPECIAL);
+        } else {
+            activeFilters.add(Event.Category.SPECIAL);
+        }
+        updateFilters();
+    }
+
+    public void toggleSportsFilter(View view) {
+        if (activeFilters.contains(Event.Category.SPORTS)) {
+            activeFilters.remove(Event.Category.SPORTS);
+        } else {
+            activeFilters.add(Event.Category.SPORTS);
+        }
+        updateFilters();
+    }
+
+    public void toggleStudentSponsoredFilter(View view) {
+        if (activeFilters.contains(Event.Category.STUDENT)) {
+            activeFilters.remove(Event.Category.STUDENT);
+        } else {
+            activeFilters.add(Event.Category.STUDENT);
+        }
+        updateFilters();
+    }
+
+    public void toggleTrainingFilter(View view) {
+        if (activeFilters.contains(Event.Category.TRAINING)) {
+            activeFilters.remove(Event.Category.TRAINING);
+        } else {
+            activeFilters.add(Event.Category.TRAINING);
+        }
+        updateFilters();
     }
 
     public void updateFilters() {
         eFilter2 = eFilter.filterByCategories(activeFilters);
         List<Event> filteredList = eFilter2.filterByTitle(userInput).getList();
         eAdapter.setData(filteredList);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch(i) {
+            case 0: // Art
+                toggleArtFilter(view);
+                break;
+            case 1: // Career
+                toggleCareerFilter(view);
+                break;
+            case 2: // Conference
+                toggleConferenceFilter(view);
+                break;
+            case 3: // Other
+                toggleOtherFilter(view);
+                break;
+            case 4: // Seminar
+                toggleSeminarFilter(view);
+                break;
+            case 5: // Special Event
+                toggleSpecialEventFilter(view);
+                break;
+            case 6: // Sports
+                toggleSportsFilter(view);
+                break;
+            case 7: // Student Sponsored
+                toggleStudentSponsoredFilter(view);
+                break;
+            case 8: // Training
+                toggleTrainingFilter(view);
+                break;
+            default:
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
     }
 }

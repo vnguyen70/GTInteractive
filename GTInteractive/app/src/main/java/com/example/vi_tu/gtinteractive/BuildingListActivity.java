@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,11 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.vi_tu.gtinteractive.adapters.BuildingListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -31,7 +36,10 @@ import java.util.List;
  * Created by Rayner on 9/27/17.
  */
 
-public class BuildingListActivity extends AppCompatActivity {
+public class BuildingListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
+
+    public static final String[] drawerItems = {"Food", "Housing", "Sports", "Greek", "Parking", "Academic", "Other"};
+
     private BuildingPersistence buildingsDB;
 
     private RecyclerView buildingsListView;
@@ -46,10 +54,9 @@ public class BuildingListActivity extends AppCompatActivity {
     private SearchView searchView;
     private MenuItem searchItem;
 
-    private Button foodFilterButton;
-    private Button housingFilterButton;
-    private Button sportsFilterButton;
-    private Button greekFilterButton;
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private Button filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,32 +76,21 @@ public class BuildingListActivity extends AppCompatActivity {
 
         buildingsListView.setAdapter(bAdapter);
 
-        foodFilterButton = (Button) findViewById(R.id.foodFilterButton);
-        foodFilterButton.setOnClickListener(new View.OnClickListener() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
+        drawerList.setOnItemClickListener(this);
+        drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        filterButton = (Button) findViewById(R.id.FilterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFoodFilter(view);
-            }
-        });
-        housingFilterButton = (Button) findViewById(R.id.housingFilterButton);
-        housingFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleHousingFilter(view);
-            }
-        });
-        sportsFilterButton = (Button) findViewById(R.id.sportsFilterButton);
-        sportsFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleSportsFilter(view);
-            }
-        });
-        greekFilterButton = (Button) findViewById(R.id.greekFilterButton);
-        greekFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleGreekFilter(view);
+                if (drawerLayout.isDrawerOpen(drawerList)) {
+                    drawerLayout.closeDrawer(drawerList);
+                } else {
+                    drawerLayout.openDrawer(drawerList);
+                }
             }
         });
     }
@@ -130,7 +126,7 @@ public class BuildingListActivity extends AppCompatActivity {
             }
         });
 
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+//        searchView.setMaxWidth(Integer.MAX_VALUE);
         return true;
     }
 
@@ -146,10 +142,8 @@ public class BuildingListActivity extends AppCompatActivity {
     public void toggleFoodFilter(View view) {
         if (activeFilters.contains(Building.Category.FOOD)) {
             activeFilters.remove(Building.Category.FOOD);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Building.Category.FOOD);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
     }
@@ -157,10 +151,8 @@ public class BuildingListActivity extends AppCompatActivity {
     public void toggleHousingFilter(View view) {
         if (activeFilters.contains(Building.Category.HOUSING)) {
             activeFilters.remove(Building.Category.HOUSING);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Building.Category.HOUSING);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
     }
@@ -168,30 +160,77 @@ public class BuildingListActivity extends AppCompatActivity {
     public void toggleSportsFilter(View view) {
         if (activeFilters.contains(Building.Category.SPORTS)) {
             activeFilters.remove(Building.Category.SPORTS);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Building.Category.SPORTS);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
-
     }
 
     public void toggleGreekFilter(View view) {
         if (activeFilters.contains(Building.Category.GREEK)) {
             activeFilters.remove(Building.Category.GREEK);
-            view.setBackgroundColor(Color.LTGRAY);
         } else {
             activeFilters.add(Building.Category.GREEK);
-            view.setBackgroundColor(Color.WHITE);
         }
         updateFilters();
-
+    }
+    public void toggleParkingFilter(View view) {
+        if (activeFilters.contains(Building.Category.PARKING)) {
+            activeFilters.remove(Building.Category.PARKING);
+        } else {
+            activeFilters.add(Building.Category.PARKING);
+        }
+        updateFilters();
+    }
+    public void toggleAcademicFilter(View view) {
+        if (activeFilters.contains(Building.Category.ACADEMIC)) {
+            activeFilters.remove(Building.Category.ACADEMIC);
+        } else {
+            activeFilters.add(Building.Category.ACADEMIC);
+        }
+        updateFilters();
+    }
+    public void toggleOtherFilter(View view) {
+        if (activeFilters.contains(Building.Category.OTHER)) {
+            activeFilters.remove(Building.Category.OTHER);
+        } else {
+            activeFilters.add(Building.Category.OTHER);
+        }
+        updateFilters();
     }
 
     public void updateFilters() {
         bFilter2 = bFilter.filterByCategories(activeFilters);
         List<Building> filteredList = bFilter2.filterByName(userInput).getList();
         bAdapter.setData(filteredList);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch(i) {
+            case 0: // Food
+                toggleFoodFilter(view);
+                break;
+            case 1: // Housing
+                toggleHousingFilter(view);
+                break;
+            case 2: // Sports
+                toggleSportsFilter(view);
+                break;
+            case 3: // Greek
+                toggleGreekFilter(view);
+                break;
+            case 4: // Parking
+                toggleParkingFilter(view);
+                break;
+            case 5: // Academic
+                toggleAcademicFilter(view);
+                break;
+            case 6: // Other
+                toggleOtherFilter(view);
+                break;
+            default:
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
     }
 }
