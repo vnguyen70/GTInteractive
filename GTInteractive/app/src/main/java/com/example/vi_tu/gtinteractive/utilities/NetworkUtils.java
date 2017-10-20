@@ -46,7 +46,7 @@ public class NetworkUtils {
         Log.d("NETWORK_TEST", "loadBuildingsFromAPI()...");
 //        String buildingsURL = "https://m.gatech.edu/api/gtplaces/buildings";
         String buildingsURL = "https://gtapp-api.rnoc.gatech.edu/api/v1/places";
-        final JsonArrayRequest buildingsRequest = new JsonArrayRequest(Request.Method.GET, buildingsURL, new JSONObject(),
+        final JsonArrayRequest buildingsRequest = new JsonArrayRequest(Request.Method.GET, buildingsURL, new JSONArray(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray r) {
@@ -73,7 +73,7 @@ public class NetworkUtils {
 //        String eventsURL = "http://www.calendar.gatech.edu/feeds/events.xml";
         LocalDate today = new LocalDate();
         String eventsURL = "https://gtapp-api.rnoc.gatech.edu/api/v1/events/day/" + today.getYear() + "/" + today.getMonthOfYear() + "/" + today.getDayOfMonth();
-        final JsonArrayRequest eventsRequest = new JsonArrayRequest(Request.Method.GET, eventsURL, new JSONObject(),
+        final JsonArrayRequest eventsRequest = new JsonArrayRequest(Request.Method.GET, eventsURL, new JSONArray(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray r) {
