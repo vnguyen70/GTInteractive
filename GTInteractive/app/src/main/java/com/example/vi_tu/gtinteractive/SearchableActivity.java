@@ -24,7 +24,7 @@ public class SearchableActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_list);
+        setContentView(R.layout.activity_entity_list);
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);

@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,7 +59,6 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
 
     private DrawerLayout drawerLayout;
     private ListView drawerList;
-    private Button filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,17 +84,18 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
         drawerList.setOnItemClickListener(this);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        filterButton = (Button) findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
-                } else {
-                    drawerLayout.openDrawer(drawerList);
-                }
-            }
-        });
+//        Toolbar t = (Toolbar) findViewById(R.id.tToolbar);
+//        ActionMenuView amvMenu = (ActionMenuView) t.findViewById(R.id.amvMenu);
+//        amvMenu.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                return onOptionsItemSelected(menuItem);
+//            }
+//        });
+//
+//        setSupportActionBar(t);
+//        getSupportActionBar().setTitle(null);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -126,7 +129,7 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
             }
         });
 
-//        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setMaxWidth(800);
         return true;
     }
 
@@ -135,6 +138,13 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
+        }
+        if (item.getItemId() == R.id.action_filter) {
+            if (drawerLayout.isDrawerOpen(drawerList)) {
+                drawerLayout.closeDrawer(drawerList);
+            } else {
+                drawerLayout.openDrawer(drawerList);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

@@ -11,13 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,12 +56,11 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
     private DrawerLayout drawerLayout;
     private ListView drawerList;
-    private Button filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_list);
+        setContentView(R.layout.activity_entity_list);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -85,18 +82,6 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
         drawerList.setOnItemClickListener(this);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        filterButton = (Button) findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
-                } else {
-                    drawerLayout.openDrawer(drawerList);
-                }
-            }
-        });
     }
 
     @Override
@@ -127,17 +112,12 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
             @Override
             public boolean onQueryTextChange(String input) {
-//                ArrayList tempList = new ArrayList<Object>();
-//                tempList.addAll(eventsDB.findByTitle(input));
-//                tempList.addAll(buildingsDB.findByName(input));
-//                eAdapter.setData(tempList);
-//                matchingObjects = tempList;
                 userInput = input;
                 eAdapter.setData(eFilter2.filterByName(userInput).getList());
                 return true;
             }
         });
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setMaxWidth(800);
         return true;
     }
 
@@ -146,6 +126,13 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
+        }
+        if (item.getItemId() == R.id.action_filter) {
+            if (drawerLayout.isDrawerOpen(drawerList)) {
+                drawerLayout.closeDrawer(drawerList);
+            } else {
+                drawerLayout.openDrawer(drawerList);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

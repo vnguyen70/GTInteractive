@@ -56,7 +56,6 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
 
     private DrawerLayout drawerLayout;
     private ListView drawerList;
-    private Button filterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,18 +80,6 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
         drawerList.setOnItemClickListener(this);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-        filterButton = (Button) findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
-                } else {
-                    drawerLayout.openDrawer(drawerList);
-                }
-            }
-        });
     }
 
     @Override
@@ -125,7 +112,7 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
                 return true;
             }
         });
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setMaxWidth(800);
         return true;
     }
 
@@ -134,6 +121,13 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
+        }
+        if (item.getItemId() == R.id.action_filter) {
+            if (drawerLayout.isDrawerOpen(drawerList)) {
+                drawerLayout.closeDrawer(drawerList);
+            } else {
+                drawerLayout.openDrawer(drawerList);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

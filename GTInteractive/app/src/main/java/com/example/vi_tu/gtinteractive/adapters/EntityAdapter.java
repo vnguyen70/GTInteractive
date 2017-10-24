@@ -81,7 +81,7 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         Log.d("EntityAdapter", "onCreateViewHolder");
         if (viewType == ITEM_TYPE_BUILDING) {
-            return new BuildingViewHolder(layoutInflater.inflate(R.layout.search_list_item, parent, false));
+            return new BuildingViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false));
         } else if (viewType == ITEM_TYPE_EVENT){
             return new EventViewHolder(layoutInflater.inflate(R.layout.event_card, parent, false));
         }
