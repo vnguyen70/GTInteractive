@@ -13,7 +13,7 @@ import com.example.vi_tu.gtinteractive.MapActivity;
 import com.example.vi_tu.gtinteractive.R;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
@@ -25,35 +25,35 @@ import java.util.List;
  */
 
 public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int ITEM_TYPE_BUILDING = 0;
+    private static final int ITEM_TYPE_PLACE = 0;
     private static final int ITEM_TYPE_EVENT = 1;
-    private List<Entity> searchList;
+    private List<Entity> entityList;
 
     public EntityAdapter() {
-        this.searchList = new ArrayList<>();
+        this.entityList = new ArrayList<>();
     }
-    public EntityAdapter(List<Entity> searchList) { this.searchList = searchList; }
+    public EntityAdapter(List<Entity> eList) { this.entityList = eList; }
 
-    private static class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView buildingNameView;
-        public int buildingId;
+    private static class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView placeNameView;
+        public int placeId;
 
-        public BuildingViewHolder (View view) {
+        public PlaceViewHolder(View view) {
             super(view);
-            buildingNameView = view.findViewById(R.id.tv_building_data);
-            buildingId = -1;
+            placeNameView = view.findViewById(R.id.tv_label);
+            placeId = -1;
             view.setOnClickListener(this);
         }
 
         public void onClick(View view) {
             Context context = view.getContext();
             Intent mapActivityIntent = new Intent(context, MapActivity.class);
-            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
-            mapActivityIntent.putExtra(Arguments.OBJECT_ID, buildingId);
+            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+            mapActivityIntent.putExtra(Arguments.OBJECT_ID, placeId);
             context.startActivity(mapActivityIntent);
         }
-        public void setBuildingId(Integer buildingId) {
-            this.buildingId = buildingId;
+        public void setPlaceId(Integer placeId) {
+            this.placeId = placeId;
         }
 
     }
@@ -68,9 +68,9 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        if (searchList.get(position) instanceof Building) {
-            return ITEM_TYPE_BUILDING;
-        } else if (searchList.get(position) instanceof Event) {
+        if (entityList.get(position) instanceof Place) {
+            return ITEM_TYPE_PLACE;
+        } else if (entityList.get(position) instanceof Event) {
             return ITEM_TYPE_EVENT;
         }
         return -1;
@@ -80,8 +80,8 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         Log.d("EntityAdapter", "onCreateViewHolder");
-        if (viewType == ITEM_TYPE_BUILDING) {
-            return new BuildingViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false));
+        if (viewType == ITEM_TYPE_PLACE) {
+            return new PlaceViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false));
         } else if (viewType == ITEM_TYPE_EVENT){
             return new EventViewHolder(layoutInflater.inflate(R.layout.event_card, parent, false));
         }
@@ -90,11 +90,11 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Object item = searchList.get(position);
-        if (viewHolder instanceof BuildingViewHolder) {
-            Building building = (Building) item;
-            ((BuildingViewHolder) viewHolder).buildingNameView.setText(building.getName());
-            ((BuildingViewHolder) viewHolder).setBuildingId(building.getId());
+        Object item = entityList.get(position);
+        if (viewHolder instanceof PlaceViewHolder) {
+            Place place = (Place) item;
+            ((PlaceViewHolder) viewHolder).placeNameView.setText(place.getName());
+            ((PlaceViewHolder) viewHolder).setPlaceId(place.getId());
         } else if (viewHolder instanceof EventViewHolder) {
             Event event = (Event) item;
             ((EventViewHolder) viewHolder).eventNameView.setText(event.getTitle());
@@ -103,11 +103,11 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return searchList.size();
+        return entityList.size();
     }
 
-    public void setData(List<Entity> searchList) {
-        this.searchList = searchList;
+    public void setData(List<Entity> eList) {
+        this.entityList = eList;
         Log.d("EntityAdapter", "setData");
         notifyDataSetChanged();
     }

@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -86,7 +84,7 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the options menu from XML
 
-        getMenuInflater().inflate(R.menu.menu_building_search, menu);
+        getMenuInflater().inflate(R.menu.menu_place_search, menu);
         searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -99,7 +97,7 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
                 List<Event> queryResults = eFilter2.filterByTitle(query).getList();
                 // always return first building in queryResults
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
                 mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
                 startActivity(mapActivityIntent);
                 return true;

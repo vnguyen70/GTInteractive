@@ -22,10 +22,10 @@ import android.widget.Toast;
 import com.example.vi_tu.gtinteractive.adapters.EntityAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.EntityFilter;
@@ -37,7 +37,7 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
     public static final String[] drawerItems = {"Places", "Events"};
 
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence buildingsDB;
     private EventPersistence eventsDB;
 
     private RecyclerView entityListView;
@@ -64,7 +64,7 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
+        buildingsDB = new PlacePersistence(db);
         eventsDB = new EventPersistence(db);
 
         entityList.addAll(buildingsDB.getAll());
@@ -88,7 +88,7 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the options menu from XML
 
-        getMenuInflater().inflate(R.menu.menu_building_search, menu);
+        getMenuInflater().inflate(R.menu.menu_place_search, menu);
         searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -103,7 +103,7 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
                 // always return first building in queryResults
                 List<Entity> queryResults = eFilter2.filterByName(query).getList();
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING); // TODO: Check for ViewType
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE); // TODO: Check for ViewType
                 mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
                 startActivity(mapActivityIntent);
 
@@ -137,10 +137,10 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         return super.onOptionsItemSelected(item);
     }
     public void togglePlacesFilter(View view) {
-        if (activeFilters.contains(Building.class)) {
-            activeFilters.remove(Building.class);
+        if (activeFilters.contains(Place.class)) {
+            activeFilters.remove(Place.class);
         } else {
-            activeFilters.add(Building.class);
+            activeFilters.add(Place.class);
         }
         updateFilters();
     }

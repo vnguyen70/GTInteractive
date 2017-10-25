@@ -1,6 +1,6 @@
 package com.example.vi_tu.gtinteractive.utilities;
 
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
@@ -25,10 +25,10 @@ public class EntityFilter extends BaseFilter<Entity> {
                 if (event.getTitle().toLowerCase().contains(name.trim().toLowerCase())) {
                     results.add(event);
                 }
-            } else { // e is a Building
-                Building building = (Building) e;
-                if (building.getNameTokens().contains(name.trim().toLowerCase())) {
-                    results.add(building);
+            } else { // e is a Place
+                Place place = (Place) e;
+                if (place.getNameTokens().contains(name.trim().toLowerCase())) {
+                    results.add(place);
                 }
             }
 

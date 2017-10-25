@@ -13,8 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
@@ -23,23 +23,23 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
-public class BuildingsTestActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
+public class PlaceTestActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
-    private TextView tvBuildingsTest;
+    private TextView tvPlacesTest;
 
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence placesDB;
 
     private NetworkUtils networkUtils;
 
-    public static final String REQUEST_TAG = "BuildingsTestActivity";
+    public static final String REQUEST_TAG = "PlaceTestActivity";
 
-    private static final long BUILDINGS_CACHE_DURATION_MS = 86400000; // number of milliseconds in 1 day
+    private static final long PLACES_CACHE_DURATION_MS = 86400000; // number of milliseconds in 1 day
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buildings_test);
-        tvBuildingsTest = (TextView) findViewById(R.id.tv_buildings_test);
+        setContentView(R.layout.activity_places_test);
+        tvPlacesTest = (TextView) findViewById(R.id.tv_places_test);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,22 +47,22 @@ public class BuildingsTestActivity extends AppCompatActivity implements NetworkE
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
+        placesDB = new PlacePersistence(db);
 
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         long nowMS = DateTime.now().getMillis();
-        long buildingsCacheExpiredMS = sharedPreferences.getLong("buildingsCacheExpiredMS", 0);
+        long placesCacheExpiredMS = sharedPreferences.getLong("placesCacheExpiredMS", 0);
 
-        if (nowMS >= buildingsCacheExpiredMS) {
-            networkUtils.loadBuildingsFromAPI(buildingsDB);
+        if (nowMS >= placesCacheExpiredMS) {
+            networkUtils.loadPlacesFromAPI(placesDB);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong("buildingsCacheExpiredMS", nowMS + BUILDINGS_CACHE_DURATION_MS);
+            editor.putLong("placesCacheExpiredMS", nowMS + PLACES_CACHE_DURATION_MS);
             editor.apply();
         } else {
-            Log.d("NETWORK_TEST", "buildings already loaded");
+            Log.d("NETWORK_TEST", "places already loaded");
         }
 
     }
@@ -70,7 +70,7 @@ public class BuildingsTestActivity extends AppCompatActivity implements NetworkE
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_buildings_test, menu);
+        inflater.inflate(R.menu.menu_places_test, menu);
         return true;
     }
 
@@ -87,11 +87,11 @@ public class BuildingsTestActivity extends AppCompatActivity implements NetworkE
                 displayResults();
                 return true;
             case R.id.action_reload:
-                tvBuildingsTest.setText("");
-                networkUtils.loadBuildingsFromAPI(buildingsDB);
+                tvPlacesTest.setText("");
+                networkUtils.loadPlacesFromAPI(placesDB);
                 return true;
             case R.id.action_clear:
-                buildingsDB.deleteAll();
+                placesDB.deleteAll();
                 displayResults();
                 return true;
             default:
@@ -102,18 +102,18 @@ public class BuildingsTestActivity extends AppCompatActivity implements NetworkE
     }
 
     private void displayResults() {
-        List<Building> bList = buildingsDB.getAll();
+        List<Place> pList = placesDB.getAll();
         String results = "";
-        for (Building b : bList) {
-            results += b.getId() + ": " + b.getBuildingId() + " (" + b.getName() + ")\n";
+        for (Place p : pList) {
+            results += p.getId() + ": " + p.getPlaceId() + " (" + p.getName() + ")\n";
         }
-        tvBuildingsTest.setText("" + bList.size() + " buildings found:\n\n" + results);
+        tvPlacesTest.setText("" + pList.size() + " places found:\n\n" + results);
     }
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog) {
-        tvBuildingsTest.setText("");
-        networkUtils.loadBuildingsFromAPI(buildingsDB);
+        tvPlacesTest.setText("");
+        networkUtils.loadPlacesFromAPI(placesDB);
     }
 
     @Override

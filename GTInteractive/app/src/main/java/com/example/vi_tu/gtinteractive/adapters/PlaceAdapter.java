@@ -12,53 +12,53 @@ import com.example.vi_tu.gtinteractive.MapActivity;
 import com.example.vi_tu.gtinteractive.R;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder> {
+public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder> {
 
-    private List<Building> bList;
+    private List<Place> pList;
 
-    public BuildingAdapter() {
-        this.bList = new ArrayList<>();
+    public PlaceAdapter() {
+        this.pList = new ArrayList<>();
     }
 
-    public BuildingAdapter(List<Building> bList) {
-        this.bList = bList;
-    }
-
-    @Override
-    public BuildingViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new BuildingViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false));
+    public PlaceAdapter(List<Place> pList) {
+        this.pList = pList;
     }
 
     @Override
-    public void onBindViewHolder(BuildingViewHolder holder, int position) {
-        Building b = bList.get(position);
-        holder.buildingNameView.setText(b.getName());
-        holder.setObjectId(b.getId());
+    public PlaceViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        return new PlaceViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false));
+    }
+
+    @Override
+    public void onBindViewHolder(PlaceViewHolder holder, int position) {
+        Place p = pList.get(position);
+        holder.placeNameView.setText(p.getName());
+        holder.setObjectId(p.getId());
     }
 
     @Override
     public int getItemCount() {
-        return bList.size();
+        return pList.size();
     }
 
-    public void setData(List<Building> bList) {
-        this.bList = bList;
+    public void setData(List<Place> pList) {
+        this.pList = pList;
         notifyDataSetChanged();
     }
 
-    public class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView buildingNameView;
+        public TextView placeNameView;
         public int objectId;
 
-        public BuildingViewHolder(View view) {
+        public PlaceViewHolder(View view) {
             super(view);
-            buildingNameView = view.findViewById(R.id.tv_building_data);
+            placeNameView = view.findViewById(R.id.tv_label);
             objectId = -1;
             view.setOnClickListener(this);
         }
@@ -67,7 +67,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
         public void onClick(View view) {
             Context context = view.getContext();
             Intent mapActivityIntent = new Intent(context, MapActivity.class);
-            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
             mapActivityIntent.putExtra(Arguments.OBJECT_ID,objectId);
             context.startActivity(mapActivityIntent);
         }

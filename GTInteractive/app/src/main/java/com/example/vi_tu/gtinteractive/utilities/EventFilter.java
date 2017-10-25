@@ -1,8 +1,5 @@
 package com.example.vi_tu.gtinteractive.utilities;
 
-import android.util.Log;
-
-import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
 import java.util.ArrayList;

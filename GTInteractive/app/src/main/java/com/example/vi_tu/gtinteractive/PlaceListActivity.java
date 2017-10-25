@@ -4,33 +4,28 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.vi_tu.gtinteractive.adapters.BuildingListAdapter;
+import com.example.vi_tu.gtinteractive.adapters.PlaceListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.utilities.BuildingFilter;
+import com.example.vi_tu.gtinteractive.utilities.PlaceFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,18 +34,18 @@ import java.util.List;
  * Created by Rayner on 9/27/17.
  */
 
-public class BuildingListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
+public class PlaceListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
 
     public static final String[] drawerItems = {"Food", "Housing", "Sports", "Greek", "Parking", "Academic", "Other"};
 
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence placesDB;
 
-    private RecyclerView buildingsListView;
-    private BuildingListAdapter bAdapter;
-    private List<Building> bList;
-    private BuildingFilter bFilter;
-    private BuildingFilter bFilter2;
-    private List<Building.Category> activeFilters = new ArrayList<>();
+    private RecyclerView placesListView;
+    private PlaceListAdapter pAdapter;
+    private List<Place> pList;
+    private PlaceFilter pFilter;
+    private PlaceFilter pFilter2;
+    private List<Place.Category> activeFilters = new ArrayList<>();
     private String userInput;
 
     private SearchManager searchManager;
@@ -63,20 +58,20 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_building_list);
+        setContentView(R.layout.activity_place_list);
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
-        bList = buildingsDB.getAll();
-        bFilter = new BuildingFilter(buildingsDB.getAll());
-        bFilter2 = new BuildingFilter(buildingsDB.getAll());
-        bAdapter = new BuildingListAdapter(bList);
-        buildingsListView = (RecyclerView) findViewById(R.id.recyclerview_search);
-        buildingsListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        buildingsListView.setHasFixedSize(true);
+        placesDB = new PlacePersistence(db);
+        pList = placesDB.getAll();
+        pFilter = new PlaceFilter(placesDB.getAll());
+        pFilter2 = new PlaceFilter(placesDB.getAll());
+        pAdapter = new PlaceListAdapter(pList);
+        placesListView = (RecyclerView) findViewById(R.id.recyclerview_search);
+        placesListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        placesListView.setHasFixedSize(true);
 
-        buildingsListView.setAdapter(bAdapter);
+        placesListView.setAdapter(pAdapter);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -102,7 +97,7 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the options menu from XML
 
-        getMenuInflater().inflate(R.menu.menu_building_search, menu);
+        getMenuInflater().inflate(R.menu.menu_place_search, menu);
         searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -112,10 +107,10 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                List<Building> queryResults = bFilter2.filterByName(query).getList();
-                // always return first building in queryResults
+                List<Place> queryResults = pFilter2.filterByName(query).getList();
+                // always return first place in queryResults
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
                 mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
                 startActivity(mapActivityIntent);
                 return true;
@@ -124,7 +119,7 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
             @Override
             public boolean onQueryTextChange(String input) {
                 userInput = input;
-                bAdapter.setData(bFilter2.filterByName(userInput).getList()); // TODO: implement filtering methods, because this is somewhat inefficient
+                pAdapter.setData(pFilter2.filterByName(userInput).getList()); // TODO: implement filtering methods, because this is somewhat inefficient
                 return true;
             }
         });
@@ -150,69 +145,69 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
     }
 
     public void toggleFoodFilter(View view) {
-        if (activeFilters.contains(Building.Category.FOOD)) {
-            activeFilters.remove(Building.Category.FOOD);
+        if (activeFilters.contains(Place.Category.FOOD)) {
+            activeFilters.remove(Place.Category.FOOD);
         } else {
-            activeFilters.add(Building.Category.FOOD);
+            activeFilters.add(Place.Category.FOOD);
         }
         updateFilters();
     }
 
     public void toggleHousingFilter(View view) {
-        if (activeFilters.contains(Building.Category.HOUSING)) {
-            activeFilters.remove(Building.Category.HOUSING);
+        if (activeFilters.contains(Place.Category.HOUSING)) {
+            activeFilters.remove(Place.Category.HOUSING);
         } else {
-            activeFilters.add(Building.Category.HOUSING);
+            activeFilters.add(Place.Category.HOUSING);
         }
         updateFilters();
     }
 
     public void toggleSportsFilter(View view) {
-        if (activeFilters.contains(Building.Category.SPORTS)) {
-            activeFilters.remove(Building.Category.SPORTS);
+        if (activeFilters.contains(Place.Category.SPORTS)) {
+            activeFilters.remove(Place.Category.SPORTS);
         } else {
-            activeFilters.add(Building.Category.SPORTS);
+            activeFilters.add(Place.Category.SPORTS);
         }
         updateFilters();
     }
 
     public void toggleGreekFilter(View view) {
-        if (activeFilters.contains(Building.Category.GREEK)) {
-            activeFilters.remove(Building.Category.GREEK);
+        if (activeFilters.contains(Place.Category.GREEK)) {
+            activeFilters.remove(Place.Category.GREEK);
         } else {
-            activeFilters.add(Building.Category.GREEK);
+            activeFilters.add(Place.Category.GREEK);
         }
         updateFilters();
     }
     public void toggleParkingFilter(View view) {
-        if (activeFilters.contains(Building.Category.PARKING)) {
-            activeFilters.remove(Building.Category.PARKING);
+        if (activeFilters.contains(Place.Category.PARKING)) {
+            activeFilters.remove(Place.Category.PARKING);
         } else {
-            activeFilters.add(Building.Category.PARKING);
+            activeFilters.add(Place.Category.PARKING);
         }
         updateFilters();
     }
     public void toggleAcademicFilter(View view) {
-        if (activeFilters.contains(Building.Category.ACADEMIC)) {
-            activeFilters.remove(Building.Category.ACADEMIC);
+        if (activeFilters.contains(Place.Category.ACADEMIC)) {
+            activeFilters.remove(Place.Category.ACADEMIC);
         } else {
-            activeFilters.add(Building.Category.ACADEMIC);
+            activeFilters.add(Place.Category.ACADEMIC);
         }
         updateFilters();
     }
     public void toggleOtherFilter(View view) {
-        if (activeFilters.contains(Building.Category.OTHER)) {
-            activeFilters.remove(Building.Category.OTHER);
+        if (activeFilters.contains(Place.Category.OTHER)) {
+            activeFilters.remove(Place.Category.OTHER);
         } else {
-            activeFilters.add(Building.Category.OTHER);
+            activeFilters.add(Place.Category.OTHER);
         }
         updateFilters();
     }
 
     public void updateFilters() {
-        bFilter2 = bFilter.filterByCategories(activeFilters);
-        List<Building> filteredList = bFilter2.filterByName(userInput).getList();
-        bAdapter.setData(filteredList);
+        pFilter2 = pFilter.filterByCategories(activeFilters);
+        List<Place> filteredList = pFilter2.filterByName(userInput).getList();
+        pAdapter.setData(filteredList);
     }
 
     @Override

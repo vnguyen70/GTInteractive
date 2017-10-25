@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BuildingsTestActivity"
+            android:name=".PlaceTestActivity"
             android:label="@string/title_activity_buildings_test"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -56,12 +56,12 @@
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BuildingDetailsActivity"
+            android:name=".PlaceDetailsActivity"
             android:label="@string/title_activity_building_details"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BuildingListActivity"
+            android:name=".PlaceListActivity"
             android:label="Building List"
             android:parentActivityName=".MapActivity" />
         <activity
@@ -75,7 +75,7 @@
         <activity
             android:name=".InternalMapActivity"
             android:label="@string/title_activity_internal_map"
-            android:parentActivityName=".BuildingDetailsActivity" />
+            android:parentActivityName=".PlaceDetailsActivity" />
         <activity
             android:name=".EntityListActivity"
             android:label="@string/title_activity_building_search"

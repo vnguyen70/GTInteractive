@@ -1,7 +1,6 @@
 package com.example.vi_tu.gtinteractive;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -28,12 +27,11 @@ import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -44,20 +42,20 @@ import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.seriali
 
 //import com.squareup.picasso.Picasso;
 
-public class BuildingDetailsActivity extends AppCompatActivity {
+public class PlaceDetailsActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-    private ImageView buildingImageView;
+    private ImageView placeImageView;
 
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence placesDB;
     private EventPersistence eventsDB;
 
     private NetworkUtils networkUtils;
 
     private int objectId;
-    private static Building b; // building to display
+    private static Place p; // place to display
 
     private static List<Event> eList;
 
@@ -66,37 +64,37 @@ public class BuildingDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_building_details);
+        setContentView(R.layout.activity_place_details);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        buildingImageView = (ImageView) findViewById(R.id.buildingImageView);
+        placeImageView = (ImageView) findViewById(R.id.placeImageView);
 
         context = this;
 
         // persistence
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
+        placesDB = new PlacePersistence(db);
         eventsDB = new EventPersistence(db);
 
-        // building to display
-        b = Building.DUMMY;
+        // place to display
+        p = Place.DUMMY;
         objectId = getIntent().getIntExtra(Arguments.OBJECT_ID, -1);
-        Building temp = buildingsDB.get(objectId);
+        Place temp = placesDB.get(objectId);
         if (temp != null) {
-            b = temp;
+            p = temp;
         }
-        Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
-        Log.d("BuildingDetailsActivity", "hello " + b.getBuildingId());
+        Picasso.with(this).load(p.getImageURL()).fit().into(placeImageView); // TODO: store the bitmaps into database and load image from database
+        Log.d("PlaceDetailsActivity", "hello " + p.getPlaceId());
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
 
         // Initializing animated scroll for the toolbar
         CollapsingToolbarLayout collapsingToolBarLayout
                 = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
-        collapsingToolBarLayout.setTitle(b.getName());
+        collapsingToolBarLayout.setTitle(p.getName());
 
         eList = eventsDB.getAll();
 
@@ -153,16 +151,16 @@ public class BuildingDetailsActivity extends AppCompatActivity {
             View rootView;
             switch (sectionNum) {
                 case 1: // events
-                    rootView = inflater.inflate(R.layout.fragment_building_details_events, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_place_details_event, container, false);
                     RecyclerView eventsView = rootView.findViewById(R.id.eventsRecyclerView);
                     eventsView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                     eventsView.setAdapter(new EventAdapter(eList));
                     break;
                 default: // info (e.g. sectionNum = 0)
-                    rootView = inflater.inflate(R.layout.fragment_building_details_info, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_place_details_info, container, false);
 
                     TextView idTextView = rootView.findViewById(R.id.idText);
-                    TextView buildingIdTextView = rootView.findViewById(R.id.buildingIdText);
+                    TextView placeIdTextView = rootView.findViewById(R.id.placeIdText);
                     TextView nameTextView = rootView.findViewById(R.id.nameText);
                     TextView imageURLTextView = rootView.findViewById(R.id.imageURLText);
                     TextView websiteURLTextView = rootView.findViewById(R.id.websiteURLText);
@@ -189,40 +187,40 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     Button showInMapButton = rootView.findViewById(R.id.showInMapButton);
                     Button viewInternalLayoutButton = rootView.findViewById(R.id.viewInternalLayoutButton);
 
-                    idTextView.setText(String.valueOf(b.getId()));
-                    buildingIdTextView.setText(b.getBuildingId());
-                    nameTextView.setText(b.getName());
-                    imageURLTextView.setText(b.getImageURL());
-                    websiteURLTextView.setText(b.getWebsiteURL());
-                    phoneNumTextView.setText(b.getPhoneNum());
-                    streetTextView.setText(b.getStreet());
-                    cityTextView.setText(b.getCity() + ",");
-                    stateTextView.setText(b.getState());
-                    postalCodeTextView.setText(b.getPostalCode());
-                    latitudeTextView.setText(String.valueOf(b.getLatitude()));
-                    longitudeTextView.setText(String.valueOf(b.getLongitude()));
-                    polygonsTextView.setText(serializePolygons(b.getPolygons()));
-                    descriptionTextView.setText(b.getDescription());
-                    locatedInTextView.setText(b.getLocatedIn());
-                    yelpIDTextView.setText(b.getYelpID());
-                    openTimesTextView.setText(serializeTimes(b.getOpenTimes()));
-                    closeTimesTextView.setText(serializeTimes(b.getCloseTimes()));
-                    acceptsBuzzFundsTextView.setText(String.valueOf(b.getAcceptsBuzzFunds()));
-                    priceLevelTextView.setText(String.valueOf(b.getPriceLevel()));
-                    categoryTextVew.setText(b.getCategory().name());
-                    altNamesTextVew.setText(b.getAltNames());
-                    nameTokensTextView.setText(b.getNameTokens());
-                    addressTokensTextVew.setText(b.getAddressTokens());
-                    numFloorsTextView.setText(String.valueOf(b.getNumFloors()));
+                    idTextView.setText(String.valueOf(p.getId()));
+                    placeIdTextView.setText(p.getPlaceId());
+                    nameTextView.setText(p.getName());
+                    imageURLTextView.setText(p.getImageURL());
+                    websiteURLTextView.setText(p.getWebsiteURL());
+                    phoneNumTextView.setText(p.getPhoneNum());
+                    streetTextView.setText(p.getStreet());
+                    cityTextView.setText(p.getCity() + ",");
+                    stateTextView.setText(p.getState());
+                    postalCodeTextView.setText(p.getPostalCode());
+                    latitudeTextView.setText(String.valueOf(p.getLatitude()));
+                    longitudeTextView.setText(String.valueOf(p.getLongitude()));
+                    polygonsTextView.setText(serializePolygons(p.getPolygons()));
+                    descriptionTextView.setText(p.getDescription());
+                    locatedInTextView.setText(p.getLocatedIn());
+                    yelpIDTextView.setText(p.getYelpID());
+                    openTimesTextView.setText(serializeTimes(p.getOpenTimes()));
+                    closeTimesTextView.setText(serializeTimes(p.getCloseTimes()));
+                    acceptsBuzzFundsTextView.setText(String.valueOf(p.getAcceptsBuzzFunds()));
+                    priceLevelTextView.setText(String.valueOf(p.getPriceLevel()));
+                    categoryTextVew.setText(p.getCategory().name());
+                    altNamesTextVew.setText(p.getAltNames());
+                    nameTokensTextView.setText(p.getNameTokens());
+                    addressTokensTextVew.setText(p.getAddressTokens());
+                    numFloorsTextView.setText(String.valueOf(p.getNumFloors()));
 
-                    final Building finalB = b;
+                    final Place finalP = p;
                     showInMapButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
                             Intent mapActivityIntent = new Intent(context, MapActivity.class);
-                            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
-                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, finalB.getId());
+                            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, finalP.getId());
                             startActivity(mapActivityIntent);
                         }
                     });
@@ -231,7 +229,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             Context context = view.getContext();
                             Intent internalMapIntent = new Intent(context, InternalMapActivity.class);
-                            internalMapIntent.putExtra(Arguments.OBJECT_ID, b.getId());
+                            internalMapIntent.putExtra(Arguments.OBJECT_ID, p.getId());
                             startActivity(internalMapIntent);
                         }
                     });

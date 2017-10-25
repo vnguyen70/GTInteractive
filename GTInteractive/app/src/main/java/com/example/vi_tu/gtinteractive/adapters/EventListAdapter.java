@@ -62,7 +62,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         public EventViewHolder(View view) {
             super(view);
-            eventNameView = view.findViewById(R.id.tv_building_data);
+            eventNameView = view.findViewById(R.id.tv_label);
             categoryView = view.findViewById(R.id.tv_category);
             objectId = -1;
             view.setOnClickListener(this);

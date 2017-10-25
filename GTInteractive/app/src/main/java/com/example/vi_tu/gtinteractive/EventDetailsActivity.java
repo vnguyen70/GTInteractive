@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.squareup.picasso.Picasso;
@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 public class EventDetailsActivity extends AppCompatActivity {
 
     private EventPersistence eventsDB;
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence buildingsDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
-        buildingsDB = new BuildingPersistence(db);
+        buildingsDB = new PlacePersistence(db);
 
         // event to display
         Event e = Event.DUMMY;
@@ -60,7 +60,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         TextView allDayTextView = (TextView) findViewById(R.id.allDayText);
         TextView recurringTextView = (TextView) findViewById(R.id.recurringText);
         TextView categoriesTextView = (TextView) findViewById(R.id.categoriesText);
-        TextView buildingIdTextView = (TextView) findViewById(R.id.buildingIdText);
+        TextView buildingIdTextView = (TextView) findViewById(R.id.placeIdText);
         Button openBuildingDetailsButton = (Button) findViewById(R.id.openBuildingDetailsButton);
         Button showInMapButton = (Button) findViewById(R.id.showInMapButton);
 
@@ -80,15 +80,15 @@ public class EventDetailsActivity extends AppCompatActivity {
         allDayTextView.setText(String.valueOf(e.getAllDay()));
         recurringTextView.setText(String.valueOf(e.getRecurring()));
         categoriesTextView.setText(categories);
-        buildingIdTextView.setText(e.getBuildingId());
+        buildingIdTextView.setText(e.getPlaceId());
 
-        final Building b = buildingsDB.findByBuildingId(e.getBuildingId());
+        final Place b = buildingsDB.findByPlaceId(e.getPlaceId());
         if (b != null) {
             openBuildingDetailsButton.setVisibility(View.VISIBLE);
             openBuildingDetailsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent buildingDetailIntent = new Intent(EventDetailsActivity.this, BuildingDetailsActivity.class);
+                    Intent buildingDetailIntent = new Intent(EventDetailsActivity.this, PlaceDetailsActivity.class);
                     buildingDetailIntent.putExtra(Arguments.OBJECT_ID, b.getId());
                     buildingDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
                     startActivity(buildingDetailIntent);

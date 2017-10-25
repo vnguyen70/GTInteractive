@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context="com.example.vi_tu.gtinteractive.BuildingDetailsActivity$PlaceholderFragment">
+        tools:context="com.example.vi_tu.gtinteractive.PlaceDetailsActivity$PlaceholderFragment">
 
 
         <TextView
@@ -43,9 +43,9 @@
             android:text="buildingId: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/buildingIdText"
+            app:layout_constraintBottom_toBottomOf="@+id/placeIdText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buildingIdText" />
+            app:layout_constraintTop_toTopOf="@+id/placeIdText" />
 
         <TextView
             android:id="@+id/buildingIdText"
@@ -80,7 +80,7 @@
             android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@+id/nameStatic"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buildingIdText" />
+            app:layout_constraintTop_toBottomOf="@+id/placeIdText" />
 
 
         <TextView

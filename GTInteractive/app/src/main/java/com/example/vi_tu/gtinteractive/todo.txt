@@ -42,4 +42,4 @@ TODO: cleanup:
 
 TODO: null check everywhere, in case database has zero objects
 
-TODO: events idea: for each building, list matched events in building detail, but also list all "unknown" events as "nearby"; also - have some place where users can see a list of ALL events somewhere in the app
+TODO: events idea: for each place, list matched events in place detail, but also list all "unknown" events as "nearby"; also - have some place where users can see a list of ALL events somewhere in the app

@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">GTInteractive</string>
     <string name="title_activity_map">Map</string>
-    <string name="title_activity_buildings_test">Buildings Test</string>
+    <string name="title_activity_buildings_test">Places Test</string>
     <string name="title_activity_events_test">Events Test</string>
-    <string name="title_activity_building_details">Building Details</string>
+    <string name="title_activity_building_details">Place Details</string>
     <string name="title_activity_event_details">Event Details</string>
     <string name="title_activity_internal_map">Internal map</string>
-    <string name="title_activity_building_search">Building Search</string>
+    <string name="title_activity_building_search">Place Search</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
-    <string name="search_hint">Find a building...</string>
+    <string name="search_hint">Find a place...</string>
     <string name="action_display">Display</string>
     <string name="action_reload">Reload</string>
 
@@ -38,6 +38,6 @@
     <string name="printers_view_button_label">Printers</string>
     <string name="parking_view_button_label">Parking</string>
     <string name="events_view_button_label">Events</string>
-    <string name="buildings_view_button_label">Buildings</string>
+    <string name="places_view_button_label">Places</string>
 
 </resources>

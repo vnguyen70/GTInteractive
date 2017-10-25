@@ -24,7 +24,7 @@ import lombok.NonNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Building extends Entity {
+public class Place extends Entity {
 
     public static final Map<String, String> shortcuts = Collections.unmodifiableMap(
             new HashMap<String, String>() {{
@@ -32,9 +32,9 @@ public class Building extends Entity {
                 put("Atlanta, GA", "ATLANTA_GA");
             }});
 
-    public static final Building DUMMY = Building.builder()
-            .buildingId("DUMMY")
-            .name("Building Info Not Available")
+    public static final Place DUMMY = Place.builder()
+            .placeId("DUMMY")
+            .name("Place Info Not Available")
             .imageURL("")
             .websiteURL("")
             .phoneNum("")
@@ -70,7 +70,7 @@ public class Building extends Entity {
      * From API: https://gtapp-api.rnoc.gatech.edu/api/v1/places
      */
 
-    @NonNull String buildingId; // 280/280
+    @NonNull String placeId; // 280/280
     @NonNull String name; // 280/280
     @NonNull String imageURL; // 280/280
     @NonNull String websiteURL; // 154/280; default = ""
@@ -132,8 +132,8 @@ public class Building extends Entity {
     }
 
     public final class Contract implements BaseColumns {
-        public static final String TABLE_NAME = "buildings";
-        public static final String COLUMN_BUILDING_ID = "buildingId";
+        public static final String TABLE_NAME = "places";
+        public static final String COLUMN_PLACE_ID = "placeId";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_IMAGE_URL = "imageURL";
         public static final String COLUMN_WEBSITE_URL = "websiteURL";

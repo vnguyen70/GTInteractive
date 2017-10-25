@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
 
 public class PersistenceHelper extends SQLiteOpenHelper {
@@ -13,7 +13,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "persistence.db";
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     // Constructor
     public PersistenceHelper(Context context) {
@@ -23,32 +23,32 @@ public class PersistenceHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        final String SQL_CREATE_BUILDINGS_TABLE = "CREATE TABLE " + Building.Contract.TABLE_NAME + " (" +
-                Building.Contract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Building.Contract.COLUMN_BUILDING_ID + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_NAME + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_IMAGE_URL + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_WEBSITE_URL + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_PHONE_NUM + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_STREET + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_CITY + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_STATE + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_POSTAL_CODE + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_LATITUDE + " DOUBLE NOT NULL, " +
-                Building.Contract.COLUMN_LONGITUDE + " DOUBLE NOT NULL, " +
-                Building.Contract.COLUMN_POLYGONS + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_CATEGORY + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_LOCATED_IN + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_YELP_ID + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_OPEN_TIMES + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_CLOSE_TIMES + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS + " BOOLEAN NOT NULL, " +
-                Building.Contract.COLUMN_PRICE_LEVEL + " INTEGER NOT NULL, " +
-                Building.Contract.COLUMN_ALT_NAMES + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_NAME_TOKENS + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_ADDRESS_TOKENS + " TEXT NOT NULL, " +
-                Building.Contract.COLUMN_NUM_FLOORS + " INTEGER NOT NULL " +
+        final String SQL_CREATE_BUILDINGS_TABLE = "CREATE TABLE " + Place.Contract.TABLE_NAME + " (" +
+                Place.Contract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Place.Contract.COLUMN_PLACE_ID + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_NAME + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_IMAGE_URL + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_WEBSITE_URL + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_PHONE_NUM + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_STREET + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_CITY + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_STATE + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_POSTAL_CODE + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_LATITUDE + " DOUBLE NOT NULL, " +
+                Place.Contract.COLUMN_LONGITUDE + " DOUBLE NOT NULL, " +
+                Place.Contract.COLUMN_POLYGONS + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_CATEGORY + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_LOCATED_IN + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_YELP_ID + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_OPEN_TIMES + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_CLOSE_TIMES + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS + " BOOLEAN NOT NULL, " +
+                Place.Contract.COLUMN_PRICE_LEVEL + " INTEGER NOT NULL, " +
+                Place.Contract.COLUMN_ALT_NAMES + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_NAME_TOKENS + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_ADDRESS_TOKENS + " TEXT NOT NULL, " +
+                Place.Contract.COLUMN_NUM_FLOORS + " INTEGER NOT NULL " +
                 "); ";
 
         final String SQL_CREATE_EVENTS_TABLE = "CREATE TABLE " + Event.Contract.TABLE_NAME + " (" +
@@ -63,7 +63,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
                 Event.Contract.COLUMN_ALL_DAY + " BOOLEAN NOT NULL, " +
                 Event.Contract.COLUMN_RECURRING + " BOOLEAN NOT NULL, " +
                 Event.Contract.COLUMN_CATEGORIES + " TEXT NOT NULL, " +
-                Event.Contract.COLUMN_BUILDING_ID + " TEXT NOT NULL " +
+                Event.Contract.COLUMN_PLACE_ID + " TEXT NOT NULL " +
                 "); ";
 
         sqLiteDatabase.execSQL(SQL_CREATE_BUILDINGS_TABLE);
@@ -76,7 +76,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
         // DATABASE_VERSION the table will be dropped.
         // In a production app, this method might be modified to ALTER the table
         // instead of dropping it, so that existing data is not deleted.
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Building.Contract.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Place.Contract.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Event.Contract.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }

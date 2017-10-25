@@ -10,8 +10,8 @@ import android.util.Log;
 
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.adapters.SuggestionProvider;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class SearchableActivity extends Activity {
 
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence buildingsDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,16 +27,16 @@ public class SearchableActivity extends Activity {
         setContentView(R.layout.activity_entity_list);
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
+        buildingsDB = new PlacePersistence(db);
         SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            List<Building> queryResults = buildingsDB.findByName(query);
+            List<Place> queryResults = buildingsDB.findByName(query);
             if (queryResults.size() == 1) {
-                Building b = queryResults.get(0);
+                Place b = queryResults.get(0);
                 Intent mapActivityIntent = new Intent(SearchableActivity.this, MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
                 mapActivityIntent.putExtra(Arguments.OBJECT_ID, b.getId());
                 startActivity(mapActivityIntent);
             }
