@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
         holder.placeNameView.setText(p.getName());
         holder.categoryView.setText(p.getCategory().toString());
         holder.categoryView.setTextColor(Color.parseColor("#" + p.getCategory().getColor()));
+
+        if (p.getCategory().toString().equals("FOOD")) {
+            holder.openView.setText(" - Open");
+            holder.openView.setTextColor(Color.parseColor("#22b21a"));
+        }
         holder.setObjectId(p.getId());
     }
 
@@ -58,12 +64,14 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
 
         public TextView placeNameView;
         public TextView categoryView;
+        public TextView openView;
         public int objectId;
 
         public PlaceViewHolder(View view) {
             super(view);
             placeNameView = view.findViewById(R.id.tv_label);
             categoryView = view.findViewById(R.id.tv_category);
+            openView = view.findViewById(R.id.tv_open);
             objectId = -1;
             view.setOnClickListener(this);
         }

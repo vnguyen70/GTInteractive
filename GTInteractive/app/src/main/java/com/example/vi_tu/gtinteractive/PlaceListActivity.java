@@ -1,22 +1,32 @@
 package com.example.vi_tu.gtinteractive;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vi_tu.gtinteractive.adapters.PlaceListAdapter;
@@ -135,13 +145,50 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
             return true;
         }
         if (item.getItemId() == R.id.action_filter) {
-            if (drawerLayout.isDrawerOpen(drawerList)) {
-                drawerLayout.closeDrawer(drawerList);
-            } else {
-                drawerLayout.openDrawer(drawerList);
-            }
+//            if (drawerLayout.isDrawerOpen(drawerList)) {
+//                drawerLayout.closeDrawer(drawerList);
+//            } else {
+//                drawerLayout.openDrawer(drawerList);
+//            }
+            createAndDisplayDialog();
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createAndDisplayDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LinearLayout layout = new LinearLayout(this);
+        ListView listView = new ListView(this);
+        listView.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
+        listView.setOnItemClickListener(this);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+//        for (int i = 0; i < drawerItems.length; i++) {
+//            CheckedTextView ctvMessage = new CheckedTextView(this);
+//            ctvMessage.setText(drawerItems[i]);
+//            layout.addView(ctvMessage);
+//        }
+        layout.addView(listView);
+        layout.setPadding(50, 40, 50, 10);
+
+        builder.setView(layout);
+        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d("PlaceListActivity", "Done clicked");
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.cancel();
+                Log.d("PlaceListActivity", "Cancel Clicked");
+            }
+        });
+
+        builder.create().show();
     }
 
     public void toggleFoodFilter(View view) {
