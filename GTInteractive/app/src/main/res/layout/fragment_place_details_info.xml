@@ -36,7 +36,7 @@
 
 
         <TextView
-            android:id="@+id/buildingIdStatic"
+            android:id="@+id/placeIdStatic"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toTopOf="@+id/placeIdText" />
 
         <TextView
-            android:id="@+id/buildingIdText"
+            android:id="@+id/placeIdText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

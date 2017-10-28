@@ -1,6 +1,5 @@
 package com.example.vi_tu.gtinteractive;
 
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,20 +14,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vi_tu.gtinteractive.adapters.FilterAdapter;
 import com.example.vi_tu.gtinteractive.adapters.PlaceListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
@@ -47,7 +42,7 @@ import java.util.List;
 public class PlaceListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
 
     public static final String[] drawerItems = {"Food", "Housing", "Sports", "Greek", "Parking", "Academic", "Other"};
-
+    private Place.Category[] filterItems = Place.Category.values();
     private PlacePersistence placesDB;
 
     private RecyclerView placesListView;
@@ -160,31 +155,27 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LinearLayout layout = new LinearLayout(this);
         ListView listView = new ListView(this);
-        listView.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
+        listView.setAdapter(new FilterAdapter(this, R.layout.filter_list_item, filterItems));
         listView.setOnItemClickListener(this);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        // Dialog does not save which items were checked previously
+        // Thus, we have to manually check these when creating the layout
+        for (int i = 0; i < filterItems.length; i++) {
+            if (activeFilters.contains(filterItems[i])) {
+                listView.setItemChecked(i, true);
+            }
+        }
+
         layout.setOrientation(LinearLayout.VERTICAL);
 
-//        for (int i = 0; i < drawerItems.length; i++) {
-//            CheckedTextView ctvMessage = new CheckedTextView(this);
-//            ctvMessage.setText(drawerItems[i]);
-//            layout.addView(ctvMessage);
-//        }
         layout.addView(listView);
-        layout.setPadding(50, 40, 50, 10);
 
         builder.setView(layout);
         builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Log.d("PlaceListActivity", "Done clicked");
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                dialog.cancel();
-                Log.d("PlaceListActivity", "Cancel Clicked");
             }
         });
 

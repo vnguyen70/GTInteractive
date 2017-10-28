@@ -46,6 +46,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
         if (p.getCategory().toString().equals("FOOD")) {
             holder.openView.setText(" - Open");
             holder.openView.setTextColor(Color.parseColor("#22b21a"));
+        } else {
+            // this statement is important because holders are reused
+            // if the holder contained a food place and then contains another place
+            // the open text will still be there
+            holder.openView.setText("");
         }
         holder.setObjectId(p.getId());
     }

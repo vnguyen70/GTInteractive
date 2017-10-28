@@ -11,10 +11,10 @@
         android:title="Filter"
         android:icon="@drawable/ic_menu_black_24dp"
         app:showAsAction="ifRoom" />
-    <!--<item-->
-        <!--android:id="@+id/action_display"-->
-        <!--android:title="Display"-->
-        <!--app:showAsAction="ifRoom"/>-->
+    <item
+        android:id="@+id/action_refresh"
+        android:title="Refresh"
+        app:showAsAction="ifRoom"/>
     <!--<item-->
         <!--android:id="@+id/action_clear"-->
         <!--android:title="Clear"-->

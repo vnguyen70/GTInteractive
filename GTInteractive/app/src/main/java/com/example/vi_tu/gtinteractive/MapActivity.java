@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -631,6 +632,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     public void onInfoWindowClick(Marker marker) {
         switch (currView) {
             case ViewType.PLACE:
+                Log.d("MapActivity", String.valueOf(Arguments.OBJECT_ID));
                 Intent placeDetailIntent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
                 placeDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
                 placeDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
