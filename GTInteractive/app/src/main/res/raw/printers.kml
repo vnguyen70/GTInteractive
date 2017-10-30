@@ -127,7 +127,7 @@
       </Placemark>
       <Placemark>
         <name>Scheller CoB</name>
-        <description><![CDATA[1st Floor - Computer Lab (B/W & Color) **Requires CoB Building BuzzCard Access**]]></description>
+        <description><![CDATA[1st Floor - Computer Lab (B/W & Color) **Requires CoB Place BuzzCard Access**]]></description>
         <Point>
           <coordinates>
             -84.3883681,33.7763984,0

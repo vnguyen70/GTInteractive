@@ -107,6 +107,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_activity);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -327,11 +328,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         }
     }
 
-    private List<Polygon> addPlacePolygons(Place b) {
+    private List<Polygon> addPlacePolygons(Place p) {
         List<Polygon> added = new ArrayList<>();
-        List<LatLng[]> polygons = b.getPolygons();
+        List<LatLng[]> polygons = p.getPolygons();
         for (LatLng[] polygon : polygons) {
-            Polygon p = googleMap.addPolygon(new PolygonOptions()
+            Polygon poly = googleMap.addPolygon(new PolygonOptions()
                     .addAll(Arrays.asList(polygon))
                     .strokeWidth(5)
                     .strokeColor(0x9900254c) // TODO: refactor colors into colors.xml
@@ -339,29 +340,29 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                     .clickable(false)
                     .visible(false)
             );
-            p.setTag(b.getId());
-            added.add(p);
+            poly.setTag(poly.getId());
+            added.add(poly);
         }
-        placesPolygons.put(b.getId(), added);
+        placesPolygons.put(p.getId(), added);
         return added;
     }
 
-    private Marker addPlaceMarker(Place b) {
+    private Marker addPlaceMarker(Place p) {
         Marker m = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(b.getLatitude(), b.getLongitude()))
-                .title(b.getName())
+                .position(new LatLng(p.getLatitude(), p.getLongitude()))
+                .title(p.getName())
                 .visible(false));
-        m.setTag(b.getId());
-        placesMarkers.put(b.getId(), m);
+        m.setTag(p.getId());
+        placesMarkers.put(p.getId(), m);
         return m;
     }
 
     private Marker addEventMarker(Event e) {
         String placeId = e.getPlaceId();
-        Place b = placesDB.findByPlaceId(placeId);
+        Place p = placesDB.findByPlaceId(placeId);
         LatLng ll = new LatLng(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
-        if (b != null) {
-            ll = new LatLng(b.getLatitude(), b.getLongitude());
+        if (p != null) {
+            ll = new LatLng(p.getLatitude(), p.getLongitude());
         }
         Marker m = googleMap.addMarker(new MarkerOptions()
                 .position(ll)

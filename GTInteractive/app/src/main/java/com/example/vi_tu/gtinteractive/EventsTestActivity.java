@@ -29,7 +29,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     private TextView tvEventsTest;
 
     private EventPersistence eventsDB;
-    private PlacePersistence buildingsDB;
+    private PlacePersistence placesDB;
 
     private NetworkUtils networkUtils;
 
@@ -50,7 +50,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
-        buildingsDB = new PlacePersistence(db);
+        placesDB = new PlacePersistence(db);
 
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
 
@@ -60,7 +60,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         long eventsCacheExpiredMS = sharedPreferences.getLong("eventsCacheExpiredMS", 0);
 
         if (nowMS >= eventsCacheExpiredMS) {
-            networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+            networkUtils.loadEventsFromAPI(eventsDB, placesDB);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("eventsCacheExpiredMS", nowMS + EVENTS_CACHE_DURATION_MS);
             editor.apply();
@@ -91,7 +91,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
-                networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+                networkUtils.loadEventsFromAPI(eventsDB, placesDB);
                 return true;
             case R.id.action_clear:
                 eventsDB.deleteAll();
@@ -126,7 +126,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     @Override
     public void onDialogPositiveClick(DialogInterface dialog) {
         tvEventsTest.setText("");
-        networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+        networkUtils.loadEventsFromAPI(eventsDB, placesDB);
     }
 
     @Override

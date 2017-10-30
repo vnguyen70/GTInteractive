@@ -75,7 +75,7 @@ public class PlacePersistence extends BasePersistence<Place> {
             } else if (t.equals("room")) {
                 skipFlag = true; // skip this token and skip next token as well (room number)
             } else if (t.equals("bldg")) {
-                tokens.add("building");
+                tokens.add("place");
             } else if (t.equals("dr")) {
                 tokens.add("drive");
                 hasAddress = true;
@@ -96,7 +96,7 @@ public class PlacePersistence extends BasePersistence<Place> {
 
 //        Log.d("LOCATION_TOKENS", tokens.toString());
 
-        // Step 3: if hasAddress is true, call findBuildingsByAddress() for each token and update placeScores
+        // Step 3: if hasAddress is true, call findPlacesByAddress() for each token and update placeScores
 
         if (hasAddress) {
             for (String t : tokens) {
@@ -122,7 +122,7 @@ public class PlacePersistence extends BasePersistence<Place> {
             }
         }
 
-        // Step 4: call findBuildingsByName() for each token and update placeScores
+        // Step 4: call findPlacesByName() for each token and update placeScores
 
         for (String t : tokens) {
             List<Place> partialMatches = findByName(t);
@@ -131,11 +131,11 @@ public class PlacePersistence extends BasePersistence<Place> {
                 Integer oldScore = placeScores.get(pId);
                 // TODO: create a better scoring system than this
                 int score = 10;
-                if (t.equals("room")) { // lowest weight - can apply to any building / location
+                if (t.equals("room")) { // lowest weight - can apply to any place / location
                     score = 1;
-                } else if (t.equals("building") || t.equals("bldg") || t.equals("hall") || t.equals("lab")) { // low weight - can apply to nearly any building / location
+                } else if (t.equals("place") || t.equals("bldg") || t.equals("hall") || t.equals("lab")) { // low weight - can apply to nearly any place / location
                     score = 3;
-                } else if (t.equals("house") || t.equals("deck") || t.equals("apartments") || t.equals("center")) { // medium weight - can apply to some buildings / locations
+                } else if (t.equals("house") || t.equals("deck") || t.equals("apartments") || t.equals("center")) { // medium weight - can apply to some places / locations
                     score = 5;
                 } else if (t.equals("conference")) {
                     score = 7;
@@ -179,32 +179,32 @@ public class PlacePersistence extends BasePersistence<Place> {
     }
 
     @Override
-    protected ContentValues toContentValues(Place b) {
+    protected ContentValues toContentValues(Place p) {
         ContentValues cv = new ContentValues();
-        cv.put(Place.Contract.COLUMN_PLACE_ID, b.getPlaceId());
-        cv.put(Place.Contract.COLUMN_NAME, b.getName());
-        cv.put(Place.Contract.COLUMN_IMAGE_URL, b.getImageURL());
-        cv.put(Place.Contract.COLUMN_WEBSITE_URL, b.getWebsiteURL());
-        cv.put(Place.Contract.COLUMN_PHONE_NUM, b.getPhoneNum());
-        cv.put(Place.Contract.COLUMN_STREET, b.getStreet());
-        cv.put(Place.Contract.COLUMN_CITY, b.getCity());
-        cv.put(Place.Contract.COLUMN_STATE, b.getState());
-        cv.put(Place.Contract.COLUMN_POSTAL_CODE, b.getPostalCode());
-        cv.put(Place.Contract.COLUMN_LATITUDE, b.getLatitude());
-        cv.put(Place.Contract.COLUMN_LONGITUDE, b.getLongitude());
-        cv.put(Place.Contract.COLUMN_POLYGONS, serializePolygons(b.getPolygons()));
-        cv.put(Place.Contract.COLUMN_CATEGORY, b.getCategory().name());
-        cv.put(Place.Contract.COLUMN_DESCRIPTION, b.getDescription());
-        cv.put(Place.Contract.COLUMN_LOCATED_IN, b.getLocatedIn());
-        cv.put(Place.Contract.COLUMN_YELP_ID, b.getYelpID());
-        cv.put(Place.Contract.COLUMN_OPEN_TIMES, serializeTimes(b.getOpenTimes()));
-        cv.put(Place.Contract.COLUMN_CLOSE_TIMES, serializeTimes(b.getCloseTimes()));
-        cv.put(Place.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS, b.getAcceptsBuzzFunds());
-        cv.put(Place.Contract.COLUMN_PRICE_LEVEL, b.getPriceLevel());
-        cv.put(Place.Contract.COLUMN_ALT_NAMES, b.getAltNames());
-        cv.put(Place.Contract.COLUMN_NAME_TOKENS, tokenize(b.getName()));
-        cv.put(Place.Contract.COLUMN_ADDRESS_TOKENS, tokenize(b.getStreet())); // TODO
-        cv.put(Place.Contract.COLUMN_NUM_FLOORS, b.getNumFloors());
+        cv.put(Place.Contract.COLUMN_PLACE_ID, p.getPlaceId());
+        cv.put(Place.Contract.COLUMN_NAME, p.getName());
+        cv.put(Place.Contract.COLUMN_IMAGE_URL, p.getImageURL());
+        cv.put(Place.Contract.COLUMN_WEBSITE_URL, p.getWebsiteURL());
+        cv.put(Place.Contract.COLUMN_PHONE_NUM, p.getPhoneNum());
+        cv.put(Place.Contract.COLUMN_STREET, p.getStreet());
+        cv.put(Place.Contract.COLUMN_CITY, p.getCity());
+        cv.put(Place.Contract.COLUMN_STATE, p.getState());
+        cv.put(Place.Contract.COLUMN_POSTAL_CODE, p.getPostalCode());
+        cv.put(Place.Contract.COLUMN_LATITUDE, p.getLatitude());
+        cv.put(Place.Contract.COLUMN_LONGITUDE, p.getLongitude());
+        cv.put(Place.Contract.COLUMN_POLYGONS, serializePolygons(p.getPolygons()));
+        cv.put(Place.Contract.COLUMN_CATEGORY, p.getCategory().name());
+        cv.put(Place.Contract.COLUMN_DESCRIPTION, p.getDescription());
+        cv.put(Place.Contract.COLUMN_LOCATED_IN, p.getLocatedIn());
+        cv.put(Place.Contract.COLUMN_YELP_ID, p.getYelpID());
+        cv.put(Place.Contract.COLUMN_OPEN_TIMES, serializeTimes(p.getOpenTimes()));
+        cv.put(Place.Contract.COLUMN_CLOSE_TIMES, serializeTimes(p.getCloseTimes()));
+        cv.put(Place.Contract.COLUMN_ACCEPTS_BUZZ_FUNDS, p.getAcceptsBuzzFunds());
+        cv.put(Place.Contract.COLUMN_PRICE_LEVEL, p.getPriceLevel());
+        cv.put(Place.Contract.COLUMN_ALT_NAMES, p.getAltNames());
+        cv.put(Place.Contract.COLUMN_NAME_TOKENS, tokenize(p.getName()));
+        cv.put(Place.Contract.COLUMN_ADDRESS_TOKENS, tokenize(p.getStreet())); // TODO
+        cv.put(Place.Contract.COLUMN_NUM_FLOORS, p.getNumFloors());
         return cv;
     }
 

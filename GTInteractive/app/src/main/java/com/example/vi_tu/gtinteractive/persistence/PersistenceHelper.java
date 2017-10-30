@@ -23,7 +23,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        final String SQL_CREATE_BUILDINGS_TABLE = "CREATE TABLE " + Place.Contract.TABLE_NAME + " (" +
+        final String SQL_CREATE_PLACES_TABLE = "CREATE TABLE " + Place.Contract.TABLE_NAME + " (" +
                 Place.Contract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Place.Contract.COLUMN_PLACE_ID + " TEXT NOT NULL, " +
                 Place.Contract.COLUMN_NAME + " TEXT NOT NULL, " +
@@ -66,7 +66,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
                 Event.Contract.COLUMN_PLACE_ID + " TEXT NOT NULL " +
                 "); ";
 
-        sqLiteDatabase.execSQL(SQL_CREATE_BUILDINGS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLACES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_EVENTS_TABLE);
     }
 

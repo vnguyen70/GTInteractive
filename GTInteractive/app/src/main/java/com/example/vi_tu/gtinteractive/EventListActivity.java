@@ -95,7 +95,7 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
             @Override
             public boolean onQueryTextSubmit(String query) {
                 List<Event> queryResults = eFilter2.filterByTitle(query).getList();
-                // always return first building in queryResults
+                // always return first place in queryResults
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
                 mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
                 mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class SearchableActivity extends Activity {
 
-    private PlacePersistence buildingsDB;
+    private PlacePersistence placesDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,17 +27,17 @@ public class SearchableActivity extends Activity {
         setContentView(R.layout.activity_entity_list);
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new PlacePersistence(db);
+        placesDB = new PlacePersistence(db);
         SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            List<Place> queryResults = buildingsDB.findByName(query);
+            List<Place> queryResults = placesDB.findByName(query);
             if (queryResults.size() == 1) {
-                Place b = queryResults.get(0);
+                Place p = queryResults.get(0);
                 Intent mapActivityIntent = new Intent(SearchableActivity.this, MapActivity.class);
                 mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
-                mapActivityIntent.putExtra(Arguments.OBJECT_ID, b.getId());
+                mapActivityIntent.putExtra(Arguments.OBJECT_ID, p.getId());
                 startActivity(mapActivityIntent);
             }
             suggestions.saveRecentQuery(query, null);
@@ -46,7 +46,7 @@ public class SearchableActivity extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.d("BUILDINGS_SEARCH", "reached new intent in searchable activity");
+        Log.d("PLACES_SEARCH", "reached new intent in searchable activity");
     }
 
 }

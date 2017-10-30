@@ -44,7 +44,7 @@ public class NetworkUtils {
     public void loadPlacesFromAPI(final PlacePersistence placesDB) {
         placesDB.deleteAll();
         Log.d("NETWORK_TEST", "loadPlacesFromAPI()...");
-//        String placesURL = "https://m.gatech.edu/api/gtplaces/buildings";
+//        String placesURL = "https://m.gatech.edu/api/gtplaces/places";
         String placesURL = "https://gtapp-api.rnoc.gatech.edu/api/v1/places";
         final JsonArrayRequest placesRequest = new JsonArrayRequest(Request.Method.GET, placesURL, new JSONArray(),
                 new Response.Listener<JSONArray>() {
@@ -130,7 +130,7 @@ public class NetworkUtils {
                         }
                     }
 
-                    Place b = Place.builder()
+                    Place p = Place.builder()
                             .placeId(o.getString("id"))
                             .name(o.getString("name"))
                             .imageURL(o.optString("imageURL", ""))
@@ -156,7 +156,7 @@ public class NetworkUtils {
                             .addressTokens("")
                             .numFloors(0)
                             .build();
-                    pList.add(b);
+                    pList.add(p);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

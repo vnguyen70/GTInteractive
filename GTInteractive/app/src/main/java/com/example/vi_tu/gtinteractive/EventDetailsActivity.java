@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 public class EventDetailsActivity extends AppCompatActivity {
 
     private EventPersistence eventsDB;
-    private PlacePersistence buildingsDB;
+    private PlacePersistence placesDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
-        buildingsDB = new PlacePersistence(db);
+        placesDB = new PlacePersistence(db);
 
         // event to display
         Event e = Event.DUMMY;
@@ -46,7 +46,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         // Sets up event image TODO: Need to verify URLs for events (currently displays nothing)
         ImageView eventImageView = (ImageView) findViewById(R.id.eventImageView);
-        Picasso.with(this).load(e.getImageURL()).fit().into(eventImageView);
+        if (!e.getImageURL().isEmpty()) {
+            Picasso.with(this).load(e.getImageURL()).fit().into(eventImageView);
+        }
 
         // UI
         TextView idTextView = (TextView) findViewById(R.id.idText);
@@ -60,8 +62,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         TextView allDayTextView = (TextView) findViewById(R.id.allDayText);
         TextView recurringTextView = (TextView) findViewById(R.id.recurringText);
         TextView categoriesTextView = (TextView) findViewById(R.id.categoriesText);
-        TextView buildingIdTextView = (TextView) findViewById(R.id.placeIdText);
-        Button openBuildingDetailsButton = (Button) findViewById(R.id.openBuildingDetailsButton);
+        TextView placeIdTextView = (TextView) findViewById(R.id.placeIdText);
+        Button openPlaceDetailsButton = (Button) findViewById(R.id.openPlaceDetailsButton);
         Button showInMapButton = (Button) findViewById(R.id.showInMapButton);
 
         String categories = "";
@@ -80,18 +82,18 @@ public class EventDetailsActivity extends AppCompatActivity {
         allDayTextView.setText(String.valueOf(e.getAllDay()));
         recurringTextView.setText(String.valueOf(e.getRecurring()));
         categoriesTextView.setText(categories);
-        buildingIdTextView.setText(e.getPlaceId());
+        placeIdTextView.setText(e.getPlaceId());
 
-        final Place b = buildingsDB.findByPlaceId(e.getPlaceId());
-        if (b != null) {
-            openBuildingDetailsButton.setVisibility(View.VISIBLE);
-            openBuildingDetailsButton.setOnClickListener(new View.OnClickListener() {
+        final Place p = placesDB.findByPlaceId(e.getPlaceId());
+        if (p != null) {
+            openPlaceDetailsButton.setVisibility(View.VISIBLE);
+            openPlaceDetailsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent buildingDetailIntent = new Intent(EventDetailsActivity.this, PlaceDetailsActivity.class);
-                    buildingDetailIntent.putExtra(Arguments.OBJECT_ID, b.getId());
-                    buildingDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
-                    startActivity(buildingDetailIntent);
+                    Intent placeDetailIntent = new Intent(EventDetailsActivity.this, PlaceDetailsActivity.class);
+                    placeDetailIntent.putExtra(Arguments.OBJECT_ID, p.getId());
+                    placeDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
+                    startActivity(placeDetailIntent);
                 }
             });
         }

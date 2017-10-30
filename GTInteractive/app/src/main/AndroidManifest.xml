@@ -47,7 +47,7 @@
         </activity>
         <activity
             android:name=".PlaceTestActivity"
-            android:label="@string/title_activity_buildings_test"
+            android:label="@string/title_activity_places_test"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -57,12 +57,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PlaceDetailsActivity"
-            android:label="@string/title_activity_building_details"
+            android:label="@string/title_activity_place_details"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PlaceListActivity"
-            android:label="Building List"
+            android:label="Place List"
             android:parentActivityName=".MapActivity" />
         <activity
             android:name=".EventDetailsActivity"
@@ -78,7 +78,7 @@
             android:parentActivityName=".PlaceDetailsActivity" />
         <activity
             android:name=".EntityListActivity"
-            android:label="@string/title_activity_building_search"
+            android:label="@string/title_activity_place_search"
             android:parentActivityName=".MapActivity" />
         <activity android:name=".SearchableActivity">
             <intent-filter>

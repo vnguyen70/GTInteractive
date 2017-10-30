@@ -1,6 +1,7 @@
 package com.example.vi_tu.gtinteractive.domain;
 
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.google.android.gms.maps.model.LatLng;
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -60,12 +62,46 @@ public class Place extends Entity {
             .build();
 
     Integer id; // default = null
+    boolean isOpen;
 
     @Override
     public Integer getId() {
         return id;
     }
 
+    // Write function isOpen
+    // In API, Day 0 is Sunday, Day 6 is Saturday
+    // In Calendar, Day 2 is Monday so Assumption is Day 1 is Sunday
+    public boolean isOpen() {
+        Integer currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+        if (null == this.getOpenTimes()) {
+            Log.d("Place.java", this.getName() + " does not have open/closing times");
+            return false;
+        }
+        LocalTime openTime = (this.getOpenTimes())[currentDay];
+        LocalTime closeTime = (this.getCloseTimes())[currentDay];
+
+        LocalTime now = LocalTime.now();
+        Log.d("Place.java", this.getName() + " current time: " + now.toString());
+        if (null == openTime) {
+            return false;
+        }
+
+        Log.d("Place.java", this.getName() + " open time today: " + openTime);
+        Log.d("Place.java", this.getName() + " close time today: " + closeTime);
+
+        // Deal with scenario when closing time is earlier than closing time: Ex: closing time: 2AM and opening time: 8AM
+        if (openTime.isAfter(closeTime)) {
+            if (!now.isAfter(closeTime) || !now.isBefore(openTime)) {
+                return true;
+            }
+        } else if (now.isAfter(openTime) && now.isBefore(closeTime)) {
+            return true;
+        }
+
+
+        return false;
+    }
     /**
      * From API: https://gtapp-api.rnoc.gatech.edu/api/v1/places
      */
@@ -103,7 +139,7 @@ public class Place extends Entity {
      * Custom fields
      */
 
-    @NonNull String altNames; // building nicknames or abbreviations TODO: convert to List<String>
+    @NonNull String altNames; // place nicknames or abbreviations TODO: convert to List<String>
     @NonNull String nameTokens; // name converted into lowercase tokens separated by spaces for easy searching
     @NonNull String addressTokens; // street converted into lowercase tokens separated by spaces for easy searching
     @NonNull Integer numFloors; // default = 0; used for internal layout map

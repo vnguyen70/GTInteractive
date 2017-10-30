@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -154,6 +155,8 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
     private void createAndDisplayDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LinearLayout layout = new LinearLayout(this);
+
+
         ListView listView = new ListView(this);
         listView.setAdapter(new FilterAdapter(this, R.layout.filter_list_item, filterItems));
         listView.setOnItemClickListener(this);
@@ -171,7 +174,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
 
         layout.addView(listView);
 
+
         builder.setView(layout);
+
         builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {

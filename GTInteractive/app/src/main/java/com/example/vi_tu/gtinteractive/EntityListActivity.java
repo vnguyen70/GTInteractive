@@ -37,7 +37,7 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
     public static final String[] drawerItems = {"Places", "Events"};
 
-    private PlacePersistence buildingsDB;
+    private PlacePersistence placesDB;
     private EventPersistence eventsDB;
 
     private RecyclerView entityListView;
@@ -64,10 +64,10 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new PlacePersistence(db);
+        placesDB = new PlacePersistence(db);
         eventsDB = new EventPersistence(db);
 
-        entityList.addAll(buildingsDB.getAll());
+        entityList.addAll(placesDB.getAll());
         entityList.addAll(eventsDB.getAll());
         eFilter = new EntityFilter(entityList);
         eFilter2 = new EntityFilter(entityList);
@@ -100,7 +100,7 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // always return first building in queryResults
+                // always return first place in queryResults
                 List<Entity> queryResults = eFilter2.filterByName(query).getList();
                 Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
                 mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE); // TODO: Check for ViewType

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +43,14 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
         holder.categoryView.setTextColor(Color.parseColor("#" + p.getCategory().getColor()));
 
         if (p.getCategory().toString().equals("FOOD")) {
-            holder.openView.setText(" - Open");
-            holder.openView.setTextColor(Color.parseColor("#22b21a"));
+            if (p.isOpen()) {
+                holder.openView.setText("   Open");
+                holder.openView.setTextColor(Color.parseColor("#22b21a"));
+            } else {
+                holder.openView.setText("  Closed");
+                holder.openView.setTextColor(Color.RED);
+            }
+
         } else {
             // this statement is important because holders are reused
             // if the holder contained a food place and then contains another place
@@ -60,8 +65,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
         return pList.size();
     }
 
-    public void setData(List<Place> bList) {
-        this.pList = bList;
+    public void setData(List<Place> pList) {
+        this.pList = pList;
         notifyDataSetChanged();
     }
 
