@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,14 +16,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.vi_tu.gtinteractive.adapters.FilterAdapter;
+import com.example.vi_tu.gtinteractive.adapters.PlaceFilterAdapter;
 import com.example.vi_tu.gtinteractive.adapters.PlaceListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
@@ -42,7 +39,6 @@ import java.util.List;
 
 public class PlaceListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
 
-    public static final String[] drawerItems = {"Food", "Housing", "Sports", "Greek", "Parking", "Academic", "Other"};
     private Place.Category[] filterItems = Place.Category.values();
     private PlacePersistence placesDB;
 
@@ -57,9 +53,6 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
     private SearchManager searchManager;
     private SearchView searchView;
     private MenuItem searchItem;
-
-    private DrawerLayout drawerLayout;
-    private ListView drawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +71,6 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         placesListView.setHasFixedSize(true);
 
         placesListView.setAdapter(pAdapter);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
-        drawerList.setOnItemClickListener(this);
-        drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 //        Toolbar t = (Toolbar) findViewById(R.id.tToolbar);
 //        ActionMenuView amvMenu = (ActionMenuView) t.findViewById(R.id.amvMenu);
@@ -141,13 +128,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
             return true;
         }
         if (item.getItemId() == R.id.action_filter) {
-//            if (drawerLayout.isDrawerOpen(drawerList)) {
-//                drawerLayout.closeDrawer(drawerList);
-//            } else {
-//                drawerLayout.openDrawer(drawerList);
-//            }
             createAndDisplayDialog();
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -155,10 +136,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
     private void createAndDisplayDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LinearLayout layout = new LinearLayout(this);
+        final ListView listView = new ListView(this);
 
-
-        ListView listView = new ListView(this);
-        listView.setAdapter(new FilterAdapter(this, R.layout.filter_list_item, filterItems));
+        listView.setAdapter(new PlaceFilterAdapter(this, R.layout.filter_list_item, filterItems));
         listView.setOnItemClickListener(this);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
@@ -171,9 +151,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         }
 
         layout.setOrientation(LinearLayout.VERTICAL);
-
         layout.addView(listView);
-
 
         builder.setView(layout);
 
@@ -184,7 +162,28 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
             }
         });
 
-        builder.create().show();
+        builder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // do nothing. Will override later to prevent automatic closing dialog behavior
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // uncheck all the filters
+                for (int i = 0; i < filterItems.length; i++) {
+                    listView.setItemChecked(i, false);
+                }
+                // remove all active filters
+                activeFilters.clear();
+                updateFilters();
+            }
+        });
     }
 
     public void toggleFoodFilter(View view) {
@@ -222,6 +221,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         }
         updateFilters();
     }
+
     public void toggleParkingFilter(View view) {
         if (activeFilters.contains(Place.Category.PARKING)) {
             activeFilters.remove(Place.Category.PARKING);
@@ -230,6 +230,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         }
         updateFilters();
     }
+
     public void toggleAcademicFilter(View view) {
         if (activeFilters.contains(Place.Category.ACADEMIC)) {
             activeFilters.remove(Place.Category.ACADEMIC);
@@ -238,6 +239,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         }
         updateFilters();
     }
+
     public void toggleOtherFilter(View view) {
         if (activeFilters.contains(Place.Category.OTHER)) {
             activeFilters.remove(Place.Category.OTHER);

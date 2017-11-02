@@ -2,24 +2,28 @@ package com.example.vi_tu.gtinteractive;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.vi_tu.gtinteractive.adapters.EventFilterAdapter;
 import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
+import com.example.vi_tu.gtinteractive.adapters.PlaceFilterAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Event;
@@ -36,7 +40,7 @@ import java.util.List;
 
 public class EventListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
 
-    public static final String[] drawerItems = {"Art", "Career", "Conference", "Other", "Seminar", "Special Event", "Sports", "Student Sponsored", "Training"};
+    private Event.Category[] filterItems = Event.Category.values();
     private EventPersistence eventsDB;
 
     private RecyclerView eventsListView;
@@ -47,13 +51,9 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
     private List<Event.Category> activeFilters = new ArrayList<>();
     private String userInput;
 
-
     private SearchManager searchManager;
     private SearchView searchView;
     private MenuItem searchItem;
-
-    private DrawerLayout drawerLayout;
-    private ListView drawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +73,6 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
 
         eventsListView.setAdapter(eAdapter);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
-        drawerList.setOnItemClickListener(this);
-        drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
     @Override
@@ -121,13 +116,62 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
             return true;
         }
         if (item.getItemId() == R.id.action_filter) {
-            if (drawerLayout.isDrawerOpen(drawerList)) {
-                drawerLayout.closeDrawer(drawerList);
-            } else {
-                drawerLayout.openDrawer(drawerList);
-            }
+            createAndDisplayDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createAndDisplayDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LinearLayout layout = new LinearLayout(this);
+        final ListView listView = new ListView(this);
+
+        listView.setAdapter(new EventFilterAdapter(this, R.layout.filter_list_item, filterItems));
+        listView.setOnItemClickListener(this);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        // Dialog does not save which items were checked previously
+        // Thus, we have to manually check these when creating the layout
+        for (int i = 0; i < filterItems.length; i++) {
+            if (activeFilters.contains(filterItems[i])) {
+                listView.setItemChecked(i, true);
+            }
+        }
+
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(listView);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d("PlaceListActivity", "Done clicked");
+            }
+        });
+
+        builder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // do nothing. Will override later to prevent automatic closing dialog behavior
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // uncheck all the filters
+                for (int i = 0; i < filterItems.length; i++) {
+                    listView.setItemChecked(i, false);
+                }
+                // remove all active filters
+                activeFilters.clear();
+                updateFilters();
+            }
+        });
     }
 
     public void toggleArtFilter(View view) {

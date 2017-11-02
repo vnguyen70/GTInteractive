@@ -43,6 +43,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             holder.categoryView.setText(e.getCategories().toString());
             holder.categoryView.setTextColor(Color.parseColor("#" + e.getCategories().get(0).getColor()));
         }
+        holder.dateView.setText((e.getStartDate() != null ? e.getStartDate().toString("YYYY-MM-DD") : ""));
+        holder.locationView.setText(e.getLocation());
         holder.setObjectId(e.getId());
     }
 
@@ -58,12 +60,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
         public TextView eventNameView;
         public TextView categoryView;
+        public TextView dateView;
+        public TextView locationView;
+
         public int objectId;
 
         public EventViewHolder(View view) {
             super(view);
             eventNameView = view.findViewById(R.id.tv_label);
             categoryView = view.findViewById(R.id.tv_category);
+            dateView = view.findViewById(R.id.tv_date);
+            locationView = view.findViewById(R.id.tv_location);
             objectId = -1;
             view.setOnClickListener(this);
         }

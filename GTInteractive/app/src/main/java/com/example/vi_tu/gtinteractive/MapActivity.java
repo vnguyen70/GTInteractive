@@ -340,7 +340,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                     .clickable(false)
                     .visible(false)
             );
-            poly.setTag(poly.getId());
+            poly.setTag(p.getId());
             added.add(poly);
         }
         placesPolygons.put(p.getId(), added);

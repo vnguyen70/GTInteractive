@@ -7,22 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.R;
-import com.example.vi_tu.gtinteractive.domain.Place;
+import com.example.vi_tu.gtinteractive.domain.Event;
 
 /**
- * Created by Rayner on 10/27/17.
+ * Created by Rayner on 11/1/17.
  */
 
-public class FilterAdapter extends ArrayAdapter<Place.Category> {
+public class EventFilterAdapter extends ArrayAdapter<Event.Category> {
     private LayoutInflater layoutInflater;
-    private Place.Category[] categories;
+    private Event.Category[] categories;
 
     private int mViewResourceId;
 
-    public FilterAdapter(Context context, int viewResourceId, Place.Category[] categories) {
+    public EventFilterAdapter(Context context, int viewResourceId, Event.Category[] categories) {
         super(context, viewResourceId, categories);
 
         layoutInflater = (LayoutInflater) context.getSystemService(
@@ -37,7 +36,7 @@ public class FilterAdapter extends ArrayAdapter<Place.Category> {
     }
 
     @Override
-    public Place.Category getItem(int position) {
+    public Event.Category getItem(int position) {
         return categories[position];
     }
 
@@ -48,9 +47,8 @@ public class FilterAdapter extends ArrayAdapter<Place.Category> {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-//        view = layoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_list_item, viewGroup, false);
         view = layoutInflater.inflate(mViewResourceId, null);
-        Place.Category category = categories[position];
+        Event.Category category = categories[position];
         view.setMinimumHeight(132);
         CheckedTextView ctv = view.findViewById(R.id.ctv_filter);
         ctv.setText(category.toString());
