@@ -65,25 +65,12 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         pList = placesDB.getAll();
         pFilter = new PlaceFilter(placesDB.getAll());
         pFilter2 = new PlaceFilter(placesDB.getAll());
-        pAdapter = new PlaceListAdapter(pList);
+        pAdapter = new PlaceListAdapter(pList, getIntent().getBooleanExtra("ShowMapNext", true));
         placesListView = (RecyclerView) findViewById(R.id.recyclerview_search);
         placesListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         placesListView.setHasFixedSize(true);
 
         placesListView.setAdapter(pAdapter);
-
-//        Toolbar t = (Toolbar) findViewById(R.id.tToolbar);
-//        ActionMenuView amvMenu = (ActionMenuView) t.findViewById(R.id.amvMenu);
-//        amvMenu.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem menuItem) {
-//                return onOptionsItemSelected(menuItem);
-//            }
-//        });
-//
-//        setSupportActionBar(t);
-//        getSupportActionBar().setTitle(null);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

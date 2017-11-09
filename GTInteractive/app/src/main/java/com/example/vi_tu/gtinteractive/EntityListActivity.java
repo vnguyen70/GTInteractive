@@ -11,13 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.vi_tu.gtinteractive.adapters.EntityAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
@@ -44,7 +47,6 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
     private EntityAdapter eAdapter;
 
     private List<Entity> entityList = new ArrayList<Entity>();
-    private List<Entity> matchingObjects;
     private EntityFilter eFilter;
     private EntityFilter eFilter2;
     private List<Class> activeFilters = new ArrayList<>();
@@ -57,6 +59,11 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
     private DrawerLayout drawerLayout;
     private ListView drawerList;
 
+    private ToggleButton placeButton;
+    private ToggleButton eventButton;
+    private boolean placeOn;
+    private boolean eventOn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +74,16 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         placesDB = new PlacePersistence(db);
         eventsDB = new EventPersistence(db);
 
+        // Add all places and events to entityList
         entityList.addAll(placesDB.getAll());
         entityList.addAll(eventsDB.getAll());
+
+        // Create two entity filters: one that always stores all the entities
+        // the other that stores the filtered entities
         eFilter = new EntityFilter(entityList);
         eFilter2 = new EntityFilter(entityList);
+
+        // Set up recycler view
         eAdapter = new EntityAdapter(entityList);
         entityListView = (RecyclerView) findViewById(R.id.recyclerview_search);
         entityListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
@@ -82,6 +95,55 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
         drawerList.setOnItemClickListener(this);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        placeButton = (ToggleButton) findViewById(R.id.tb_places);
+        eventButton = (ToggleButton) findViewById(R.id.tb_events);
+
+        // Based on previous view, set button and filter states
+        int previousView = getIntent().getIntExtra("ViewType", -1);
+        if (previousView == ViewType.PLACE) {
+            placeOn = true;
+            eventOn = false;
+            activeFilters.add(Place.class);
+        } else if (previousView == ViewType.EVENT) {
+            placeOn = false;
+            eventOn = true;
+            activeFilters.add(Event.class);
+        } else {
+            placeOn = true;
+            eventOn = true;
+            activeFilters.add(Place.class);
+            activeFilters.add(Event.class);
+        }
+        updateFilters();
+
+        placeButton.setChecked(placeOn);
+        eventButton.setChecked(eventOn);
+
+        // Handle onClick events for each button
+        placeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                togglePlacesFilter(view);
+                placeOn = !placeOn;
+
+                // if user tries to turn off both, both turn on
+                if (!placeOn && !eventOn) {
+                    resetFilters(view);
+                }
+            }
+        });
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleEventsFilter(view);
+                eventOn = !eventOn;
+
+                if (!placeOn && !eventOn) {
+                    resetFilters(view);
+                }
+            }
+        });
     }
 
     @Override
@@ -156,6 +218,15 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         eFilter2 = eFilter.filterByClass(activeFilters);
         List<Entity> filteredList = eFilter2.filterByName(userInput).getList();
         eAdapter.setData(filteredList);
+    }
+    public void resetFilters(View view) {
+        placeOn = true;
+        eventOn = true;
+        placeButton.setChecked(placeOn);
+        eventButton.setChecked(eventOn);
+        activeFilters.clear();
+        togglePlacesFilter(view);
+        toggleEventsFilter(view);
     }
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -2,6 +2,7 @@ package com.example.vi_tu.gtinteractive.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,42 +30,63 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int ITEM_TYPE_EVENT = 1;
     private List<Entity> entityList;
 
-    public EntityAdapter() {
-        this.entityList = new ArrayList<>();
-    }
     public EntityAdapter(List<Entity> eList) { this.entityList = eList; }
 
-    private static class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView placeNameView;
-        public int placeId;
-
-        public PlaceViewHolder(View view) {
-            super(view);
-            placeNameView = view.findViewById(R.id.tv_label);
-            placeId = -1;
-            view.setOnClickListener(this);
-        }
-
-        public void onClick(View view) {
-            Context context = view.getContext();
-            Intent mapActivityIntent = new Intent(context, MapActivity.class);
-            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
-            mapActivityIntent.putExtra(Arguments.OBJECT_ID, placeId);
-            context.startActivity(mapActivityIntent);
-        }
-        public void setPlaceId(Integer placeId) {
-            this.placeId = placeId;
-        }
-
-    }
-
-    private static class EventViewHolder extends RecyclerView.ViewHolder {
-        public TextView eventNameView;
-        public EventViewHolder (View view) {
-            super(view);
-            eventNameView = view.findViewById(R.id.nameText);
-        }
-    }
+//    private static class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//        public TextView placeNameView;
+//        public int placeId;
+//
+//        public PlaceViewHolder(View view) {
+//            super(view);
+//            placeNameView = view.findViewById(R.id.tv_label);
+//            placeId = -1;
+//            view.setOnClickListener(this);
+//        }
+//
+//        public void onClick(View view) {
+//            Context context = view.getContext();
+//            Intent mapActivityIntent = new Intent(context, MapActivity.class);
+//            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+//            mapActivityIntent.putExtra(Arguments.OBJECT_ID, placeId);
+//            context.startActivity(mapActivityIntent);
+//        }
+//        public void setPlaceId(Integer placeId) {
+//            this.placeId = placeId;
+//        }
+//
+//    }
+//
+//    private static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//        public TextView eventNameView;
+//        public TextView categoryView;
+//        public TextView dateView;
+//        public TextView locationView;
+//
+//        public int objectId;
+//
+//        public EventViewHolder (View view) {
+//            super(view);
+//            eventNameView = view.findViewById(R.id.tv_label);
+//            categoryView = view.findViewById(R.id.tv_category);
+//            dateView = view.findViewById(R.id.tv_date);
+//            locationView = view.findViewById(R.id.tv_location);
+//            objectId = -1;
+//            view.setOnClickListener(this);
+//        }
+//
+//        @Override
+//        public void onClick(View view) {
+//            Context context = view.getContext();
+//            Intent mapActivityIntent = new Intent(context, MapActivity.class);
+//            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.EVENT);
+//            mapActivityIntent.putExtra(Arguments.OBJECT_ID, objectId);
+//            context.startActivity(mapActivityIntent);
+//        }
+//
+//        public void setObjectId(int objectId) {
+//            this.objectId = objectId;
+//        }
+//    }
 
     @Override
     public int getItemViewType(int position) {
@@ -81,23 +103,48 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         Log.d("EntityAdapter", "onCreateViewHolder");
         if (viewType == ITEM_TYPE_PLACE) {
-            return new PlaceViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false));
+            return new PlaceListAdapter.PlaceViewHolder(layoutInflater.inflate(R.layout.list_place_item, parent, false), true);
         } else if (viewType == ITEM_TYPE_EVENT){
-            return new EventViewHolder(layoutInflater.inflate(R.layout.event_card, parent, false));
+            return new EventListAdapter.EventViewHolder(layoutInflater.inflate(R.layout.list_event_item, parent, false));
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        Object item = entityList.get(position);
-        if (viewHolder instanceof PlaceViewHolder) {
-            Place place = (Place) item;
-            ((PlaceViewHolder) viewHolder).placeNameView.setText(place.getName());
-            ((PlaceViewHolder) viewHolder).setPlaceId(place.getId());
-        } else if (viewHolder instanceof EventViewHolder) {
-            Event event = (Event) item;
-            ((EventViewHolder) viewHolder).eventNameView.setText(event.getTitle());
+        if (viewHolder instanceof PlaceListAdapter.PlaceViewHolder) {
+            PlaceListAdapter.PlaceViewHolder holder = (PlaceListAdapter.PlaceViewHolder) viewHolder;
+            Place p = (Place) entityList.get(position);
+            holder.placeNameView.setText(p.getName());
+            holder.categoryView.setText(p.getCategory().toString());
+            holder.categoryView.setTextColor(Color.parseColor("#" + p.getCategory().getColor()));
+
+            if (p.getCategory().toString().equals("FOOD")) {
+                if (p.isOpen()) {
+                    holder.openView.setText("   Open");
+                    holder.openView.setTextColor(Color.parseColor("#22b21a"));
+                } else {
+                    holder.openView.setText("  Closed");
+                    holder.openView.setTextColor(Color.RED);
+                }
+            } else {
+                // this statement is important because holders are reused
+                // if the holder contained a food place and then contains another place
+                // the open text will still be there
+                holder.openView.setText("");
+            }
+            holder.setObjectId(p.getId());
+        } else if (viewHolder instanceof EventListAdapter.EventViewHolder) {
+            Event e = (Event) entityList.get(position);
+            EventListAdapter.EventViewHolder holder = (EventListAdapter.EventViewHolder) viewHolder;
+            holder.eventNameView.setText(e.getTitle());
+            if (e.getCategories().size() > 0) {
+                holder.categoryView.setText(e.getCategories().toString());
+                holder.categoryView.setTextColor(Color.parseColor("#" + e.getCategories().get(0).getColor()));
+            }
+            holder.dateView.setText((e.getStartDate() != null ? e.getStartDate().toString("MMM dd, YYYY h:mm a") : ""));
+            holder.locationView.setText(e.getLocation());
+            holder.setObjectId(e.getId());
         }
     }
 
@@ -108,7 +155,6 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void setData(List<Entity> eList) {
         this.entityList = eList;
-        Log.d("EntityAdapter", "setData");
         notifyDataSetChanged();
     }
 }

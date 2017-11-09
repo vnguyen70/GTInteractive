@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.MapActivity;
+import com.example.vi_tu.gtinteractive.PlaceDetailsActivity;
 import com.example.vi_tu.gtinteractive.R;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
@@ -21,18 +22,16 @@ import java.util.List;
 public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.PlaceViewHolder> {
 
     private List<Place> pList;
+    private boolean showMapNext;
 
-    public PlaceListAdapter() {
-        this.pList = new ArrayList<>();
-    }
-
-    public PlaceListAdapter(List<Place> pList) {
+    public PlaceListAdapter(List<Place> pList, boolean showMapNext) {
         this.pList = pList;
+        this.showMapNext = showMapNext;
     }
 
     @Override
     public PlaceViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new PlaceViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false));
+        return new PlaceViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_place_item, viewGroup, false), showMapNext);
     }
 
     @Override
@@ -70,29 +69,38 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
         notifyDataSetChanged();
     }
 
-    public class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView placeNameView;
         public TextView categoryView;
         public TextView openView;
         public int objectId;
+        public boolean showMapNext;
 
-        public PlaceViewHolder(View view) {
+        public PlaceViewHolder(View view, boolean showMapNext) {
             super(view);
             placeNameView = view.findViewById(R.id.tv_label);
             categoryView = view.findViewById(R.id.tv_category);
             openView = view.findViewById(R.id.tv_open);
             objectId = -1;
+            this.showMapNext = showMapNext;
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
-            Intent mapActivityIntent = new Intent(context, MapActivity.class);
-            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
-            mapActivityIntent.putExtra(Arguments.OBJECT_ID, objectId);
-            context.startActivity(mapActivityIntent);
+            if (showMapNext) {
+                Intent mapActivityIntent = new Intent(context, MapActivity.class);
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+                mapActivityIntent.putExtra(Arguments.OBJECT_ID, objectId);
+                context.startActivity(mapActivityIntent);
+            } else {
+                Intent detailsActivityIntent = new Intent(context, PlaceDetailsActivity.class);
+                detailsActivityIntent.putExtra(Arguments.OBJECT_ID, objectId);
+                context.startActivity(detailsActivityIntent);
+            }
+
         }
 
         public void setObjectId(int objectId) {

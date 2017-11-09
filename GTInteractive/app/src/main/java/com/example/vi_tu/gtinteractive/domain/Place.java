@@ -95,7 +95,7 @@ public class Place extends Entity {
             if (!now.isAfter(closeTime) || !now.isBefore(openTime)) {
                 return true;
             }
-        } else if (now.isAfter(openTime) && now.isBefore(closeTime)) {
+        } else if (!now.isAfter(openTime) || !now.isBefore(closeTime)) {
             return true;
         }
 

@@ -197,8 +197,8 @@ public class NetworkUtils {
                 for (int i = 0; i < r.length(); i++) {
                     JSONObject o = r.getJSONObject(i);
 
-                    int millisStart = o.optInt("startDate") * 1000;
-                    int millisEnd = o.optInt("endDate") * 1000;
+                    long millisStart = o.optLong("startDate") * 1000;
+                    long millisEnd = o.optLong("endDate") * 1000;
                     String location = o.getString("location");
                     String placeId = placesDB.findPlaceIdByLocation(location);
                     List<Event.Category> categories = new ArrayList<>();
@@ -214,8 +214,8 @@ public class NetworkUtils {
                             .location(location)
                             .description(o.optString("description", ""))
                             .imageURL(o.optString("imageURL", ""))
-                            .startDate(millisStart > 0 ? new DateTime(millisStart) : null)
-                            .endDate(millisEnd > 0 ? new DateTime(millisEnd) : null)
+                            .startDate(millisStart > 0 ? new DateTime((long) millisStart) : null)
+                            .endDate(millisEnd > 0 ? new DateTime((long) millisEnd) : null)
                             .allDay(o.optBoolean("allDay"))
                             .recurring(o.optBoolean("recurring"))
                             .categories(categories)

@@ -26,13 +26,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     private List<Event> eList;
 
-    public EventListAdapter() { this.eList = new ArrayList<>(); }
-
     public EventListAdapter(List<Event> eList) { this.eList = eList; }
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false));
+        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_event_item, viewGroup, false));
     }
 
     @Override
@@ -43,7 +41,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             holder.categoryView.setText(e.getCategories().toString());
             holder.categoryView.setTextColor(Color.parseColor("#" + e.getCategories().get(0).getColor()));
         }
-        holder.dateView.setText((e.getStartDate() != null ? e.getStartDate().toString("YYYY-MM-DD") : ""));
+        holder.dateView.setText((e.getStartDate() != null ? e.getStartDate().toString("MMM dd, YYYY h:mm a") : ""));
         holder.locationView.setText(e.getLocation());
         holder.setObjectId(e.getId());
     }
@@ -56,7 +54,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         notifyDataSetChanged();
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView eventNameView;
         public TextView categoryView;

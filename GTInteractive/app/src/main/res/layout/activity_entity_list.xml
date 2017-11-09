@@ -25,11 +25,34 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/tb_places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOn="Places"
+                android:textOff="Places"/>
+
+            <ToggleButton
+                android:id="@+id/tb_events"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOn="Events"
+                android:textOff="Events"/>
+
+        </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+            android:layout_weight="0.84"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 

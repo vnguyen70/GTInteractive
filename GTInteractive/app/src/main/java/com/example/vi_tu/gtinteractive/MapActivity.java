@@ -169,6 +169,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             @Override
             public void onClick(View view) {
                 Intent searchIntent = new Intent(MapActivity.this, EntityListActivity.class);
+                searchIntent.putExtra("ViewType", currView);
                 startActivity(searchIntent);
             }
         });
@@ -598,6 +599,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             case 2: // Places List
                 drawerLayout.closeDrawer(drawerList);
                 Intent placeListActivityIntent = new Intent(MapActivity.this, PlaceListActivity.class);
+                placeListActivityIntent.putExtra("ShowMapNext", false);
                 startActivity(placeListActivityIntent);
                 break;
             case 3: // Events List
