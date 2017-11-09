@@ -6,36 +6,195 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/filterButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Floor"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
-
-    <ImageView
-        android:id="@+id/blueprintCcbFloor1"
-        android:layout_width="398dp"
-        android:layout_height="519dp"
-        app:srcCompat="@drawable/floor_50_1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="64dp"
-        android:layout_marginLeft="44dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
-        android:id="@+id/Description"
-        android:layout_width="316dp"
-        android:layout_height="38dp"
-        android:text="This view is what users will see when selecting internal view"
+        android:id="@+id/text_error_message"
+        android:layout_width="248dp"
+        android:layout_height="108dp"
+        android:layout_marginTop="112dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
+        android:text="Blueprint Not Available"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/image_blueprint"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_blueprint"
+        android:layout_width="385dp"
+        android:layout_height="417dp"
+        android:layout_marginBottom="94dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@color/common_google_signin_btn_text_dark_disabled" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floor_expand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/darker_gray"
+        app:fabSize="normal"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@android:color/transparent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floor_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:clickable="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_purple"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_floor_expand"
+        app:srcCompat="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/text_floor_1_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="4dp"
+        android:text="Floor 1"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toTopOf="@+id/button_floor_1"
+        app:layout_constraintBottom_toBottomOf="@+id/button_floor_1"
+        app:layout_constraintRight_toLeftOf="@+id/button_floor_1" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floor_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:clickable="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_green_dark"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_floor_1"
+        app:srcCompat="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/text_floor_2_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="4dp"
+        android:text="Floor 2"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toTopOf="@+id/button_floor_2"
+        app:layout_constraintRight_toLeftOf="@+id/button_floor_2"
+        app:layout_constraintBottom_toBottomOf="@+id/button_floor_2" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floor_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:clickable="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_orange_dark"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_floor_2"
+        app:srcCompat="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/text_floor_3_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="4dp"
+        android:text="Floor 3"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toTopOf="@+id/button_floor_3"
+        app:layout_constraintRight_toLeftOf="@+id/button_floor_3"
+        app:layout_constraintBottom_toBottomOf="@+id/button_floor_3"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floor_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:clickable="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_red_dark"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_floor_3"
+        app:srcCompat="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/text_floor_4_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="4dp"
+        android:text="Floor 4"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toTopOf="@+id/button_floor_4"
+        app:layout_constraintRight_toLeftOf="@+id/button_floor_4"
+        app:layout_constraintBottom_toBottomOf="@+id/button_floor_4" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_floor_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:clickable="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/holo_blue_dark"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_floor_4"
+        app:srcCompat="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/text_floor_5_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="4dp"
+        android:text="Floor 5"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toTopOf="@+id/button_floor_5"
+        app:layout_constraintRight_toLeftOf="@+id/button_floor_5"
+        app:layout_constraintBottom_toBottomOf="@+id/button_floor_5" />
+
+    <TextView
+        android:id="@+id/text_floor_banner"
+        android:layout_width="173dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="-1dp"
+        android:layout_marginLeft="115dp"
+        android:text="TextView"
+        android:textSize= "40sp"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

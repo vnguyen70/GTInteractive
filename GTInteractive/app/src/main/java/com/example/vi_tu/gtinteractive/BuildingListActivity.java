@@ -82,7 +82,7 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
         drawerList.setOnItemClickListener(this);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        filterButton = (Button) findViewById(R.id.FilterButton);
+        filterButton = (Button) findViewById(R.id.button_filter);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

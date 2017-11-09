@@ -45,24 +45,25 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
 
         // Sets up event image TODO: Need to verify URLs for events (currently displays nothing)
-        ImageView eventImageView = (ImageView) findViewById(R.id.eventImageView);
+        ImageView eventImageView = (ImageView) findViewById(R.id.image_event_picture);
         Picasso.with(this).load(e.getImageURL()).fit().into(eventImageView);
 
         // UI
-        TextView idTextView = (TextView) findViewById(R.id.idText);
-        TextView eventIdTextView = (TextView) findViewById(R.id.eventIdText);
-        TextView titleTextView = (TextView) findViewById(R.id.titleText);
-        TextView locationTextView = (TextView) findViewById(R.id.locationText);
-        TextView descriptionTextView = (TextView) findViewById(R.id.descriptionText);
-        TextView imageURLTextView = (TextView) findViewById(R.id.imageURLText);
-        TextView startDateTextView = (TextView) findViewById(R.id.startDateText);
-        TextView endDateTextView = (TextView) findViewById(R.id.endDateText);
-        TextView allDayTextView = (TextView) findViewById(R.id.allDayText);
-        TextView recurringTextView = (TextView) findViewById(R.id.recurringText);
-        TextView categoriesTextView = (TextView) findViewById(R.id.categoriesText);
-        TextView buildingIdTextView = (TextView) findViewById(R.id.buildingIdText);
-        Button openBuildingDetailsButton = (Button) findViewById(R.id.openBuildingDetailsButton);
-        Button showInMapButton = (Button) findViewById(R.id.showInMapButton);
+        TextView idTextView = (TextView) findViewById(R.id.text_id);
+        TextView eventIdTextView = (TextView) findViewById(R.id.text_event_id);
+        TextView titleTextView = (TextView) findViewById(R.id.text_title);
+        TextView locationTextView = (TextView) findViewById(R.id.text_location);
+        TextView descriptionTextView = (TextView) findViewById(R.id.text_description);
+        TextView imageURLTextView = (TextView) findViewById(R.id.text_image_url);
+        TextView startDateTextView = (TextView) findViewById(R.id.text_start_date);
+        TextView endDateTextView = (TextView) findViewById(R.id.text_end_date);
+        TextView allDayTextView = (TextView) findViewById(R.id.text_all_day);
+        TextView recurringTextView = (TextView) findViewById(R.id.text_recurring);
+        TextView categoriesTextView = (TextView) findViewById(R.id.text_categories);
+        TextView buildingIdTextView = (TextView) findViewById(R.id.text_building_id);
+
+        Button openBuildingDetailsButton = (Button) findViewById(R.id.button_open_building_details);
+        Button showInMapButton = (Button) findViewById(R.id.button_show_in_map);
 
         String categories = "";
         for (Event.Category c : e.getCategories()) {

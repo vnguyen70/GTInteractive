@@ -62,10 +62,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         public EventViewHolder(View view) {
             super(view);
-            titleText = view.findViewById(R.id.nameText);
+            titleText = view.findViewById(R.id.text_name);
             dateText = view.findViewById(R.id.dateText);
             durationText = view.findViewById(R.id.operationHrsText);
-            descriptionText = view.findViewById(R.id.descriptionText);
+            descriptionText = view.findViewById(R.id.text_description);
             objectId = -1;
             view.setOnClickListener(this);
         }

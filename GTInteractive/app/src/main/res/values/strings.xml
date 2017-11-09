@@ -39,5 +39,6 @@
     <string name="parking_view_button_label">Parking</string>
     <string name="events_view_button_label">Events</string>
     <string name="buildings_view_button_label">Buildings</string>
+    <string name="text_fill">TextView</string>
 
 </resources>

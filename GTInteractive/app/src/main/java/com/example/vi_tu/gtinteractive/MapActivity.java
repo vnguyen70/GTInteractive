@@ -12,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -29,7 +28,6 @@ import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
@@ -134,24 +132,24 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         drawerList.setOnItemClickListener(this);
 
         // buttons
-        searchBar = findViewById(R.id.searchBar);
-        drawerButton = findViewById(R.id.drawerButton);
-        searchOptionsButton = findViewById(R.id.searchOptionsButton);
-        buildingsViewButton = findViewById(R.id.buildingsViewButton);
-        eventsViewButton = findViewById(R.id.eventsViewButton);
-        parkingViewButton = findViewById(R.id.parkingViewButton);
-        printingViewButton = findViewById(R.id.printingViewButton);
-        selectViewButton = findViewById(R.id.selectViewButton);
-        resetCameraButton = findViewById(R.id.resetCameraButton);
-        toggleTrafficButton = findViewById(R.id.toggleTrafficButton);
-        togglePolygonsButton = findViewById(R.id.togglePolygonsButton);
-        toggleOverlayButton = findViewById(R.id.toggleOverlayButton);
+        searchBar = findViewById(R.id.search_bar);
+        drawerButton = findViewById(R.id.button_drawer);
+        searchOptionsButton = findViewById(R.id.button_search_options);
+        buildingsViewButton = findViewById(R.id.button_buildings_view);
+        eventsViewButton = findViewById(R.id.button_events_view);
+        parkingViewButton = findViewById(R.id.button_parking_view);
+        printingViewButton = findViewById(R.id.button_printing_view);
+        selectViewButton = findViewById(R.id.button_select_view);
+        resetCameraButton = findViewById(R.id.button_reset_camera);
+        toggleTrafficButton = findViewById(R.id.button_toggle_traffic);
+        togglePolygonsButton = findViewById(R.id.button_toggle_polygons);
+        toggleOverlayButton = findViewById(R.id.button_toggle_overlay);
 
         // button labels
-        buildingsViewLabel = findViewById(R.id.buildingsViewLabel);
-        eventsViewLabel = findViewById(R.id.eventsViewLabel);
-        parkingViewLabel = findViewById(R.id.parkingViewLabel);
-        printingViewLabel = findViewById(R.id.printingViewLabel);
+        buildingsViewLabel = findViewById(R.id.text_buildings_view_label);
+        eventsViewLabel = findViewById(R.id.text_events_view_label);
+        parkingViewLabel = findViewById(R.id.text_parking_view_label);
+        printingViewLabel = findViewById(R.id.text_printing_view_label);
 
         // button icons
         drawerButton.setImageResource(R.drawable.ic_menu_black_24dp);

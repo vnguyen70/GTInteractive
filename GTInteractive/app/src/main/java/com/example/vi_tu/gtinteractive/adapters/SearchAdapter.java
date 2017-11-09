@@ -61,7 +61,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView eventNameView;
         public EventViewHolder (View view) {
             super(view);
-            eventNameView = view.findViewById(R.id.nameText);
+            eventNameView = view.findViewById(R.id.text_name);
         }
     }
 

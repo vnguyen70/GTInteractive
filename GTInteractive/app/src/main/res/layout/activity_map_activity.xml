@@ -17,20 +17,18 @@
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.example.vi_tu.gtinteractive.MapActivity"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context="com.example.vi_tu.gtinteractive.MapActivity"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
-            android:id="@+id/searchBar"
+            android:id="@+id/search_bar"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_margin="8dp"
@@ -43,208 +41,208 @@
             android:paddingLeft="60dp"
             android:paddingRight="60dp"
             android:selectAllOnFocus="true"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintRight_toRightOf="parent" />
 
         <ImageButton
-            android:id="@+id/drawerButton"
+            android:id="@+id/button_drawer"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:src="@drawable/places_ic_clear"
-            app:layout_constraintBottom_toBottomOf="@+id/searchBar"
-            app:layout_constraintLeft_toLeftOf="@+id/searchBar"
-            app:layout_constraintTop_toTopOf="@+id/searchBar" />
+            app:layout_constraintTop_toTopOf="@+id/search_bar"
+            app:layout_constraintLeft_toLeftOf="@+id/search_bar"
+            app:layout_constraintBottom_toBottomOf="@+id/search_bar" />
 
         <ImageButton
-            android:id="@+id/searchOptionsButton"
+            android:id="@+id/button_search_options"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:src="@drawable/places_ic_search"
-            app:layout_constraintBottom_toBottomOf="@+id/searchBar"
-            app:layout_constraintRight_toRightOf="@+id/searchBar"
-            app:layout_constraintTop_toTopOf="@+id/searchBar" />
+            app:layout_constraintTop_toTopOf="@+id/search_bar"
+            app:layout_constraintRight_toRightOf="@+id/search_bar"
+            app:layout_constraintBottom_toBottomOf="@+id/search_bar" />
 
         <TextView
-            android:id="@+id/buildingsViewLabel"
+            android:id="@+id/text_buildings_view_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:padding="4dp"
             android:text="@string/buildings_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
             android:textColor="@android:color/white"
             android:background="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/buildingsViewButton"
-            app:layout_constraintRight_toLeftOf="@+id/buildingsViewButton"
-            app:layout_constraintTop_toTopOf="@+id/buildingsViewButton" />
+            app:layout_constraintTop_toTopOf="@+id/button_buildings_view"
+            app:layout_constraintRight_toLeftOf="@+id/button_buildings_view"
+            app:layout_constraintBottom_toBottomOf="@+id/button_buildings_view" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/buildingsViewButton"
+            android:id="@+id/button_buildings_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             android:visibility="gone"
             app:backgroundTint="@android:color/holo_red_light"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/eventsViewButton"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_events_view"
             app:srcCompat="@android:color/transparent" />
 
         <TextView
-            android:id="@+id/eventsViewLabel"
+            android:id="@+id/text_events_view_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:padding="4dp"
             android:text="@string/events_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
             android:textColor="@android:color/white"
             android:background="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/eventsViewButton"
-            app:layout_constraintRight_toLeftOf="@+id/eventsViewButton"
-            app:layout_constraintTop_toTopOf="@+id/eventsViewButton" />
+            app:layout_constraintTop_toTopOf="@+id/button_events_view"
+            app:layout_constraintRight_toLeftOf="@+id/button_events_view"
+            app:layout_constraintBottom_toBottomOf="@+id/button_events_view" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/eventsViewButton"
+            android:id="@+id/button_events_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             android:visibility="gone"
             app:backgroundTint="@android:color/holo_orange_light"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/parkingViewButton"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_parking_view"
             app:srcCompat="@android:color/transparent" />
 
         <TextView
-            android:id="@+id/parkingViewLabel"
+            android:id="@+id/text_parking_view_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:padding="4dp"
             android:text="@string/parking_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
             android:textColor="@android:color/white"
             android:background="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/parkingViewButton"
-            app:layout_constraintRight_toLeftOf="@+id/parkingViewButton"
-            app:layout_constraintTop_toTopOf="@+id/parkingViewButton" />
+            app:layout_constraintTop_toTopOf="@+id/button_parking_view"
+            app:layout_constraintRight_toLeftOf="@+id/button_parking_view"
+            app:layout_constraintBottom_toBottomOf="@+id/button_parking_view" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/parkingViewButton"
+            android:id="@+id/button_parking_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             android:visibility="gone"
             app:backgroundTint="@android:color/holo_green_light"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/printingViewButton"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_printing_view"
             app:srcCompat="@android:color/transparent" />
 
         <TextView
-            android:id="@+id/printingViewLabel"
+            android:id="@+id/text_printing_view_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:padding="4dp"
             android:text="@string/printers_view_button_label"
             android:textStyle="bold"
             android:visibility="gone"
             android:textColor="@android:color/white"
             android:background="@android:color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/printingViewButton"
-            app:layout_constraintRight_toLeftOf="@+id/printingViewButton"
-            app:layout_constraintTop_toTopOf="@+id/printingViewButton" />
+            app:layout_constraintTop_toTopOf="@+id/button_printing_view"
+            app:layout_constraintRight_toLeftOf="@+id/button_printing_view"
+            app:layout_constraintBottom_toBottomOf="@+id/button_printing_view" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/printingViewButton"
+            android:id="@+id/button_printing_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             android:visibility="gone"
             app:backgroundTint="@android:color/holo_blue_bright"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/selectViewButton"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_select_view"
             app:srcCompat="@android:color/transparent" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/selectViewButton"
+            android:id="@+id/button_select_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             app:backgroundTint="@android:color/white"
             app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:srcCompat="@android:color/transparent" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/resetCameraButton"
+            android:id="@+id/button_reset_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             app:backgroundTint="@android:color/white"
             app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:rippleColor="@android:color/black"
-            app:srcCompat="@android:color/transparent" />
+            app:srcCompat="@android:color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/toggleTrafficButton"
+            android:id="@+id/button_toggle_traffic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             app:backgroundTint="@android:color/darker_gray"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/resetCameraButton"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:rippleColor="@android:color/black"
-            app:srcCompat="@android:color/transparent" />
+            app:srcCompat="@android:color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_reset_camera" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/togglePolygonsButton"
+            android:id="@+id/button_toggle_polygons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             android:visibility="gone"
             app:backgroundTint="@android:color/holo_red_light"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/toggleTrafficButton"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:rippleColor="@android:color/black"
-            app:srcCompat="@android:color/transparent" />
+            app:srcCompat="@android:color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_toggle_traffic" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/toggleOverlayButton"
+            android:id="@+id/button_toggle_overlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/button_margin"
             android:clickable="true"
             android:visibility="gone"
             app:backgroundTint="@android:color/holo_green_light"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/toggleTrafficButton"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:rippleColor="@android:color/black"
-            app:srcCompat="@android:color/transparent" />
+            app:srcCompat="@android:color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_toggle_traffic" />
 
     </android.support.constraint.ConstraintLayout>
 

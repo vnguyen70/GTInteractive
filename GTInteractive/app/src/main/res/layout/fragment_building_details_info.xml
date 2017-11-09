@@ -14,614 +14,614 @@
 
 
         <TextView
-            android:id="@+id/idStatic"
+            android:id="@+id/static_id"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="id: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/idText"
+            app:layout_constraintTop_toTopOf="@+id/text_id"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/idText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_id"
+            />
 
         <TextView
-            android:id="@+id/idText"
+            android:id="@+id/text_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/idStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/buildingIdStatic"
+            android:id="@+id/static_building_id"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="buildingId: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/buildingIdText"
+            app:layout_constraintTop_toTopOf="@+id/text_building_id"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buildingIdText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_building_id" />
 
         <TextView
-            android:id="@+id/buildingIdText"
+            android:id="@+id/text_building_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/buildingIdStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_id"
+            app:layout_constraintLeft_toRightOf="@+id/static_building_id"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/nameStatic"
+            android:id="@+id/static_name"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="name: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/nameText"
+            app:layout_constraintTop_toTopOf="@+id/text_name"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_name" />
 
         <TextView
-            android:id="@+id/nameText"
+            android:id="@+id/text_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/nameStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buildingIdText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_building_id"
+            app:layout_constraintLeft_toRightOf="@+id/static_name"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/imageURLStatic"
+            android:id="@+id/static_image_url"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="imageURL: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageURLText"
+            app:layout_constraintTop_toTopOf="@+id/text_image_url"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageURLText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_image_url" />
 
         <TextView
-            android:id="@+id/imageURLText"
+            android:id="@+id/text_image_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/nameStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_name"
+            app:layout_constraintLeft_toRightOf="@+id/static_name"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/websiteURLStatic"
+            android:id="@+id/static_website_url"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="websiteURL: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/websiteURLText"
+            app:layout_constraintTop_toTopOf="@+id/text_website_url"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/websiteURLText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_website_url" />
 
         <TextView
-            android:id="@+id/websiteURLText"
+            android:id="@+id/text_website_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/websiteURLStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageURLText" />
-
+            app:layout_constraintTop_toBottomOf="@+id/text_image_url"
+            app:layout_constraintLeft_toRightOf="@+id/static_website_url"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
-            android:id="@+id/phoneNumStatic"
+            android:id="@+id/static_phone_number"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:text="Phone Number"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/priceLevelText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_price_level"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
         <TextView
-            android:id="@+id/phoneNumText"
+            android:id="@+id/text_phone_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginRight="16dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="0dp"
-            app:layout_constraintLeft_toLeftOf="@+id/phoneNumStatic"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/phoneNumStatic" />
-
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/text_fill"
+            app:layout_constraintTop_toBottomOf="@+id/static_phone_number"
+            app:layout_constraintLeft_toLeftOf="@+id/static_phone_number"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
-            android:id="@+id/streetStatic"
+            android:id="@+id/static_street"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:text="Location"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/text_gen_info"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
         <TextView
-            android:id="@+id/streetText"
+            android:id="@+id/text_street"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="0dp"
-            app:layout_constraintLeft_toLeftOf="@+id/streetStatic"
-            app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/streetStatic" />
-
-
-        <TextView
-            android:id="@+id/cityText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="7dp"
-            android:text="TextView"
-            app:layout_constraintLeft_toLeftOf="@+id/streetText"
-            app:layout_constraintTop_toBottomOf="@+id/streetText" />
+            android:text="@string/text_fill"
+            app:layout_constraintTop_toBottomOf="@+id/static_street"
+            app:layout_constraintLeft_toLeftOf="@+id/static_street"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/stateText"
+            android:id="@+id/text_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="0dp"
-            android:text="TextView"
-            app:layout_constraintLeft_toRightOf="@+id/cityText"
-            app:layout_constraintTop_toTopOf="@+id/cityText" />
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/text_fill"
+            app:layout_constraintTop_toBottomOf="@+id/text_street"
+            app:layout_constraintLeft_toLeftOf="@+id/text_street" />
 
 
         <TextView
-            android:id="@+id/postalCodeStatic"
+            android:id="@+id/text_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/text_fill"
+            app:layout_constraintTop_toTopOf="@+id/text_city"
+            app:layout_constraintLeft_toRightOf="@+id/text_city" />
+
+
+        <TextView
+            android:id="@+id/static_postal_code"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="postalCode: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/postalCodeText"
+            app:layout_constraintTop_toTopOf="@+id/text_postal_code"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/postalCodeText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_postal_code" />
+
         <TextView
-            android:id="@+id/postalCodeText"
+            android:id="@+id/text_postal_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintTop_toTopOf="@+id/stateText"
             android:layout_marginTop="0dp"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/stateText"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:text="@string/text_fill"
+            app:layout_constraintTop_toTopOf="@+id/text_state"
+            app:layout_constraintLeft_toRightOf="@+id/text_state"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/latitudeStatic"
+            android:id="@+id/static_latitude"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="latitude: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/latitudeText"
+            app:layout_constraintTop_toTopOf="@+id/text_latitude"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/latitudeText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_latitude" />
 
         <TextView
-            android:id="@+id/latitudeText"
+            android:id="@+id/text_latitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/latitudeStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postalCodeText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_postal_code"
+            app:layout_constraintLeft_toRightOf="@+id/static_latitude"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/longitudeStatic"
+            android:id="@+id/static_longitude"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="longitude: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/longitudeText"
+            app:layout_constraintTop_toTopOf="@+id/text_longitude"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/longitudeText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_longitude" />
 
         <TextView
-            android:id="@+id/longitudeText"
+            android:id="@+id/text_longitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/longitudeStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/latitudeText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_latitude"
+            app:layout_constraintLeft_toRightOf="@+id/static_longitude"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/polygonsStatic"
+            android:id="@+id/static_polygons"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="polygons: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/polygonsText"
+            app:layout_constraintTop_toTopOf="@+id/text_polygons"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/polygonsText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_polygons" />
 
         <TextView
-            android:id="@+id/polygonsText"
+            android:id="@+id/text_polygons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/polygonsStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/longitudeText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_longitude"
+            app:layout_constraintLeft_toRightOf="@+id/static_polygons"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/descriptionStatic"
+            android:id="@+id/static_description"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="description: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/descriptionText"
+            app:layout_constraintTop_toTopOf="@+id/text_description"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/descriptionText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_description" />
 
         <TextView
-            android:id="@+id/descriptionText"
+            android:id="@+id/text_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/descriptionStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/polygonsText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_polygons"
+            app:layout_constraintLeft_toRightOf="@+id/static_description"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/locatedInStatic"
+            android:id="@+id/static_located_in"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="locatedIn: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/locatedInText"
+            app:layout_constraintTop_toTopOf="@+id/text_located_in"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/locatedInText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_located_in" />
 
         <TextView
-            android:id="@+id/locatedInText"
+            android:id="@+id/text_located_in"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/locatedInStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_description"
+            app:layout_constraintLeft_toRightOf="@+id/static_located_in"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/yelpIDStatic"
+            android:id="@+id/static_yelp_id"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="yelpID: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/yelpIDText"
+            app:layout_constraintTop_toTopOf="@+id/text_yelp_id"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/yelpIDText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_yelp_id" />
 
         <TextView
-            android:id="@+id/yelpIDText"
+            android:id="@+id/text_yelp_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/yelpIDStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locatedInText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_located_in"
+            app:layout_constraintLeft_toRightOf="@+id/static_yelp_id"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/openTimesStatic"
+            android:id="@+id/static_open_times"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="openTimes: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/openTimesText"
+            app:layout_constraintTop_toTopOf="@+id/text_open_times"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/openTimesText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_open_times" />
 
         <TextView
-            android:id="@+id/openTimesText"
+            android:id="@+id/text_open_times"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/openTimesStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/yelpIDText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_yelp_id"
+            app:layout_constraintLeft_toRightOf="@+id/static_open_times"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/closeTimesStatic"
+            android:id="@+id/static_close_times"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="closeTimes: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/closeTimesText"
+            app:layout_constraintTop_toTopOf="@+id/text_close_times"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/closeTimesText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_close_times" />
 
         <TextView
-            android:id="@+id/closeTimesText"
+            android:id="@+id/text_close_times"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/closeTimesStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/openTimesText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_open_times"
+            app:layout_constraintLeft_toRightOf="@+id/static_close_times"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/acceptsBuzzFundsStatic"
+            android:id="@+id/static_accepts_buzz_funds"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="acceptsBuzzFunds: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/acceptsBuzzFundsText"
+            app:layout_constraintTop_toTopOf="@+id/text_accepts_buzz_funds"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/acceptsBuzzFundsText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_accepts_buzz_funds" />
 
         <TextView
-            android:id="@+id/acceptsBuzzFundsText"
+            android:id="@+id/text_accepts_buzz_funds"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/acceptsBuzzFundsStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/closeTimesText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_close_times"
+            app:layout_constraintLeft_toRightOf="@+id/static_accepts_buzz_funds"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/priceLevelStatic"
+            android:id="@+id/static_price_level"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="priceLevel: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/priceLevelText"
+            app:layout_constraintTop_toTopOf="@+id/text_price_level"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/priceLevelText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_price_level" />
 
         <TextView
-            android:id="@+id/priceLevelText"
+            android:id="@+id/text_price_level"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/priceLevelStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/acceptsBuzzFundsText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_accepts_buzz_funds"
+            app:layout_constraintLeft_toRightOf="@+id/static_price_level"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/categoryStatic"
+            android:id="@+id/static_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:text="Building Category"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/phoneNumText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_phone_number"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
         <TextView
-            android:id="@+id/categoryText"
+            android:id="@+id/text_category"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/categoryStatic"
             android:layout_marginLeft="0dp"
-            app:layout_constraintLeft_toLeftOf="@+id/categoryStatic" />
+            android:text="@string/text_fill"
+            app:layout_constraintTop_toBottomOf="@+id/static_category"
+            app:layout_constraintLeft_toLeftOf="@+id/static_category"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/altNamesStatic"
+            android:id="@+id/static_alt_names"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="altNames: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/altNamesText"
+            app:layout_constraintTop_toTopOf="@+id/text_alt_names"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/altNamesText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_alt_names" />
 
         <TextView
-            android:id="@+id/altNamesText"
+            android:id="@+id/text_alt_names"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/altNamesStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/categoryText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_category"
+            app:layout_constraintLeft_toRightOf="@+id/static_alt_names"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/nameTokensStatic"
+            android:id="@+id/static_name_tokens"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="nameTokens: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/nameTokensText"
+            app:layout_constraintTop_toTopOf="@+id/text_name_tokens"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameTokensText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_name_tokens" />
 
         <TextView
-            android:id="@+id/nameTokensText"
+            android:id="@+id/text_name_tokens"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/nameTokensStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/altNamesText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_alt_names"
+            app:layout_constraintLeft_toRightOf="@+id/static_name_tokens"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/addressTokensStatic"
+            android:id="@+id/static_address_tokens"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="addressTokens: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/addressTokensText"
+            app:layout_constraintTop_toTopOf="@+id/text_address_tokens"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/addressTokensText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_address_tokens" />
 
         <TextView
-            android:id="@+id/addressTokensText"
+            android:id="@+id/text_address_tokens"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/addressTokensStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameTokensText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_name_tokens"
+            app:layout_constraintLeft_toRightOf="@+id/static_address_tokens"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <TextView
-            android:id="@+id/numFloorsStatic"
+            android:id="@+id/static_num_floors"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/text_margin"
             android:text="numFloors: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/numFloorsText"
+            app:layout_constraintTop_toTopOf="@+id/text_num_floors"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/numFloorsText" />
+            app:layout_constraintBottom_toBottomOf="@+id/text_num_floors" />
 
         <TextView
-            android:id="@+id/numFloorsText"
+            android:id="@+id/text_num_floors"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="TextView"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/text_fill"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/numFloorsStatic"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addressTokensText" />
+            app:layout_constraintTop_toBottomOf="@+id/text_address_tokens"
+            app:layout_constraintLeft_toRightOf="@+id/static_num_floors"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
         <Button
-            android:id="@+id/showInMapButton"
+            android:id="@+id/button_show_in_map"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show in Map"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/numFloorsText" />
+            android:text="Show in Map"
+            app:layout_constraintTop_toBottomOf="@+id/text_num_floors"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
 
         <Button
-            android:id="@+id/viewInternalLayoutButton"
+            android:id="@+id/button_view_internal_layout"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Internal Layout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/showInMapButton"
+            android:layout_marginTop="0dp"
             android:layout_marginLeft="8dp"
-            app:layout_constraintTop_toTopOf="@+id/showInMapButton"
-            android:layout_marginTop="0dp" />
+            android:text="View Internal Layout"
+            app:layout_constraintTop_toTopOf="@+id/button_show_in_map"
+            app:layout_constraintLeft_toRightOf="@+id/button_show_in_map"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/text_gen_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
             android:text="General Information"
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
 
     </android.support.constraint.ConstraintLayout>

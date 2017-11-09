@@ -1,7 +1,6 @@
 package com.example.vi_tu.gtinteractive;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -72,7 +70,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        buildingImageView = (ImageView) findViewById(R.id.buildingImageView);
+        buildingImageView = (ImageView) findViewById(R.id.image_building_picture);
 
         context = this;
 
@@ -161,33 +159,33 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                 default: // info (e.g. sectionNum = 0)
                     rootView = inflater.inflate(R.layout.fragment_building_details_info, container, false);
 
-                    TextView idTextView = rootView.findViewById(R.id.idText);
-                    TextView buildingIdTextView = rootView.findViewById(R.id.buildingIdText);
-                    TextView nameTextView = rootView.findViewById(R.id.nameText);
-                    TextView imageURLTextView = rootView.findViewById(R.id.imageURLText);
-                    TextView websiteURLTextView = rootView.findViewById(R.id.websiteURLText);
-                    TextView phoneNumTextView = rootView.findViewById(R.id.phoneNumText);
-                    TextView streetTextView = rootView.findViewById(R.id.streetText);
-                    TextView cityTextView = rootView.findViewById(R.id.cityText);
-                    TextView stateTextView = rootView.findViewById(R.id.stateText);
-                    TextView postalCodeTextView = rootView.findViewById(R.id.postalCodeText);
-                    TextView latitudeTextView = rootView.findViewById(R.id.latitudeText);
-                    TextView longitudeTextView = rootView.findViewById(R.id.longitudeText);
-                    TextView polygonsTextView = rootView.findViewById(R.id.polygonsText);
-                    TextView descriptionTextView = rootView.findViewById(R.id.descriptionText);
-                    TextView locatedInTextView = rootView.findViewById(R.id.locatedInText);
-                    TextView yelpIDTextView = rootView.findViewById(R.id.yelpIDText);
-                    TextView openTimesTextView = rootView.findViewById(R.id.openTimesText);
-                    TextView closeTimesTextView = rootView.findViewById(R.id.closeTimesText);
-                    TextView acceptsBuzzFundsTextView = rootView.findViewById(R.id.acceptsBuzzFundsText);
-                    TextView priceLevelTextView = rootView.findViewById(R.id.priceLevelText);
-                    TextView categoryTextVew = rootView.findViewById(R.id.categoryText);
-                    TextView altNamesTextVew = rootView.findViewById(R.id.altNamesText);
-                    TextView nameTokensTextView = rootView.findViewById(R.id.nameTokensText);
-                    TextView addressTokensTextVew = rootView.findViewById(R.id.addressTokensText);
-                    TextView numFloorsTextView = rootView.findViewById(R.id.numFloorsText);
-                    Button showInMapButton = rootView.findViewById(R.id.showInMapButton);
-                    Button viewInternalLayoutButton = rootView.findViewById(R.id.viewInternalLayoutButton);
+                    TextView idTextView = rootView.findViewById(R.id.text_id);
+                    TextView buildingIdTextView = rootView.findViewById(R.id.text_building_id);
+                    TextView nameTextView = rootView.findViewById(R.id.text_name);
+                    TextView imageURLTextView = rootView.findViewById(R.id.text_image_url);
+                    TextView websiteURLTextView = rootView.findViewById(R.id.text_website_url);
+                    TextView phoneNumTextView = rootView.findViewById(R.id.text_phone_number);
+                    TextView streetTextView = rootView.findViewById(R.id.text_street);
+                    TextView cityTextView = rootView.findViewById(R.id.text_city);
+                    TextView stateTextView = rootView.findViewById(R.id.text_state);
+                    TextView postalCodeTextView = rootView.findViewById(R.id.text_postal_code);
+                    TextView latitudeTextView = rootView.findViewById(R.id.text_latitude);
+                    TextView longitudeTextView = rootView.findViewById(R.id.text_longitude);
+                    TextView polygonsTextView = rootView.findViewById(R.id.text_polygons);
+                    TextView descriptionTextView = rootView.findViewById(R.id.text_description);
+                    TextView locatedInTextView = rootView.findViewById(R.id.text_located_in);
+                    TextView yelpIDTextView = rootView.findViewById(R.id.text_yelp_id);
+                    TextView openTimesTextView = rootView.findViewById(R.id.text_open_times);
+                    TextView closeTimesTextView = rootView.findViewById(R.id.text_close_times);
+                    TextView acceptsBuzzFundsTextView = rootView.findViewById(R.id.text_accepts_buzz_funds);
+                    TextView priceLevelTextView = rootView.findViewById(R.id.text_price_level);
+                    TextView categoryTextVew = rootView.findViewById(R.id.text_category);
+                    TextView altNamesTextVew = rootView.findViewById(R.id.text_alt_names);
+                    TextView nameTokensTextView = rootView.findViewById(R.id.text_name_tokens);
+                    TextView addressTokensTextVew = rootView.findViewById(R.id.text_address_tokens);
+                    TextView numFloorsTextView = rootView.findViewById(R.id.text_num_floors);
+                    Button showInMapButton = rootView.findViewById(R.id.button_show_in_map);
+                    Button viewInternalLayoutButton = rootView.findViewById(R.id.button_view_internal_layout);
 
                     idTextView.setText(String.valueOf(b.getId()));
                     buildingIdTextView.setText(b.getBuildingId());
