@@ -28,65 +28,9 @@ import java.util.List;
 public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_TYPE_PLACE = 0;
     private static final int ITEM_TYPE_EVENT = 1;
-    private List<Entity> entityList;
+    private List<? extends Entity> entityList;
 
-    public EntityAdapter(List<Entity> eList) { this.entityList = eList; }
-
-//    private static class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        public TextView placeNameView;
-//        public int placeId;
-//
-//        public PlaceViewHolder(View view) {
-//            super(view);
-//            placeNameView = view.findViewById(R.id.tv_label);
-//            placeId = -1;
-//            view.setOnClickListener(this);
-//        }
-//
-//        public void onClick(View view) {
-//            Context context = view.getContext();
-//            Intent mapActivityIntent = new Intent(context, MapActivity.class);
-//            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
-//            mapActivityIntent.putExtra(Arguments.OBJECT_ID, placeId);
-//            context.startActivity(mapActivityIntent);
-//        }
-//        public void setPlaceId(Integer placeId) {
-//            this.placeId = placeId;
-//        }
-//
-//    }
-//
-//    private static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        public TextView eventNameView;
-//        public TextView categoryView;
-//        public TextView dateView;
-//        public TextView locationView;
-//
-//        public int objectId;
-//
-//        public EventViewHolder (View view) {
-//            super(view);
-//            eventNameView = view.findViewById(R.id.tv_label);
-//            categoryView = view.findViewById(R.id.tv_category);
-//            dateView = view.findViewById(R.id.tv_date);
-//            locationView = view.findViewById(R.id.tv_location);
-//            objectId = -1;
-//            view.setOnClickListener(this);
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            Context context = view.getContext();
-//            Intent mapActivityIntent = new Intent(context, MapActivity.class);
-//            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.EVENT);
-//            mapActivityIntent.putExtra(Arguments.OBJECT_ID, objectId);
-//            context.startActivity(mapActivityIntent);
-//        }
-//
-//        public void setObjectId(int objectId) {
-//            this.objectId = objectId;
-//        }
-//    }
+    public EntityAdapter(List<? extends Entity> eList) { this.entityList = eList; }
 
     @Override
     public int getItemViewType(int position) {
@@ -153,7 +97,7 @@ public class EntityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return entityList.size();
     }
 
-    public void setData(List<Entity> eList) {
+    public void setData(List<? extends Entity> eList) {
         this.entityList = eList;
         notifyDataSetChanged();
     }
