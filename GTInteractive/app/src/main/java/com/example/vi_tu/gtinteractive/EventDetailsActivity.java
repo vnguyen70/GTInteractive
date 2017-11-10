@@ -2,6 +2,7 @@ package com.example.vi_tu.gtinteractive;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -80,6 +81,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         allDayTextView.setText(String.valueOf(e.getAllDay()));
         recurringTextView.setText(String.valueOf(e.getRecurring()));
         categoriesTextView.setText(categories);
+//        for(int i = 0; i < categories.length(); i++) {
+//            categoriesTextView.setTextColor(Color.parseColor("#" + e.getCategories().get(i).getColor()));
+//        }
         buildingIdTextView.setText(e.getBuildingId());
 
         final Building b = buildingsDB.findByBuildingId(e.getBuildingId());
