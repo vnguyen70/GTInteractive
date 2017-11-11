@@ -36,10 +36,12 @@ import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import org.joda.time.LocalTime;
+
+import java.util.Arrays;
 import java.util.List;
 
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializePolygons;
-import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 
 //import com.squareup.picasso.Picasso;
 
@@ -237,8 +239,8 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                     descriptionTextView.setText(p.getDescription());
                     locatedInTextView.setText(p.getLocatedIn());
                     yelpIDTextView.setText(p.getYelpID());
-                    openTimesTextView.setText(serializeTimes(p.getOpenTimes()));
-                    closeTimesTextView.setText(serializeTimes(p.getCloseTimes()));
+//                    openTimesTextView.setText(serializeTimes(p.getOpenTimes()));
+//                    closeTimesTextView.setText(serializeTimes(p.getCloseTimes()));
                     acceptsBuzzFundsTextView.setText(String.valueOf(p.getAcceptsBuzzFunds()));
                     priceLevelTextView.setText(String.valueOf(p.getPriceLevel()));
                     categoryTextView.setText(p.getCategory().name());
@@ -268,15 +270,20 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                         }
                     }
 
-                    if(p.getOpenTimes() != null && p.getCloseTimes() != null
-                            && !p.getOpenTimes().toString().startsWith("NULL")
-                            && !p.getCloseTimes().toString().startsWith("NULL")) {
-                        openTimesLine.setVisibility(View.VISIBLE);
-                        hoursIcon.setVisibility(View.VISIBLE);
-                        openTimesTextView.setVisibility(View.VISIBLE);
-                        closeTimesTextView.setVisibility(View.VISIBLE);
-                        openTimesTextView.setText("N/A");
-                        closeTimesTextView.setText("");
+                    openTimesLine.setVisibility(View.VISIBLE);
+                    hoursIcon.setVisibility(View.VISIBLE);
+                    openTimesTextView.setVisibility(View.VISIBLE);
+                    closeTimesTextView.setVisibility(View.VISIBLE);
+
+                    Log.d("TEST", Arrays.asList(p.getOpenTimes()).toString());
+                    Log.d("TEST", Arrays.asList(p.getCloseTimes()).toString());
+
+                    LocalTime openTime = p.getOpenTimes()[1];  // TODO: this only shows Monday
+                    LocalTime closeTime = p.getCloseTimes()[1];  // TODO: this only shows Monday
+
+                    if(openTime != null && closeTime != null) {
+                        openTimesTextView.setText(openTime.toString("hh:mm a"));
+                        closeTimesTextView.setText(closeTime.toString("hh:mm a"));
                     }
 
                     if(p.getPhoneNum() != null && p.getPhoneNum().startsWith("+")) {
