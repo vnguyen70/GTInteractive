@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasePersistence<T> {
+public abstract class BasePersistence<T> {
 
     SQLiteDatabase db;
     String tableName;
@@ -108,12 +108,8 @@ public class BasePersistence<T> {
         return tList;
     }
 
-    T toDomain(Cursor c) {
-        return null;
-    }
+    abstract T toDomain(Cursor c);
 
-    ContentValues toContentValues(T t) {
-        return new ContentValues();
-    }
+    abstract ContentValues toContentValues(T t);
 
 }

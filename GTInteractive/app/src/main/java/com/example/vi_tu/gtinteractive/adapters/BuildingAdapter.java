@@ -31,7 +31,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
 
     @Override
     public BuildingViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new BuildingViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_list_item, viewGroup, false));
+        return new BuildingViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_building_search, viewGroup, false));
     }
 
     @Override

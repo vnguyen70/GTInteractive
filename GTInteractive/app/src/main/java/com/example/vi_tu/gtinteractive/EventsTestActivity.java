@@ -12,17 +12,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.vi_tu.gtinteractive.domain.Building;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.rest.BaseDAO;
+import com.example.vi_tu.gtinteractive.rest.BuildingDAO;
+import com.example.vi_tu.gtinteractive.rest.EventDAO;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
-import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
+import com.example.vi_tu.gtinteractive.utilities.NetworkUtilsTemp;
 
 import org.joda.time.DateTime;
 
 import java.util.List;
+
+import static com.example.vi_tu.gtinteractive.constants.Constants.BUILDINGS_CACHE_EXPIRATION_MS_KEY;
+import static com.example.vi_tu.gtinteractive.constants.Constants.EVENTS_CACHE_EXPIRATION_MS_KEY;
 
 public class EventsTestActivity extends AppCompatActivity implements NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
@@ -31,11 +39,15 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     private EventPersistence eventsDB;
     private BuildingPersistence buildingsDB;
 
-    private NetworkUtils networkUtils;
+    private NetworkUtilsTemp networkUtilsTemp;
 
     public static final String REQUEST_TAG = "EventsTestActivity";
 
     private static final long EVENTS_CACHE_DURATION_MS = 86400000; // number of milliseconds in 1 day
+
+    SharedPreferences prefs;
+
+    EventDAO eventDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +64,23 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         eventsDB = new EventPersistence(db);
         buildingsDB = new BuildingPersistence(db);
 
-        networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
+        networkUtilsTemp = new NetworkUtilsTemp(getApplicationContext(), getFragmentManager());
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        long nowMS = DateTime.now().getMillis();
-        long eventsCacheExpiredMS = sharedPreferences.getLong("eventsCacheExpiredMS", 0);
-
-        if (nowMS >= eventsCacheExpiredMS) {
-            networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong("eventsCacheExpiredMS", nowMS + EVENTS_CACHE_DURATION_MS);
-            editor.apply();
-        } else {
-            Log.d("NETWORK_TEST", "events already loaded");
-        }
+        eventDAO = new EventDAO(this, new BaseDAO.Listener<Event>() {
+            @Override
+            public void onDAOError(BaseDAO.Error error) {
+                Toast.makeText(EventsTestActivity.this, "EventDAO error", Toast.LENGTH_SHORT).show(); // TODO: error handling
+            }
+            @Override
+            public void onListReady(List<Event> events) {
+                displayResults();
+                Toast.makeText(EventsTestActivity.this, "Events Loaded", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onObjectReady(Event event) {}
+        });
 
     }
 
@@ -80,9 +94,6 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
@@ -91,10 +102,12 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
-                networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+                eventDAO.getAllAsync();
+//                networkUtilsTemp.loadEventsFromAPI(eventsDB, buildingsDB);
                 return true;
             case R.id.action_clear:
                 eventsDB.deleteAll();
+                prefs.edit().putLong(EVENTS_CACHE_EXPIRATION_MS_KEY, 0).apply();
                 displayResults();
                 return true;
             default:
@@ -126,7 +139,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     @Override
     public void onDialogPositiveClick(DialogInterface dialog) {
         tvEventsTest.setText("");
-        networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+        networkUtilsTemp.loadEventsFromAPI(eventsDB, buildingsDB);
     }
 
     @Override

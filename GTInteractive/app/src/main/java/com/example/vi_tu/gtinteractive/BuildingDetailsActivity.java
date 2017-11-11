@@ -1,7 +1,6 @@
 package com.example.vi_tu.gtinteractive;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -33,8 +32,7 @@ import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
-import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
-import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
+import com.example.vi_tu.gtinteractive.utilities.NetworkUtilsTemp;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -54,7 +52,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
     private BuildingPersistence buildingsDB;
     private EventPersistence eventsDB;
 
-    private NetworkUtils networkUtils;
+    private NetworkUtilsTemp networkUtilsTemp;
 
     private int objectId;
     private static Building b; // building to display
@@ -91,7 +89,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         }
         Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
         Log.d("BuildingDetailsActivity", "hello " + b.getBuildingId());
-        networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
+        networkUtilsTemp = new NetworkUtilsTemp(getApplicationContext(), getFragmentManager());
 
         // Initializing animated scroll for the toolbar
         CollapsingToolbarLayout collapsingToolBarLayout

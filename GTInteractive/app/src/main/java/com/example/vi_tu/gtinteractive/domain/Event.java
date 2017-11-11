@@ -2,7 +2,10 @@ package com.example.vi_tu.gtinteractive.domain;
 
 import android.provider.BaseColumns;
 
+import com.example.vi_tu.gtinteractive.constants.Constants;
+
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,8 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class Event extends Entity {
 
+    public static final String BASE_URL = Constants.BASE_URL + "/events/day/";
+
     public static final Event DUMMY = Event.builder()
             .eventId("DUMMY")
             .title("Event Info Not Available")
@@ -31,6 +36,11 @@ public class Event extends Entity {
             .categories(new ArrayList<Category>())
             .buildingId("DUMMY")
             .build();
+
+    public static String getBaseUrl() {
+        LocalDate today = new LocalDate();
+        return BASE_URL + today.getYear() + "/" + today.getMonthOfYear() + "/" + today.getDayOfMonth();
+    }
 
     Integer id;
 

@@ -46,7 +46,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
         return findMany(Building.Contract.COLUMN_CATEGORY + " = " + category.name()); // TODO: doesn't find "Other" category
     }
 
-    public String findBuildingIdByLocation(String location) {
+    public Building findBuildingByLocation(String location) {
 
         Map<String, Integer> buildingScores = new HashMap<>();
         List<String> bestMatches;
@@ -56,7 +56,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
         location = location.trim();
         String buildingId = Building.shortcuts.get(location);
         if (buildingId != null) {
-            return buildingId;
+            return findByBuildingId(buildingId);
         }
 
         // Step 2: tokenize location and check for keywords indicating address
@@ -118,7 +118,7 @@ public class BuildingPersistence extends BasePersistence<Building> {
 
             bestMatches = getBestMatches(buildingScores);
             if (bestMatches.size() == 1) {
-                return bestMatches.get(0);
+                return findByBuildingId(bestMatches.get(0));
             }
         }
 
@@ -153,14 +153,15 @@ public class BuildingPersistence extends BasePersistence<Building> {
 
         bestMatches = getBestMatches(buildingScores);
         if (bestMatches.size() == 1) {
-            buildingId = bestMatches.get(0);
+            return findByBuildingId(bestMatches.get(0));
         } else if (bestMatches.size() > 1) {
-            buildingId = "MANY: " + bestMatches.toString();
+            return null;
+//            buildingId = "MANY: " + bestMatches.toString();
         } else {
-            buildingId = "NONE";
+            return null;
+//            buildingId = "NONE";
         }
 
-        return buildingId;
     }
 
     /******** Helper Functions ********************************************************************/

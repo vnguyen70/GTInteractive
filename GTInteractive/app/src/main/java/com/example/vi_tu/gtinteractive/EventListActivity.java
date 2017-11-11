@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -78,7 +77,7 @@ public class EventListActivity extends AppCompatActivity implements ListView.OnI
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.filter_list_item, drawerItems));
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.fragment_filter_checkbox, drawerItems));
         drawerList.setOnItemClickListener(this);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 

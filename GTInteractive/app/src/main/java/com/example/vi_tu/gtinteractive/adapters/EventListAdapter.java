@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_list_item, viewGroup, false));
+        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_building_search, viewGroup, false));
     }
 
     @Override

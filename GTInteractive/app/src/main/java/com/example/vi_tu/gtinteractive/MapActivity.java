@@ -3,7 +3,6 @@ package com.example.vi_tu.gtinteractive;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,7 +11,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,14 +24,16 @@ import android.widget.Toast;
 
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.Constants;
+import com.example.vi_tu.gtinteractive.constants.SingletonProvider;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
 import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Entity;
 import com.example.vi_tu.gtinteractive.domain.Event;
 import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
-import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.rest.BaseDAO;
+import com.example.vi_tu.gtinteractive.rest.BuildingDAO;
+import com.example.vi_tu.gtinteractive.rest.EventDAO;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -106,6 +106,16 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     boolean buttonsShown;
     boolean polygonsShown;
 
+    // data
+    BuildingDAO buildingDAO;
+    EventDAO eventDAO;
+
+    // flags to sync map / data handling
+    boolean mapReady;
+    boolean buildingDataReady;
+    boolean eventDataReady;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,23 +124,51 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // persistence
-        PersistenceHelper dbHelper = new PersistenceHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
-        eventsDB = new EventPersistence(db);
-        bList = buildingsDB.getAll(); // TODO: move to AsyncTask
-        eList = eventsDB.getAll(); // TODO: move to AsyncTask
+        // initialization
+        SingletonProvider.setContext(getApplicationContext());
 
-        // context
-        Intent i = getIntent();
-        view = i.getIntExtra(Arguments.DEFAULT_VIEW, -1);
-        objectId = i.getIntExtra(Arguments.OBJECT_ID, -1);
+        // data
+        buildingDAO = new BuildingDAO(this, new BaseDAO.Listener<Building>() {
+            @Override
+            public void onDAOError(BaseDAO.Error error) {
+                Toast.makeText(MapActivity.this, "BuildingDAO error", Toast.LENGTH_SHORT).show(); // TODO: error handling
+            }
+
+            @Override
+            public void onListReady(List<Building> buildings) {
+                bList = buildings;
+                buildingDataReady = true;
+                handleMapAndDataReady();
+            }
+
+            @Override
+            public void onObjectReady(Building building) {
+
+            }
+        });
+        eventDAO = new EventDAO(this, new BaseDAO.Listener<Event>() {
+            @Override
+            public void onDAOError(BaseDAO.Error error) {
+                Toast.makeText(MapActivity.this, "EventDAO error", Toast.LENGTH_SHORT).show(); // TODO: error handling
+            }
+
+            @Override
+            public void onListReady(List<Event> events) {
+                eList = events;
+                eventDataReady = true;
+                handleMapAndDataReady();
+            }
+
+            @Override
+            public void onObjectReady(Event event) {
+
+            }
+        });
 
         // navigation drawer
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerList = findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItems));
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.item_nav_drawer, drawerItems));
         drawerList.setOnItemClickListener(this);
 
         // buttons
@@ -267,7 +305,21 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 parkingOverlay.setVisible(!parkingOverlay.isVisible());
             }
         });
+
+        // retrieve data
+        handleIntent(getIntent());
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        view = intent.getIntExtra(Arguments.DEFAULT_VIEW, -1);
+        objectId = intent.getIntExtra(Arguments.OBJECT_ID, -1);
+    }
+
 
     /**
      * Manipulates the map once available.
@@ -295,13 +347,6 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         eventMarkers = new HashMap<>();
         highlighted = new ArrayList<>();
 
-        for (Building b : bList) {
-            addBuildingPolygons(b);
-            addBuildingMarker(b);
-        }
-        for (Event e : eList) {
-            addEventMarker(e);
-        }
         parkingOverlay = googleMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.parking_map))
                 .position(new LatLng(33.777450, -84.397840), 2260f) // TODO: alignment
@@ -312,19 +357,36 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             e.printStackTrace();
         }
 
-        switch (view) {
-            case ViewType.BUILDING:
-                showBuildingsOverlay();
-                break;
-            case ViewType.EVENT:
-                showEventsOverlay();
-                break;
-            case ViewType.PARKING:
-                showParkingOverlay();
-            case ViewType.PRINTERS:
-                showPrintersOverlay();
-            default:
-                showBuildingsOverlay(); // TODO: default view for now
+        mapReady = true;
+
+        buildingDAO.getAllAsync();
+        eventDAO.getAllAsync();
+    }
+
+    private void handleMapAndDataReady() {
+        if (mapReady && buildingDataReady && eventDataReady) {
+            for (Building b : bList) {
+                addBuildingPolygons(b);
+                addBuildingMarker(b);
+            }
+            for (Event e : eList) {
+                addEventMarker(e);
+            }
+
+            switch (view) {
+                case ViewType.BUILDING:
+                    showBuildingsOverlay();
+                    break;
+                case ViewType.EVENT:
+                    showEventsOverlay();
+                    break;
+                case ViewType.PARKING:
+                    showParkingOverlay();
+                case ViewType.PRINTERS:
+                    showPrintersOverlay();
+                default:
+                    showBuildingsOverlay(); // TODO: default view for now
+            }
         }
     }
 
@@ -359,7 +421,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private Marker addEventMarker(Event e) {
         String buildingId = e.getBuildingId();
-        Building b = buildingsDB.findByBuildingId(buildingId);
+        Building b = buildingDAO.getCache().findByBuildingId(buildingId);
         LatLng ll = new LatLng(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
         if (b != null) {
             ll = new LatLng(b.getLatitude(), b.getLongitude());

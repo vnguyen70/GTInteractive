@@ -30,7 +30,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_card, viewGroup, false));
+        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_event, viewGroup, false));
     }
 
     @Override

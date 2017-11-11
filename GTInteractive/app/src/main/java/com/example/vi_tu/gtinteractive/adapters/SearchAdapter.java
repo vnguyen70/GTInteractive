@@ -80,9 +80,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         Log.d("SearchAdapter", "onCreateViewHolder");
         if (viewType == ITEM_TYPE_BUILDING) {
-            return new BuildingViewHolder(layoutInflater.inflate(R.layout.search_list_item, parent, false));
+            return new BuildingViewHolder(layoutInflater.inflate(R.layout.item_building_search, parent, false));
         } else if (viewType == ITEM_TYPE_EVENT){
-            return new EventViewHolder(layoutInflater.inflate(R.layout.event_card, parent, false));
+            return new EventViewHolder(layoutInflater.inflate(R.layout.item_event, parent, false));
         }
         return null;
     }

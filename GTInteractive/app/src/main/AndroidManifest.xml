@@ -48,37 +48,45 @@
         <activity
             android:name=".BuildingsTestActivity"
             android:label="@string/title_activity_buildings_test"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EventsTestActivity"
             android:label="@string/title_activity_events_test"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BuildingDetailsActivity"
             android:label="@string/title_activity_building_details"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BuildingListActivity"
             android:label="Building List"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity" />
         <activity
             android:name=".EventDetailsActivity"
             android:label="@string/title_activity_event_details"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity" />
         <activity
             android:name=".EventListActivity"
             android:label="Event List"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity" />
         <activity
             android:name=".InternalMapActivity"
             android:label="@string/title_activity_internal_map"
+            android:launchMode="singleTop"
             android:parentActivityName=".BuildingDetailsActivity" />
         <activity
             android:name=".AllSearchActivity"
             android:label="@string/title_activity_building_search"
+            android:launchMode="singleTop"
             android:parentActivityName=".MapActivity" />
         <activity android:name=".SearchableActivity">
             <intent-filter>
@@ -88,10 +96,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <!-- <provider -->
-        <!-- android:name=".temp.SuggestionProvider" -->
-        <!-- android:authorities="com.example.SuggestionProvider2" /> -->
 
     </application>
 

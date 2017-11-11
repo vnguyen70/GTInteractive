@@ -1,13 +1,13 @@
 package com.example.vi_tu.gtinteractive.domain;
 
+import lombok.Getter;
+
 /**
  * Created by Rayner on 10/8/17.
  */
 
-public class Entity {
-    Integer id;
+public abstract class Entity {
 
-    public Integer getId() {
-        return id;
-    }
+    @Getter Integer id;
+
 }

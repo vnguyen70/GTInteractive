@@ -26,6 +26,8 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class Building extends Entity {
 
+    public static final String BASE_URL = Constants.BASE_URL + "/places";
+
     public static final Map<String, String> shortcuts = Collections.unmodifiableMap(
             new HashMap<String, String>() {{
                 put("Georgia Tech Campus", "GEORGIA_TECH_CAMPUS");
@@ -59,12 +61,11 @@ public class Building extends Entity {
             .numFloors(0)
             .build();
 
-    Integer id; // default = null
-
-    @Override
-    public Integer getId() {
-        return id;
+    public static String getBaseUrl() {
+        return BASE_URL;
     }
+
+    Integer id; // default = null
 
     /**
      * From API: https://gtapp-api.rnoc.gatech.edu/api/v1/places

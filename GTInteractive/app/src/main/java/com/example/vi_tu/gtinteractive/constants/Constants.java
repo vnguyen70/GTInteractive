@@ -11,4 +11,12 @@ public class Constants {
     public static final double DEFAULT_LATITUDE = 33.774637; // Tech Green by default
     public static final double DEFAULT_LONGITUDE = -84.397321; // Tech Green by default
 
+    public static final String HOST_NAME = "https://gtapp-api.rnoc.gatech.edu";
+    public static final String BASE_URL = HOST_NAME + "/api/v1";
+
+    public static final long BUILDINGS_CACHE_DURATION_MS = 86400000; // milliseconds in one day
+    public static final long EVENTS_CACHE_DURATION_MS = 86400000; // milliseconds in one day
+
+    public static final String BUILDINGS_CACHE_EXPIRATION_MS_KEY = "buildingsCacheExpirationMS";
+    public static final String EVENTS_CACHE_EXPIRATION_MS_KEY = "eventsCacheExpirationMS";
 }

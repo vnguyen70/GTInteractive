@@ -29,12 +29,12 @@ import java.util.List;
 
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.deserializePolygons;
 
-public class NetworkUtils {
+public class NetworkUtilsTemp {
 
     Context context;
     FragmentManager fragmentManager;
 
-    public NetworkUtils(Context context, FragmentManager fragmentManager) {
+    public NetworkUtilsTemp(Context context, FragmentManager fragmentManager) {
         this.context = context;
         this.fragmentManager = fragmentManager;
     }
@@ -200,7 +200,7 @@ public class NetworkUtils {
                     int millisStart = o.optInt("startDate") * 1000;
                     int millisEnd = o.optInt("endDate") * 1000;
                     String location = o.getString("location");
-                    String buildingId = buildingsDB.findBuildingIdByLocation(location);
+                    Building b = buildingsDB.findBuildingByLocation(location); // building matching algorithm
                     List<Event.Category> categories = new ArrayList<>();
                     JSONArray categoriesJSON = o.getJSONArray("tags");
                     for (int j = 0; j < categoriesJSON.length(); j++) {
@@ -219,7 +219,7 @@ public class NetworkUtils {
                             .allDay(o.optBoolean("allDay"))
                             .recurring(o.optBoolean("recurring"))
                             .categories(categories)
-                            .buildingId(buildingId)
+                            .buildingId(b != null ? b.getBuildingId() : "")
                             .build();
                     eList.add(e);
                 }
