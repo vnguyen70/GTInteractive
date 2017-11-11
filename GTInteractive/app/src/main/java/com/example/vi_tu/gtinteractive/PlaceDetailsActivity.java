@@ -3,6 +3,9 @@ package com.example.vi_tu.gtinteractive;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -24,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
+import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
@@ -35,8 +39,11 @@ import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.util.List;
 
+import static android.R.color.white;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializePolygons;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 
@@ -87,8 +94,10 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         if (temp != null) {
             p = temp;
         }
+
         Picasso.with(this).load(p.getImageURL()).fit().into(placeImageView); // TODO: store the bitmaps into database and load image from database
         Log.d("PlaceDetailsActivity", "hello " + p.getPlaceId());
+
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
 
         // Initializing animated scroll for the toolbar
@@ -97,6 +106,8 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         collapsingToolBarLayout.setTitle(p.getName());
 
         eList = eventsDB.getAll();
+
+        // Logic to see if place has any events currently going on here
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -154,7 +165,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.fragment_place_details_event, container, false);
                     RecyclerView eventsView = rootView.findViewById(R.id.eventsRecyclerView);
                     eventsView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                    eventsView.setAdapter(new EventAdapter(eList));
+                    eventsView.setAdapter(new EventListAdapter(eList));
                     break;
                 default: // info (e.g. sectionNum = 0)
                     rootView = inflater.inflate(R.layout.fragment_place_details_info, container, false);
@@ -179,13 +190,42 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                     TextView closeTimesTextView = rootView.findViewById(R.id.closeTimesText);
                     TextView acceptsBuzzFundsTextView = rootView.findViewById(R.id.acceptsBuzzFundsText);
                     TextView priceLevelTextView = rootView.findViewById(R.id.priceLevelText);
-                    TextView categoryTextVew = rootView.findViewById(R.id.categoryText);
-                    TextView altNamesTextVew = rootView.findViewById(R.id.altNamesText);
+                    TextView categoryTextView = rootView.findViewById(R.id.categoryText);
+                    TextView altNamesTextView = rootView.findViewById(R.id.altNamesText);
                     TextView nameTokensTextView = rootView.findViewById(R.id.nameTokensText);
-                    TextView addressTokensTextVew = rootView.findViewById(R.id.addressTokensText);
+                    TextView addressTokensTextView = rootView.findViewById(R.id.addressTokensText);
                     TextView numFloorsTextView = rootView.findViewById(R.id.numFloorsText);
-                    Button showInMapButton = rootView.findViewById(R.id.showInMapButton);
+                    Button showInMapButton = rootView.findViewById(R.id.location_listener);
                     Button viewInternalLayoutButton = rootView.findViewById(R.id.viewInternalLayoutButton);
+
+                    View placeIdLine = rootView.findViewById(R.id.line_placeIdText);
+                    View nameLine = rootView.findViewById(R.id.line_nameText);
+                    View imageURLLine = rootView.findViewById(R.id.line_imageURLText);
+                    View addressLine = rootView.findViewById(R.id.line_addressText);
+                    View openTimesLine = rootView.findViewById(R.id.line_openTimesText);
+                    View phoneNumLine = rootView.findViewById(R.id.line_phoneNumText);
+                    View websiteURLLine = rootView.findViewById(R.id.line_websiteURLText);
+                    View categoryLine = rootView.findViewById(R.id.line_categoryText);
+                    View latitudeLine = rootView.findViewById(R.id.line_latitudeText);
+                    View polygonLine = rootView.findViewById(R.id.line_polygonText);
+                    View descriptionLine = rootView.findViewById(R.id.line_descriptionText);
+                    View yelpIDLine = rootView.findViewById(R.id.line_yelpIDText);
+                    View acceptsBuzzFundsLine = rootView.findViewById(R.id.line_acceptsBuzzFundsText);
+                    View priceLevelLine = rootView.findViewById(R.id.line_priceLevelText);
+                    View altNamesLine = rootView.findViewById(R.id.line_altNamesText);
+                    View nameTokensLine = rootView.findViewById(R.id.line_nameTokensText);
+                    View addressTokensLine = rootView.findViewById(R.id.line_addressTokensText);
+                    View numFloorsLine = rootView.findViewById(R.id.line_numFloorsText);
+
+                    ImageView nameIcon = rootView.findViewById(R.id.image_name);
+                    ImageView addressIcon = rootView.findViewById(R.id.image_address);
+                    ImageView hoursIcon = rootView.findViewById(R.id.image_hours);
+                    ImageView phoneIcon = rootView.findViewById(R.id.image_phone);
+                    ImageView websiteIcon = rootView.findViewById(R.id.image_website);
+                    ImageView categoryIcon = rootView.findViewById(R.id.image_category);
+                    ImageView descriptionIcon = rootView.findViewById(R.id.image_description);
+                    ImageView buzzfundsIcon = rootView.findViewById(R.id.image_buzzfunds);
+                    ImageView priceIcon = rootView.findViewById(R.id.image_price);
 
                     idTextView.setText(String.valueOf(p.getId()));
                     placeIdTextView.setText(p.getPlaceId());
@@ -207,14 +247,94 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                     closeTimesTextView.setText(serializeTimes(p.getCloseTimes()));
                     acceptsBuzzFundsTextView.setText(String.valueOf(p.getAcceptsBuzzFunds()));
                     priceLevelTextView.setText(String.valueOf(p.getPriceLevel()));
-                    categoryTextVew.setText(p.getCategory().name());
-                    altNamesTextVew.setText(p.getAltNames());
+                    categoryTextView.setText(p.getCategory().name());
+                    altNamesTextView.setText(p.getAltNames());
                     nameTokensTextView.setText(p.getNameTokens());
-                    addressTokensTextVew.setText(p.getAddressTokens());
+                    addressTokensTextView.setText(p.getAddressTokens());
                     numFloorsTextView.setText(String.valueOf(p.getNumFloors()));
 
+                    if(p.getName() != null) {
+//                        nameLine.setVisibility(View.VISIBLE);
+                        nameIcon.setVisibility(View.VISIBLE);
+                        nameTextView.setVisibility(View.VISIBLE);
+                        viewInternalLayoutButton.setVisibility(View.VISIBLE);
+                    }
+
+                    if(p.getStreet() != null || p.getLocatedIn() != null) {
+                        addressLine.setVisibility(View.VISIBLE);
+                        addressIcon.setVisibility(View.VISIBLE);
+                        if(p.getStreet() != null) {
+                            streetTextView.setVisibility(View.VISIBLE);
+                            cityTextView.setVisibility(View.VISIBLE);
+                            stateTextView.setVisibility(View.VISIBLE);
+                            postalCodeTextView.setVisibility(View.VISIBLE);
+                            showInMapButton.setVisibility(View.VISIBLE);
+                        } else {
+                            locatedInTextView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    if(p.getOpenTimes() != null && p.getCloseTimes() != null
+                            && !p.getOpenTimes().toString().startsWith("NULL")
+                            && !p.getCloseTimes().toString().startsWith("NULL")) {
+                        openTimesLine.setVisibility(View.VISIBLE);
+                        hoursIcon.setVisibility(View.VISIBLE);
+                        openTimesTextView.setVisibility(View.VISIBLE);
+                        closeTimesTextView.setVisibility(View.VISIBLE);
+                        openTimesTextView.setText("N/A");
+                        closeTimesTextView.setText("");
+                    }
+
+                    if(p.getPhoneNum() != null && p.getPhoneNum().startsWith("+")) {
+                        phoneNumLine.setVisibility(View.VISIBLE);
+                        phoneIcon.setVisibility(View.VISIBLE);
+                        phoneNumTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(p.getWebsiteURL() != null && p.getWebsiteURL().startsWith("h")) {
+                        websiteURLLine.setVisibility(View.VISIBLE);
+                        websiteIcon.setVisibility(View.VISIBLE);
+                        websiteURLTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(p.getCategory() != null) {
+                        categoryLine.setVisibility(View.VISIBLE);
+                        categoryIcon.setVisibility(View.VISIBLE);
+                        categoryTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(p.getDescription() != null && !p.getDescription().trim().equals("")) {
+                        descriptionLine.setVisibility(View.VISIBLE);
+                        descriptionIcon.setVisibility(View.VISIBLE);
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(p.getAcceptsBuzzFunds()) {
+                        acceptsBuzzFundsLine.setVisibility(View.VISIBLE);
+                        buzzfundsIcon.setVisibility(View.VISIBLE);
+                        acceptsBuzzFundsTextView.setVisibility(View.VISIBLE);
+                        acceptsBuzzFundsTextView.setText("Accepts BuzzFunds");
+                    }
+
+                    if(p.getPriceLevel() != null && p.getCategory().name().equals("FOOD")) {
+                        priceLevelLine.setVisibility(View.VISIBLE);
+                        priceIcon.setVisibility(View.VISIBLE);
+                        priceLevelTextView.setVisibility(View.VISIBLE);
+                    }
+
                     final Place finalP = p;
+
                     showInMapButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent mapActivityIntent = new Intent(context, MapActivity.class);
+                            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, finalP.getId());
+                            startActivity(mapActivityIntent);
+                        }
+                    });
+                    streetTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
@@ -231,6 +351,32 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                             Intent internalMapIntent = new Intent(context, InternalMapActivity.class);
                             internalMapIntent.putExtra(Arguments.OBJECT_ID, p.getId());
                             startActivity(internalMapIntent);
+                        }
+                    });
+                    phoneNumTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                            callIntent.setData(Uri.parse("tel:"+ finalP.getPhoneNum()));
+                            callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(callIntent);
+                        }
+                    });
+                    websiteURLTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(finalP.getWebsiteURL()));
+                            startActivity(browserIntent);
+                        }
+                    });
+                    categoryTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent buildingListIntent = new Intent(context, PlaceListActivity.class);
+                            buildingListIntent.putExtra(Arguments.OBJECT_ID, p.getCategory().name());
+                            startActivity(buildingListIntent);
                         }
                     });
             }

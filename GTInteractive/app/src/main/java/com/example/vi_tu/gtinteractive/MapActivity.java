@@ -9,11 +9,16 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -57,9 +62,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapActivity extends FragmentActivity implements ListView.OnItemClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public static final String[] drawerItems = {"Places Test", "Events Test", "Place List", "Event List"};
+public class MapActivity extends FragmentActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final int REQUEST_LOCATION_PERMISSION = 0;
 
@@ -98,6 +102,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     DrawerLayout drawerLayout;
     ListView drawerList;
+    NavigationView navigationView;
 
     int view;
     int objectId;
@@ -129,9 +134,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
         // navigation drawer
         drawerLayout = findViewById(R.id.drawer_layout);
-        drawerList = findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItems));
-        drawerList.setOnItemClickListener(this);
+        Log.d("map activity", drawerLayout.toString());
+        //drawerList = findViewById(R.id.left_drawer);
+//        navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
+        setNavigationViewListener();
 
         // buttons
         searchBar = findViewById(R.id.searchBar);
@@ -187,10 +194,10 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         drawerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
+                if (drawerLayout.isDrawerOpen(navigationView)) {
+                    drawerLayout.closeDrawer(navigationView);
                 } else {
-                    drawerLayout.openDrawer(drawerList);
+                    drawerLayout.openDrawer(navigationView);
                 }
             }
         });
@@ -584,34 +591,71 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        switch(i) {
-            case 0: // Places Test
-                drawerLayout.closeDrawer(drawerList);
-                Intent placesTestActivityIntent = new Intent(MapActivity.this, PlaceTestActivity.class);
-                startActivity(placesTestActivityIntent);
-                break;
-            case 1: // Events Test
-                drawerLayout.closeDrawer(drawerList);
-                Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
-                startActivity(eventsTestActivityIntent);
-                break;
-            case 2: // Places List
-                drawerLayout.closeDrawer(drawerList);
-                Intent placeListActivityIntent = new Intent(MapActivity.this, PlaceListActivity.class);
-                placeListActivityIntent.putExtra("ShowMapNext", false);
-                startActivity(placeListActivityIntent);
-                break;
-            case 3: // Events List
-                drawerLayout.closeDrawer(drawerList);
-                Intent eventListActivityIntent = new Intent(MapActivity.this, EventListActivity.class);
-                startActivity(eventListActivityIntent);
-                break;
-            default:
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Log.d("navitemselect","nav item is running");
+        if (id == R.id.nav_places) {
+            drawerLayout.closeDrawer(navigationView);
+            Intent buildingListActivityIntent = new Intent(MapActivity.this, PlaceListActivity.class);
+            startActivity(buildingListActivityIntent);
+            Log.d("navplacesrun","nav_places was clicked");
+        } else if (id == R.id.nav_events) {
+            drawerLayout.closeDrawer(navigationView);
+            Intent eventListActivityIntent = new Intent(MapActivity.this, EventListActivity.class);
+            startActivity(eventListActivityIntent);
+        } else if (id == R.id.nav_place_test) {
+            drawerLayout.closeDrawer(navigationView);
+            Intent buildingsTestActivityIntent = new Intent(MapActivity.this, PlaceTestActivity.class);
+            startActivity(buildingsTestActivityIntent);
+        } else if (id == R.id.nav_event_test) {
+            drawerLayout.closeDrawer(navigationView);
+            Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
+            startActivity(eventsTestActivityIntent);
+        } else {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void setNavigationViewListener() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
     @Override
     public boolean onMarkerClick(Marker m) {
         m.showInfoWindow();

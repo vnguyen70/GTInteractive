@@ -13,7 +13,7 @@ public class PersistenceHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "persistence.db";
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 17;
 
     // Constructor
     public PersistenceHelper(Context context) {
