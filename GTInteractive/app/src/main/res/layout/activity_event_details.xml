@@ -162,7 +162,7 @@
             app:layout_constraintHorizontal_bias="0.0" />
 
         <Button
-            android:id="@+id/openBuildingDetailsButton"
+            android:id="@+id/openPlaceDetailsButton"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -170,8 +170,9 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:elevation="4dp"
-            android:text="Open Building Details"
+            android:text="Open Place Details"
             android:textAlignment="textEnd"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/locationText"
             app:layout_constraintLeft_toLeftOf="@+id/locationText"/>
 
@@ -183,7 +184,7 @@
             android:background="@android:color/darker_gray"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/openBuildingDetailsButton"
+            app:layout_constraintTop_toBottomOf="@+id/openPlaceDetailsButton"
             app:layout_constraintBottom_toTopOf="@+id/descriptionText"
             android:visibility="gone"/>
 
@@ -213,7 +214,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/openBuildingDetailsButton" />
+            app:layout_constraintTop_toBottomOf="@+id/openPlaceDetailsButton" />
 
         <TextView
             android:id="@+id/descriptionText"
@@ -449,7 +450,7 @@
             app:layout_constraintTop_toBottomOf="@+id/categoriesStatic" />
 
         <View
-            android:id="@+id/line_buildingIDText"
+            android:id="@+id/line_placeIDText"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/darker_gray"

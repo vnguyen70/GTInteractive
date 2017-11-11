@@ -133,7 +133,7 @@ public class PlacePersistence extends BasePersistence<Place> {
                 int score = 10;
                 if (t.equals("room")) { // lowest weight - can apply to any place / location
                     score = 1;
-                } else if (t.equals("georgia") || t.equals("tech") || t.equals("place") || t.equals("building") || t.equals("bldg") || t.equals("hall") || t.equals("lab")) { // low weight - can apply to nearly any place / location
+                } else if (t.equals("georgia") || t.equals("tech") || t.equals("place") || t.equals("place") || t.equals("bldg") || t.equals("hall") || t.equals("lab")) { // low weight - can apply to nearly any place / location
                     score = 3;
                 } else if (t.equals("house") || t.equals("deck") || t.equals("apartments") || t.equals("center")) { // medium weight - can apply to some places / locations
                     score = 5;

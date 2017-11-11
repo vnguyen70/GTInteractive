@@ -89,7 +89,7 @@
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_buildingIdText" />
+            app:layout_constraintTop_toBottomOf="@+id/line_placeIdText" />
 
         <TextView
             android:id="@+id/nameText"

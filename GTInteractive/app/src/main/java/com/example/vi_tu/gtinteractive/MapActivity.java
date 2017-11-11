@@ -629,8 +629,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         Log.d("navitemselect","nav item is running");
         if (id == R.id.nav_places) {
             drawerLayout.closeDrawer(navigationView);
-            Intent buildingListActivityIntent = new Intent(MapActivity.this, PlaceListActivity.class);
-            startActivity(buildingListActivityIntent);
+            Intent placeListActivityIntent = new Intent(MapActivity.this, PlaceListActivity.class);
+            startActivity(placeListActivityIntent);
             Log.d("navplacesrun","nav_places was clicked");
         } else if (id == R.id.nav_events) {
             drawerLayout.closeDrawer(navigationView);
@@ -638,8 +638,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
             startActivity(eventListActivityIntent);
         } else if (id == R.id.nav_place_test) {
             drawerLayout.closeDrawer(navigationView);
-            Intent buildingsTestActivityIntent = new Intent(MapActivity.this, PlaceTestActivity.class);
-            startActivity(buildingsTestActivityIntent);
+            Intent placesTestActivityIntent = new Intent(MapActivity.this, PlaceTestActivity.class);
+            startActivity(placesTestActivityIntent);
         } else if (id == R.id.nav_event_test) {
             drawerLayout.closeDrawer(navigationView);
             Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -26,24 +24,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
 import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.util.List;
 
-import static android.R.color.white;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializePolygons;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 
@@ -374,9 +368,9 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
-                            Intent buildingListIntent = new Intent(context, PlaceListActivity.class);
-                            buildingListIntent.putExtra(Arguments.OBJECT_ID, p.getCategory().name());
-                            startActivity(buildingListIntent);
+                            Intent placeListIntent = new Intent(context, PlaceListActivity.class);
+                            placeListIntent.putExtra(Arguments.OBJECT_ID, p.getCategory().name());
+                            startActivity(placeListIntent);
                         }
                     });
             }
