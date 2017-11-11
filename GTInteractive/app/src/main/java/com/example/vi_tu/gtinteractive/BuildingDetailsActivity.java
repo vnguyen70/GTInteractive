@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.adapters.EventAdapter;
+import com.example.vi_tu.gtinteractive.adapters.EventListAdapter;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
@@ -38,8 +41,11 @@ import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
 import com.example.vi_tu.gtinteractive.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.util.List;
 
+import static android.R.color.white;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializePolygons;
 import static com.example.vi_tu.gtinteractive.utilities.PersistenceUtils.serializeTimes;
 
@@ -90,7 +96,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         if (temp != null) {
             b = temp;
         }
-        Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // TODO: store the bitmaps into database and load image from database
+        Picasso.with(this).load(b.getImageURL()).fit().into(buildingImageView); // COMPLETE(?): store the bitmaps into database and load image from database
         Log.d("BuildingDetailsActivity", "hello " + b.getBuildingId());
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
 
@@ -100,6 +106,8 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         collapsingToolBarLayout.setTitle(b.getName());
 
         eList = eventsDB.getAll();
+
+        // Logic to see if place has any events currently going on here
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -157,7 +165,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.fragment_building_details_events, container, false);
                     RecyclerView eventsView = rootView.findViewById(R.id.eventsRecyclerView);
                     eventsView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                    eventsView.setAdapter(new EventAdapter(eList));
+                    eventsView.setAdapter(new EventListAdapter(eList));
                     break;
                 default: // info (e.g. sectionNum = 0)
                     rootView = inflater.inflate(R.layout.fragment_building_details_info, container, false);
@@ -185,10 +193,39 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     TextView categoryTextView = rootView.findViewById(R.id.categoryText);
                     TextView altNamesTextView = rootView.findViewById(R.id.altNamesText);
                     TextView nameTokensTextView = rootView.findViewById(R.id.nameTokensText);
-                    TextView addressTokensTextVew = rootView.findViewById(R.id.addressTokensText);
+                    TextView addressTokensTextView = rootView.findViewById(R.id.addressTokensText);
                     TextView numFloorsTextView = rootView.findViewById(R.id.numFloorsText);
-                    Button showInMapButton = rootView.findViewById(R.id.showInMapButton);
+                    Button showInMapButton = rootView.findViewById(R.id.location_listener);
                     Button viewInternalLayoutButton = rootView.findViewById(R.id.viewInternalLayoutButton);
+
+                    View buildingIdLine = rootView.findViewById(R.id.line_buildingIdText);
+                    View nameLine = rootView.findViewById(R.id.line_nameText);
+                    View imageURLLine = rootView.findViewById(R.id.line_imageURLText);
+                    View addressLine = rootView.findViewById(R.id.line_addressText);
+                    View openTimesLine = rootView.findViewById(R.id.line_openTimesText);
+                    View phoneNumLine = rootView.findViewById(R.id.line_phoneNumText);
+                    View websiteURLLine = rootView.findViewById(R.id.line_websiteURLText);
+                    View categoryLine = rootView.findViewById(R.id.line_categoryText);
+                    View latitudeLine = rootView.findViewById(R.id.line_latitudeText);
+                    View polygonLine = rootView.findViewById(R.id.line_polygonText);
+                    View descriptionLine = rootView.findViewById(R.id.line_descriptionText);
+                    View yelpIDLine = rootView.findViewById(R.id.line_yelpIDText);
+                    View acceptsBuzzFundsLine = rootView.findViewById(R.id.line_acceptsBuzzFundsText);
+                    View priceLevelLine = rootView.findViewById(R.id.line_priceLevelText);
+                    View altNamesLine = rootView.findViewById(R.id.line_altNamesText);
+                    View nameTokensLine = rootView.findViewById(R.id.line_nameTokensText);
+                    View addressTokensLine = rootView.findViewById(R.id.line_addressTokensText);
+                    View numFloorsLine = rootView.findViewById(R.id.line_numFloorsText);
+
+                    ImageView nameIcon = rootView.findViewById(R.id.image_name);
+                    ImageView addressIcon = rootView.findViewById(R.id.image_address);
+                    ImageView hoursIcon = rootView.findViewById(R.id.image_hours);
+                    ImageView phoneIcon = rootView.findViewById(R.id.image_phone);
+                    ImageView websiteIcon = rootView.findViewById(R.id.image_website);
+                    ImageView categoryIcon = rootView.findViewById(R.id.image_category);
+                    ImageView descriptionIcon = rootView.findViewById(R.id.image_description);
+                    ImageView buzzfundsIcon = rootView.findViewById(R.id.image_buzzfunds);
+                    ImageView priceIcon = rootView.findViewById(R.id.image_price);
 
                     idTextView.setText(String.valueOf(b.getId()));
                     buildingIdTextView.setText(b.getBuildingId());
@@ -213,8 +250,77 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     categoryTextView.setText(b.getCategory().name());
                     altNamesTextView.setText(b.getAltNames());
                     nameTokensTextView.setText(b.getNameTokens());
-                    addressTokensTextVew.setText(b.getAddressTokens());
+                    addressTokensTextView.setText(b.getAddressTokens());
                     numFloorsTextView.setText(String.valueOf(b.getNumFloors()));
+
+                    if(b.getName() != null) {
+//                        nameLine.setVisibility(View.VISIBLE);
+                        nameIcon.setVisibility(View.VISIBLE);
+                        nameTextView.setVisibility(View.VISIBLE);
+                        viewInternalLayoutButton.setVisibility(View.VISIBLE);
+                    }
+
+                    if(b.getStreet() != null || b.getLocatedIn() != null) {
+                        addressLine.setVisibility(View.VISIBLE);
+                        addressIcon.setVisibility(View.VISIBLE);
+                        if(b.getStreet() != null) {
+                            streetTextView.setVisibility(View.VISIBLE);
+                            cityTextView.setVisibility(View.VISIBLE);
+                            stateTextView.setVisibility(View.VISIBLE);
+                            postalCodeTextView.setVisibility(View.VISIBLE);
+                            showInMapButton.setVisibility(View.VISIBLE);
+                        } else {
+                            locatedInTextView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    if(b.getOpenTimes() != null && b.getCloseTimes() != null
+                            && !b.getOpenTimes().toString().startsWith("NULL")
+                            && !b.getCloseTimes().toString().startsWith("NULL")) {
+                        openTimesLine.setVisibility(View.VISIBLE);
+                        hoursIcon.setVisibility(View.VISIBLE);
+                        openTimesTextView.setVisibility(View.VISIBLE);
+                        closeTimesTextView.setVisibility(View.VISIBLE);
+                        openTimesTextView.setText("N/A");
+                        closeTimesTextView.setText("");
+                    }
+
+                    if(b.getPhoneNum() != null && b.getPhoneNum().startsWith("+")) {
+                        phoneNumLine.setVisibility(View.VISIBLE);
+                        phoneIcon.setVisibility(View.VISIBLE);
+                        phoneNumTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(b.getWebsiteURL() != null && b.getWebsiteURL().startsWith("h")) {
+                        websiteURLLine.setVisibility(View.VISIBLE);
+                        websiteIcon.setVisibility(View.VISIBLE);
+                        websiteURLTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(b.getCategory() != null) {
+                        categoryLine.setVisibility(View.VISIBLE);
+                        categoryIcon.setVisibility(View.VISIBLE);
+                        categoryTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(b.getDescription() != null && !b.getDescription().trim().equals("")) {
+                        descriptionLine.setVisibility(View.VISIBLE);
+                        descriptionIcon.setVisibility(View.VISIBLE);
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                    }
+
+                    if(b.getAcceptsBuzzFunds()) {
+                        acceptsBuzzFundsLine.setVisibility(View.VISIBLE);
+                        buzzfundsIcon.setVisibility(View.VISIBLE);
+                        acceptsBuzzFundsTextView.setVisibility(View.VISIBLE);
+                        acceptsBuzzFundsTextView.setText("Accepts BuzzFunds");
+                    }
+
+                    if(b.getPriceLevel() != null && b.getCategory().name().equals("FOOD")) {
+                        priceLevelLine.setVisibility(View.VISIBLE);
+                        priceIcon.setVisibility(View.VISIBLE);
+                        priceLevelTextView.setVisibility(View.VISIBLE);
+                    }
 
                     final Building finalB = b;
                     showInMapButton.setOnClickListener(new View.OnClickListener() {
@@ -272,8 +378,6 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                             startActivity(buildingListIntent);
                         }
                     });
-
-
             }
             return rootView;
         }

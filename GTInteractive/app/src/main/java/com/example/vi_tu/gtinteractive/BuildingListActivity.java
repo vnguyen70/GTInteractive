@@ -58,11 +58,18 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
     private ListView drawerList;
     private Button filterButton;
 
+    private String categoryFilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_building_list);
 
+        // Context
+        Intent i = getIntent();
+        categoryFilter = i.getStringExtra(Arguments.OBJECT_ID);
+
+        // Persistence
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         buildingsDB = new BuildingPersistence(db);
@@ -93,6 +100,8 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
                 }
             }
         });
+
+        toggleIntentFilter(buildingsListView); // ???
     }
 
     @Override
@@ -197,6 +206,30 @@ public class BuildingListActivity extends AppCompatActivity implements ListView.
             activeFilters.add(Building.Category.OTHER);
         }
         updateFilters();
+    }
+
+    public void toggleIntentFilter(View view) {
+        if(!categoryFilter.isEmpty()) {
+            if(categoryFilter.equals(Building.Category.ACADEMIC.toString())) {
+                toggleAcademicFilter(view);
+            } else if (categoryFilter.equals(Building.Category.FOOD.toString())) {
+                toggleFoodFilter(view);
+            } else if (categoryFilter.equals(Building.Category.GREEK.toString())) {
+                toggleGreekFilter(view);
+            } else if (categoryFilter.equals(Building.Category.HOUSING.toString())) {
+                toggleHousingFilter(view);
+            } else if (categoryFilter.equals(Building.Category.OTHER.toString())) {
+                toggleOtherFilter(view);
+            } else if (categoryFilter.equals(Building.Category.PARKING.toString())) {
+                toggleParkingFilter(view);
+            } else if (categoryFilter.equals(Building.Category.SPORTS.toString())) {
+                toggleSportsFilter(view);
+            } else {
+                Toast.makeText(this, "Category unknown", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Intent category is empty", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void updateFilters() {
