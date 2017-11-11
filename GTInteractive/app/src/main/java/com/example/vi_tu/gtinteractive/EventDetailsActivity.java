@@ -2,8 +2,8 @@ package com.example.vi_tu.gtinteractive;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,11 +14,11 @@ import android.widget.TextView;
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.squareup.picasso.Picasso;
 
 public class EventDetailsActivity extends AppCompatActivity {
@@ -153,11 +153,22 @@ public class EventDetailsActivity extends AppCompatActivity {
         startDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent calendarIntent = new Intent() ;
-                calendarIntent.putExtra("beginTime", finalE.getStartDate());
-                calendarIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                calendarIntent.setClassName("com.android.calendar","com.android.calendar.AgendaActivity");
-                startActivity(calendarIntent);
+                // TODO: show confirmation dialog "Add event to calendar?"
+                Intent intent = new Intent(Intent.ACTION_INSERT)
+                        .setData(CalendarContract.Events.CONTENT_URI)
+                        .putExtra(CalendarContract.Events.TITLE, finalE.getTitle())
+                        .putExtra(CalendarContract.Events.EVENT_LOCATION, finalE.getLocation())
+                        .putExtra(CalendarContract.Events.DESCRIPTION, finalE.getDescription())
+                        .putExtra(CalendarContract.Events.ALL_DAY, finalE.getAllDay());
+                if (finalE.getStartDate() != null) {
+                    intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, finalE.getStartDate().getMillis());
+                }
+                if (finalE.getEndDate() != null) {
+                    intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, finalE.getEndDate().getMillis());
+                }
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
