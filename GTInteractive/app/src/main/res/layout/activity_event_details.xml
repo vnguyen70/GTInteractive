@@ -289,31 +289,31 @@
 
 
         <TextView
-            android:id="@+id/buildingIdStatic"
+            android:id="@+id/placeIdStatic"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="buildingId: "
+            android:text="placeId: "
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/buildingIdText"
+            app:layout_constraintBottom_toBottomOf="@+id/placeIdText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buildingIdText" />
+            app:layout_constraintTop_toTopOf="@+id/placeIdText" />
 
         <TextView
-            android:id="@+id/buildingIdText"
+            android:id="@+id/placeIdText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="TextView"
             android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@+id/buildingIdStatic"
+            app:layout_constraintLeft_toRightOf="@+id/placeIdStatic"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/categoriesText" />
 
 
         <Button
-            android:id="@+id/openBuildingDetailsButton"
+            android:id="@+id/openPlaceDetailsButton"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -321,7 +321,7 @@
             android:layout_marginRight="26dp"
             android:layout_marginTop="0dp"
             android:elevation="4dp"
-            android:text="Open Building Details"
+            android:text="Open Place Details"
             android:textAlignment="textEnd"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toRightOf="@+id/showInMapButton"
@@ -338,7 +338,7 @@
             android:elevation="0dp"
             android:text="Show in Map"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buildingIdText"
+            app:layout_constraintTop_toTopOf="@+id/placeIdText"
             android:layout_marginTop="24dp" />
 
         <ImageView
@@ -353,7 +353,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/openBuildingDetailsButton"
+            app:layout_constraintTop_toBottomOf="@+id/openPlaceDetailsButton"
             app:srcCompat="@drawable/clough" />
 
 

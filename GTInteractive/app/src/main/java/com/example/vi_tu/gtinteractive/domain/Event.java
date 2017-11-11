@@ -29,7 +29,7 @@ public class Event extends Entity {
             .allDay(false)
             .recurring(false)
             .categories(new ArrayList<Category>())
-            .buildingId("DUMMY")
+            .placeId("DUMMY")
             .build();
 
     Integer id;
@@ -53,7 +53,7 @@ public class Event extends Entity {
      *  Custom fields
      */
 
-    @NonNull String buildingId;
+    @NonNull String placeId;
 
     public enum Category { // TODO: choose our own colors
         ARTS("arts and performance", "812990"),
@@ -94,7 +94,7 @@ public class Event extends Entity {
         public static final String COLUMN_ALL_DAY = "allDay";
         public static final String COLUMN_RECURRING = "recurring";
         public static final String COLUMN_CATEGORIES = "categories";
-        public static final String COLUMN_BUILDING_ID = "buildingId";
+        public static final String COLUMN_PLACE_ID = "placeId";
     }
 
 }

@@ -10,8 +10,8 @@ import android.util.Log;
 
 import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.adapters.SuggestionProvider;
 
@@ -19,25 +19,25 @@ import java.util.List;
 
 public class SearchableActivity extends Activity {
 
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence placesDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_list);
+        setContentView(R.layout.activity_entity_list);
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
+        placesDB = new PlacePersistence(db);
         SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            List<Building> queryResults = buildingsDB.findByName(query);
+            List<Place> queryResults = placesDB.findByName(query);
             if (queryResults.size() == 1) {
-                Building b = queryResults.get(0);
+                Place p = queryResults.get(0);
                 Intent mapActivityIntent = new Intent(SearchableActivity.this, MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
-                mapActivityIntent.putExtra(Arguments.OBJECT_ID, b.getId());
+                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+                mapActivityIntent.putExtra(Arguments.OBJECT_ID, p.getId());
                 startActivity(mapActivityIntent);
             }
             suggestions.saveRecentQuery(query, null);
@@ -46,7 +46,7 @@ public class SearchableActivity extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.d("BUILDINGS_SEARCH", "reached new intent in searchable activity");
+        Log.d("PLACES_SEARCH", "reached new intent in searchable activity");
     }
 
 }

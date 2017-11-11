@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +26,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     private List<Event> eList;
 
-    public EventListAdapter() { this.eList = new ArrayList<>(); }
-
     public EventListAdapter(List<Event> eList) { this.eList = eList; }
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_list_item, viewGroup, false));
+        return new EventViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_event_item, viewGroup, false));
     }
 
     @Override
@@ -45,6 +41,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             holder.categoryView.setText(e.getCategories().toString());
             holder.categoryView.setTextColor(Color.parseColor("#" + e.getCategories().get(0).getColor()));
         }
+        holder.dateView.setText((e.getStartDate() != null ? e.getStartDate().toString("MMM dd, YYYY h:mm a") : ""));
+        holder.locationView.setText(e.getLocation());
         holder.setObjectId(e.getId());
     }
 
@@ -56,16 +54,21 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         notifyDataSetChanged();
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView eventNameView;
         public TextView categoryView;
+        public TextView dateView;
+        public TextView locationView;
+
         public int objectId;
 
         public EventViewHolder(View view) {
             super(view);
-            eventNameView = view.findViewById(R.id.tv_building_data);
+            eventNameView = view.findViewById(R.id.tv_label);
             categoryView = view.findViewById(R.id.tv_category);
+            dateView = view.findViewById(R.id.tv_date);
+            locationView = view.findViewById(R.id.tv_location);
             objectId = -1;
             view.setOnClickListener(this);
         }

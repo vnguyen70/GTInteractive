@@ -34,7 +34,7 @@ TODO: allow users to clear search history / suggestions
 TODO: control search suggestions: https://developer.android.com/guide/topics/search/search-dialog.html#SearchableActivity
 
 
-// TODO: add Building support for tags? The API provides tags like "parking", but it's not consistent.
+// TODO: add Place support for tags? The API provides tags like "parking", but it's not consistent.
 
 TODO: cleanup:
 - Remove unnecessary member variables from classes. The only variables that should be member variables are those that NEED to be shared across methods. An example would be SQLiteDatabase db, which only needs to be accessed in onCreate.
@@ -42,4 +42,4 @@ TODO: cleanup:
 
 TODO: null check everywhere, in case database has zero objects
 
-TODO: events idea: for each building, list matched events in building detail, but also list all "unknown" events as "nearby"; also - have some place where users can see a list of ALL events somewhere in the app
+TODO: events idea: for each place, list matched events in place detail, but also list all "unknown" events as "nearby"; also - have some place where users can see a list of ALL events somewhere in the app

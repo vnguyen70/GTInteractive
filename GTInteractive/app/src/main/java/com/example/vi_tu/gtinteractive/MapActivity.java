@@ -28,10 +28,9 @@ import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Building;
-import com.example.vi_tu.gtinteractive.domain.Entity;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -60,19 +59,19 @@ import java.util.Map;
 
 public class MapActivity extends FragmentActivity implements ListView.OnItemClickListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public static final String[] drawerItems = {"Buildings Test", "Events Test", "Building List", "Event List"};
+    public static final String[] drawerItems = {"Places Test", "Events Test", "Place List", "Event List"};
 
     public static final int REQUEST_LOCATION_PERMISSION = 0;
 
-    BuildingPersistence buildingsDB;
+    PlacePersistence placesDB;
     EventPersistence eventsDB;
 
-    List<Building> bList;
+    List<Place> pList;
     List<Event> eList;
 
     GoogleMap googleMap;
-    Map<Integer, List<Polygon>> buildingPolygons;
-    Map<Integer, Marker> buildingMarkers;
+    Map<Integer, List<Polygon>> placesPolygons;
+    Map<Integer, Marker> placesMarkers;
     Map<Integer, Marker> eventMarkers;
     KmlLayer printersLayer;
     GroundOverlay parkingOverlay;
@@ -82,7 +81,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     ImageButton drawerButton;
     ImageButton searchOptionsButton;
 
-    FloatingActionButton buildingsViewButton;
+    FloatingActionButton placesViewButton;
     FloatingActionButton eventsViewButton;
     FloatingActionButton parkingViewButton;
     FloatingActionButton printingViewButton;
@@ -92,7 +91,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     FloatingActionButton togglePolygonsButton;
     FloatingActionButton toggleOverlayButton;
 
-    TextView buildingsViewLabel;
+    TextView placesViewLabel;
     TextView eventsViewLabel;
     TextView parkingViewLabel;
     TextView printingViewLabel;
@@ -108,6 +107,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_activity);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -117,9 +117,9 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         // persistence
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        buildingsDB = new BuildingPersistence(db);
+        placesDB = new PlacePersistence(db);
         eventsDB = new EventPersistence(db);
-        bList = buildingsDB.getAll(); // TODO: move to AsyncTask
+        pList = placesDB.getAll(); // TODO: move to AsyncTask
         eList = eventsDB.getAll(); // TODO: move to AsyncTask
 
         // context
@@ -137,7 +137,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         searchBar = findViewById(R.id.searchBar);
         drawerButton = findViewById(R.id.drawerButton);
         searchOptionsButton = findViewById(R.id.searchOptionsButton);
-        buildingsViewButton = findViewById(R.id.buildingsViewButton);
+        placesViewButton = findViewById(R.id.placesViewButton);
         eventsViewButton = findViewById(R.id.eventsViewButton);
         parkingViewButton = findViewById(R.id.parkingViewButton);
         printingViewButton = findViewById(R.id.printingViewButton);
@@ -148,7 +148,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         toggleOverlayButton = findViewById(R.id.toggleOverlayButton);
 
         // button labels
-        buildingsViewLabel = findViewById(R.id.buildingsViewLabel);
+        placesViewLabel = findViewById(R.id.placesViewLabel);
         eventsViewLabel = findViewById(R.id.eventsViewLabel);
         parkingViewLabel = findViewById(R.id.parkingViewLabel);
         printingViewLabel = findViewById(R.id.printingViewLabel);
@@ -156,7 +156,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         // button icons
         drawerButton.setImageResource(R.drawable.ic_menu_black_24dp);
         searchOptionsButton.setImageResource(R.drawable.ic_more_vert_black_24dp);
-        buildingsViewButton.setImageResource(R.drawable.ic_business_black_24dp);
+        placesViewButton.setImageResource(R.drawable.ic_business_black_24dp);
         eventsViewButton.setImageResource(R.drawable.ic_today_black_24dp);
         parkingViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
         printingViewButton.setImageResource(R.drawable.ic_print_black_24dp);
@@ -168,7 +168,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent searchIntent = new Intent(MapActivity.this, AllSearchActivity.class);
+                Intent searchIntent = new Intent(MapActivity.this, EntityListActivity.class);
+                searchIntent.putExtra("ViewType", currView);
                 startActivity(searchIntent);
             }
         });
@@ -193,11 +194,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                 }
             }
         });
-        buildingsViewButton.setOnClickListener(new View.OnClickListener() {
+        placesViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currView != ViewType.BUILDING) {
-                    showBuildingsOverlay();
+                if (currView != ViewType.PLACE) {
+                    showPlacesOverlay();
                 }
                 hideButtons();
             }
@@ -255,9 +256,9 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             @Override
             public void onClick(View view) {
                 if (polygonsShown) {
-                    hideBuildingPolygons();
+                    hidePlacePolygons();
                 } else {
-                    showBuildingPolygons();
+                    showPlacePolygons();
                 }
             }
         });
@@ -290,14 +291,14 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         googleMap.setOnPolygonClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
 
-        buildingPolygons = new HashMap<>();
-        buildingMarkers = new HashMap<>();
+        placesPolygons = new HashMap<>();
+        placesMarkers = new HashMap<>();
         eventMarkers = new HashMap<>();
         highlighted = new ArrayList<>();
 
-        for (Building b : bList) {
-            addBuildingPolygons(b);
-            addBuildingMarker(b);
+        for (Place p : pList) {
+            addPlacePolygons(p);
+            addPlaceMarker(p);
         }
         for (Event e : eList) {
             addEventMarker(e);
@@ -313,8 +314,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         }
 
         switch (view) {
-            case ViewType.BUILDING:
-                showBuildingsOverlay();
+            case ViewType.PLACE:
+                showPlacesOverlay();
                 break;
             case ViewType.EVENT:
                 showEventsOverlay();
@@ -324,15 +325,15 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             case ViewType.PRINTERS:
                 showPrintersOverlay();
             default:
-                showBuildingsOverlay(); // TODO: default view for now
+                showPlacesOverlay(); // TODO: default view for now
         }
     }
 
-    private List<Polygon> addBuildingPolygons(Building b) {
+    private List<Polygon> addPlacePolygons(Place p) {
         List<Polygon> added = new ArrayList<>();
-        List<LatLng[]> polygons = b.getPolygons();
+        List<LatLng[]> polygons = p.getPolygons();
         for (LatLng[] polygon : polygons) {
-            Polygon p = googleMap.addPolygon(new PolygonOptions()
+            Polygon poly = googleMap.addPolygon(new PolygonOptions()
                     .addAll(Arrays.asList(polygon))
                     .strokeWidth(5)
                     .strokeColor(0x9900254c) // TODO: refactor colors into colors.xml
@@ -340,29 +341,29 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
                     .clickable(false)
                     .visible(false)
             );
-            p.setTag(b.getId());
-            added.add(p);
+            poly.setTag(p.getId());
+            added.add(poly);
         }
-        buildingPolygons.put(b.getId(), added);
+        placesPolygons.put(p.getId(), added);
         return added;
     }
 
-    private Marker addBuildingMarker(Building b) {
+    private Marker addPlaceMarker(Place p) {
         Marker m = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(b.getLatitude(), b.getLongitude()))
-                .title(b.getName())
+                .position(new LatLng(p.getLatitude(), p.getLongitude()))
+                .title(p.getName())
                 .visible(false));
-        m.setTag(b.getId());
-        buildingMarkers.put(b.getId(), m);
+        m.setTag(p.getId());
+        placesMarkers.put(p.getId(), m);
         return m;
     }
 
     private Marker addEventMarker(Event e) {
-        String buildingId = e.getBuildingId();
-        Building b = buildingsDB.findByBuildingId(buildingId);
+        String placeId = e.getPlaceId();
+        Place p = placesDB.findByPlaceId(placeId);
         LatLng ll = new LatLng(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
-        if (b != null) {
-            ll = new LatLng(b.getLatitude(), b.getLongitude());
+        if (p != null) {
+            ll = new LatLng(p.getLatitude(), p.getLongitude());
         }
         Marker m = googleMap.addMarker(new MarkerOptions()
                 .position(ll)
@@ -374,12 +375,12 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         return m;
     }
 
-    private void showBuildingsOverlay() {
+    private void showPlacesOverlay() {
         clearMap();
-        showBuildingPolygons();
-        if (view == ViewType.BUILDING && objectId != -1) {
-            highlightPolygons(buildingPolygons.get(objectId));
-            Marker m = buildingMarkers.get(objectId);
+        showPlacePolygons();
+        if (view == ViewType.PLACE && objectId != -1) {
+            highlightPolygons(placesPolygons.get(objectId));
+            Marker m = placesMarkers.get(objectId);
             m.setVisible(true);
             m.showInfoWindow();
             centerMarkerZoom(m);
@@ -389,7 +390,7 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
             centerCampus();
         }
         togglePolygonsButton.setVisibility(View.VISIBLE);
-        setCurrView(ViewType.BUILDING);
+        setCurrView(ViewType.PLACE);
     }
 
     private void showEventsOverlay() {
@@ -426,8 +427,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         setCurrView(ViewType.PRINTERS);
     }
 
-    private void showBuildingPolygons() {
-        for (List<Polygon> pList : buildingPolygons.values()) {
+    private void showPlacePolygons() {
+        for (List<Polygon> pList : placesPolygons.values()) {
             for (Polygon p : pList) {
                 p.setVisible(true);
                 p.setClickable(true);
@@ -436,8 +437,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         polygonsShown = true;
     }
 
-    private void hideBuildingPolygons() {
-        for (List<Polygon> pList : buildingPolygons.values()) {
+    private void hidePlacePolygons() {
+        for (List<Polygon> pList : placesPolygons.values()) {
             for (Polygon p : pList) {
                 p.setVisible(false);
                 p.setClickable(false);
@@ -446,14 +447,14 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
         polygonsShown = false;
     }
 
-    private void showBuildingMarkers() {
-        for (Marker m : buildingMarkers.values()) {
+    private void showPlaceMarkers() {
+        for (Marker m : placesMarkers.values()) {
             m.setVisible(true);
         }
     }
 
-    private void hideBuildingMarkers() {
-        for (Marker m : buildingMarkers.values()) {
+    private void hidePlaceMarkers() {
+        for (Marker m : placesMarkers.values()) {
             m.setVisible(false);
         }
     }
@@ -472,8 +473,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private void clearMap() {
         resetPolygonColors();
-        hideBuildingPolygons();
-        hideBuildingMarkers();
+        hidePlacePolygons();
+        hidePlaceMarkers();
         hideEventMarkers();
         printersLayer.removeLayerFromMap();
         parkingOverlay.setVisible(false);
@@ -514,11 +515,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     private void showButtons() {
-        buildingsViewButton.setVisibility(View.VISIBLE);
+        placesViewButton.setVisibility(View.VISIBLE);
         eventsViewButton.setVisibility(View.VISIBLE);
         parkingViewButton.setVisibility(View.VISIBLE);
         printingViewButton.setVisibility(View.VISIBLE);
-        buildingsViewLabel.setVisibility(View.VISIBLE);
+        placesViewLabel.setVisibility(View.VISIBLE);
         eventsViewLabel.setVisibility(View.VISIBLE);
         parkingViewLabel.setVisibility(View.VISIBLE);
         printingViewLabel.setVisibility(View.VISIBLE);
@@ -526,11 +527,11 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     }
 
     private void hideButtons() {
-        buildingsViewButton.setVisibility(View.GONE);
+        placesViewButton.setVisibility(View.GONE);
         eventsViewButton.setVisibility(View.GONE);
         parkingViewButton.setVisibility(View.GONE);
         printingViewButton.setVisibility(View.GONE);
-        buildingsViewLabel.setVisibility(View.GONE);
+        placesViewLabel.setVisibility(View.GONE);
         eventsViewLabel.setVisibility(View.GONE);
         parkingViewLabel.setVisibility(View.GONE);
         printingViewLabel.setVisibility(View.GONE);
@@ -539,8 +540,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
 
     private void setCurrView(int v) {
         switch(v) {
-            case ViewType.BUILDING:
-                selectViewButton.setBackgroundTintList(buildingsViewButton.getBackgroundTintList());
+            case ViewType.PLACE:
+                selectViewButton.setBackgroundTintList(placesViewButton.getBackgroundTintList());
                 selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
                 break;
             case ViewType.EVENT:
@@ -585,20 +586,21 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch(i) {
-            case 0: // Buildings Test
+            case 0: // Places Test
                 drawerLayout.closeDrawer(drawerList);
-                Intent buildingsTestActivityIntent = new Intent(MapActivity.this, BuildingsTestActivity.class);
-                startActivity(buildingsTestActivityIntent);
+                Intent placesTestActivityIntent = new Intent(MapActivity.this, PlaceTestActivity.class);
+                startActivity(placesTestActivityIntent);
                 break;
             case 1: // Events Test
                 drawerLayout.closeDrawer(drawerList);
                 Intent eventsTestActivityIntent = new Intent(MapActivity.this, EventsTestActivity.class);
                 startActivity(eventsTestActivityIntent);
                 break;
-            case 2: // Buildings List
+            case 2: // Places List
                 drawerLayout.closeDrawer(drawerList);
-                Intent buildingListActivityIntent = new Intent(MapActivity.this, BuildingListActivity.class);
-                startActivity(buildingListActivityIntent);
+                Intent placeListActivityIntent = new Intent(MapActivity.this, PlaceListActivity.class);
+                placeListActivityIntent.putExtra("ShowMapNext", false);
+                startActivity(placeListActivityIntent);
                 break;
             case 3: // Events List
                 drawerLayout.closeDrawer(drawerList);
@@ -621,8 +623,8 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     public void onPolygonClick(Polygon polygon) {
         resetPolygonColors();
         highlightPolygon(polygon);
-        hideBuildingMarkers();
-        Marker m = buildingMarkers.get(Integer.parseInt(polygon.getTag().toString()));
+        hidePlaceMarkers();
+        Marker m = placesMarkers.get(Integer.parseInt(polygon.getTag().toString()));
         m.setVisible(true);
         m.showInfoWindow();
         centerMarker(m);
@@ -632,11 +634,12 @@ public class MapActivity extends FragmentActivity implements ListView.OnItemClic
     @Override
     public void onInfoWindowClick(Marker marker) {
         switch (currView) {
-            case ViewType.BUILDING:
-                Intent buildingDetailIntent = new Intent(MapActivity.this, BuildingDetailsActivity.class);
-                buildingDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
-                buildingDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
-                startActivity(buildingDetailIntent);
+            case ViewType.PLACE:
+                Log.d("MapActivity", String.valueOf(Arguments.OBJECT_ID));
+                Intent placeDetailIntent = new Intent(MapActivity.this, PlaceDetailsActivity.class);
+                placeDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
+                placeDetailIntent.putExtra(Arguments.DEFAULT_TAB, TabType.INFO);
+                startActivity(placeDetailIntent);
                 break;
             case ViewType.EVENT:
                 Intent eventDetailIntent = new Intent(MapActivity.this, EventDetailsActivity.class);

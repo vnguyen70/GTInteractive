@@ -37,8 +37,8 @@ public class EventPersistence extends BasePersistence<Event> {
         return findMany(Event.Contract.COLUMN_CATEGORIES + " LIKE \"%" + category.name() + "%\""); // TODO: whole word matching
     }
 
-    public List<Event> findByBuildingId(String buildingId) {
-        return findMany(Event.Contract.COLUMN_BUILDING_ID + " = " + buildingId);
+    public List<Event> findByPlaceId(String placeId) {
+        return findMany(Event.Contract.COLUMN_PLACE_ID + " = " + placeId);
     }
 
     /******** Helper Functions ********************************************************************/
@@ -56,7 +56,7 @@ public class EventPersistence extends BasePersistence<Event> {
         cv.put(Event.Contract.COLUMN_ALL_DAY, e.getAllDay());
         cv.put(Event.Contract.COLUMN_RECURRING, e.getRecurring());
         cv.put(Event.Contract.COLUMN_CATEGORIES, serializeCategories(e.getCategories()));
-        cv.put(Event.Contract.COLUMN_BUILDING_ID, e.getBuildingId());
+        cv.put(Event.Contract.COLUMN_PLACE_ID, e.getPlaceId());
         return cv;
     }
 
@@ -74,7 +74,7 @@ public class EventPersistence extends BasePersistence<Event> {
                 .allDay(c.getInt(c.getColumnIndex(Event.Contract.COLUMN_ALL_DAY)) == 1)
                 .recurring(c.getInt(c.getColumnIndex(Event.Contract.COLUMN_RECURRING)) == 1)
                 .categories(deserializeCategories(c.getString(c.getColumnIndex(Event.Contract.COLUMN_CATEGORIES))))
-                .buildingId(c.getString(c.getColumnIndex(Event.Contract.COLUMN_BUILDING_ID)))
+                .placeId(c.getString(c.getColumnIndex(Event.Contract.COLUMN_PLACE_ID)))
                 .build();
     }
 

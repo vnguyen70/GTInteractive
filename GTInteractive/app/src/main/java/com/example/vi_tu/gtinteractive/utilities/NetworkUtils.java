@@ -12,9 +12,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.vi_tu.gtinteractive.constants.Constants;
-import com.example.vi_tu.gtinteractive.domain.Building;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 
 import org.joda.time.DateTime;
@@ -41,33 +41,33 @@ public class NetworkUtils {
 
     // TODO: upon any failure, set sharedPreferences so that database is reloaded next time activity starts
 
-    public void loadBuildingsFromAPI(final BuildingPersistence buildingsDB) {
-        buildingsDB.deleteAll();
-        Log.d("NETWORK_TEST", "loadBuildingsFromAPI()...");
-//        String buildingsURL = "https://m.gatech.edu/api/gtplaces/buildings";
-        String buildingsURL = "https://gtapp-api.rnoc.gatech.edu/api/v1/places";
-        final JsonArrayRequest buildingsRequest = new JsonArrayRequest(Request.Method.GET, buildingsURL, new JSONArray(),
+    public void loadPlacesFromAPI(final PlacePersistence placesDB) {
+        placesDB.deleteAll();
+        Log.d("NETWORK_TEST", "loadPlacesFromAPI()...");
+//        String placesURL = "https://m.gatech.edu/api/gtplaces/places";
+        String placesURL = "https://gtapp-api.rnoc.gatech.edu/api/v1/places";
+        final JsonArrayRequest placesRequest = new JsonArrayRequest(Request.Method.GET, placesURL, new JSONArray(),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray r) {
-                        Log.d("NETWORK_TEST", "successful response from Buildings API");
-                        Log.d("NETWORK_TEST", "buildings found: " + r.length());
-                        new ProcessBuildingsResponseTask(buildingsDB).execute(r);
+                        Log.d("NETWORK_TEST", "successful response from Places API");
+                        Log.d("NETWORK_TEST", "places found: " + r.length());
+                        new ProcessPlacesResponseTask(placesDB).execute(r);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("NETWORK_TEST", "failed response from Buildings API");
+                        Log.d("NETWORK_TEST", "failed response from Places API");
                         DialogFragment dialog = new NetworkErrorDialogFragment();
-                        dialog.show(fragmentManager, "buildingsNetworkError");
+                        dialog.show(fragmentManager, "placesNetworkError");
                         Toast.makeText(context, "ERROR: " + error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
-//        buildingsRequest.setTag(REQUEST_TAG);
-        RequestQueueSingleton.getRequestQueue(context).add(buildingsRequest);
+//        placesRequest.setTag(REQUEST_TAG);
+        RequestQueueSingleton.getRequestQueue(context).add(placesRequest);
     }
 
-    public void loadEventsFromAPI(final EventPersistence eventsDB, final BuildingPersistence buildingsDB) {
+    public void loadEventsFromAPI(final EventPersistence eventsDB, final PlacePersistence placesDB) {
         eventsDB.deleteAll();
         Log.d("NETWORK_TEST", "loadEventsFromAPI()...");
 //        String eventsURL = "http://www.calendar.gatech.edu/feeds/events.xml";
@@ -79,7 +79,7 @@ public class NetworkUtils {
                     public void onResponse(JSONArray r) {
                         Log.d("NETWORK_TEST", "successful response from events API");
                         Log.d("NETWORK_TEST", "events found: " + r.length());
-                        new ProcessEventsResponseTask(eventsDB, buildingsDB).execute(r);
+                        new ProcessEventsResponseTask(eventsDB, placesDB).execute(r);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -93,18 +93,18 @@ public class NetworkUtils {
         RequestQueueSingleton.getRequestQueue(context).add(eventsRequest);
     }
 
-    private class ProcessBuildingsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
+    private class ProcessPlacesResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
 
-        private BuildingPersistence buildingsDB;
+        private PlacePersistence placesDB;
 
-        ProcessBuildingsResponseTask(BuildingPersistence buildingsDB) {
-            this.buildingsDB = buildingsDB;
+        ProcessPlacesResponseTask(PlacePersistence placesDB) {
+            this.placesDB = placesDB;
         }
 
         @Override
         protected Boolean doInBackground(JSONArray... jsonArrays) {
             JSONArray r = jsonArrays[0];
-            List<Building> bList = new ArrayList<>();
+            List<Place> pList = new ArrayList<>();
             try {
                 for (int i = 0; i < r.length(); i++) {
                     JSONObject o = r.getJSONObject(i);
@@ -130,8 +130,8 @@ public class NetworkUtils {
                         }
                     }
 
-                    Building b = Building.builder()
-                            .buildingId(o.getString("id"))
+                    Place p = Place.builder()
+                            .placeId(o.getString("id"))
                             .name(o.getString("name"))
                             .imageURL(o.optString("imageURL", ""))
                             .websiteURL(o.optString("websiteURL", ""))
@@ -143,7 +143,7 @@ public class NetworkUtils {
                             .latitude(locationJSON.getDouble("latitude"))
                             .longitude(locationJSON.getDouble("longitude"))
                             .polygons(deserializePolygons(locationJSON.optJSONArray("shapeCoordinates")))
-                            .category(Building.Category.getCategory(categoryJSON.getString("title")))
+                            .category(Place.Category.getCategory(categoryJSON.getString("title")))
                             .description(o.optString("description", ""))
                             .locatedIn(o.optString("locatedIn", ""))
                             .yelpID(o.optString("yelpID", ""))
@@ -156,20 +156,20 @@ public class NetworkUtils {
                             .addressTokens("")
                             .numFloors(0)
                             .build();
-                    bList.add(b);
+                    pList.add(p);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
-            return buildingsDB.createMany(bList);
+            return placesDB.createMany(pList);
         }
 
         @Override
         protected void onPostExecute(Boolean wasSuccessful) {
             if (!wasSuccessful) {
                 DialogFragment dialog = new NetworkErrorDialogFragment();
-                dialog.show(fragmentManager, "buildingsNetworkError");
+                dialog.show(fragmentManager, "placesNetworkError");
             }
         }
     }
@@ -177,15 +177,15 @@ public class NetworkUtils {
     private class ProcessEventsResponseTask extends AsyncTask<JSONArray, Void, Boolean> {
 
         // TODO: guarantee that this task completes uninterrupted - what things can interrupt an Async task? screen orientation change? Minimizing app?
-        // TODO: instead of using SQL WHERE LIKE to match strings (which doesn't take into account whitespace - inefficient), TOKENIZE name and address fields and store in building object; this way you can just match tokens
+        // TODO: instead of using SQL WHERE LIKE to match strings (which doesn't take into account whitespace - inefficient), TOKENIZE name and address fields and store in place object; this way you can just match tokens
         // TODO: catch common nicknames / abbreviations like CRC and CULC and such; currently - we fail to match these
 
         private EventPersistence eventsDB;
-        private BuildingPersistence buildingsDB;
+        private PlacePersistence placesDB;
 
-        ProcessEventsResponseTask(EventPersistence eventsDB, BuildingPersistence buildingsDB) {
+        ProcessEventsResponseTask(EventPersistence eventsDB, PlacePersistence placesDB) {
             this.eventsDB = eventsDB;
-            this.buildingsDB = buildingsDB;
+            this.placesDB = placesDB;
         }
 
         @Override
@@ -197,10 +197,10 @@ public class NetworkUtils {
                 for (int i = 0; i < r.length(); i++) {
                     JSONObject o = r.getJSONObject(i);
 
-                    int millisStart = o.optInt("startDate") * 1000;
-                    int millisEnd = o.optInt("endDate") * 1000;
+                    long millisStart = o.optLong("startDate") * 1000;
+                    long millisEnd = o.optLong("endDate") * 1000;
                     String location = o.getString("location");
-                    String buildingId = buildingsDB.findBuildingIdByLocation(location);
+                    String placeId = placesDB.findPlaceIdByLocation(location);
                     List<Event.Category> categories = new ArrayList<>();
                     JSONArray categoriesJSON = o.getJSONArray("tags");
                     for (int j = 0; j < categoriesJSON.length(); j++) {
@@ -214,12 +214,12 @@ public class NetworkUtils {
                             .location(location)
                             .description(o.optString("description", ""))
                             .imageURL(o.optString("imageURL", ""))
-                            .startDate(millisStart > 0 ? new DateTime(millisStart) : null)
-                            .endDate(millisEnd > 0 ? new DateTime(millisEnd) : null)
+                            .startDate(millisStart > 0 ? new DateTime((long) millisStart) : null)
+                            .endDate(millisEnd > 0 ? new DateTime((long) millisEnd) : null)
                             .allDay(o.optBoolean("allDay"))
                             .recurring(o.optBoolean("recurring"))
                             .categories(categories)
-                            .buildingId(buildingId)
+                            .placeId(placeId)
                             .build();
                     eList.add(e);
                 }
@@ -234,7 +234,7 @@ public class NetworkUtils {
         protected void onPostExecute(Boolean wasSuccessful) {
             if (!wasSuccessful) {
                 DialogFragment dialog = new NetworkErrorDialogFragment();
-                dialog.show(fragmentManager, "buildingsNetworkError");
+                dialog.show(fragmentManager, "placesNetworkError");
             }
         }
     }

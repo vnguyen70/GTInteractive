@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.BuildingPersistence;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
 import com.example.vi_tu.gtinteractive.utilities.NetworkErrorDialogFragment;
@@ -29,7 +29,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
     private TextView tvEventsTest;
 
     private EventPersistence eventsDB;
-    private BuildingPersistence buildingsDB;
+    private PlacePersistence placesDB;
 
     private NetworkUtils networkUtils;
 
@@ -50,7 +50,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         PersistenceHelper dbHelper = new PersistenceHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         eventsDB = new EventPersistence(db);
-        buildingsDB = new BuildingPersistence(db);
+        placesDB = new PlacePersistence(db);
 
         networkUtils = new NetworkUtils(getApplicationContext(), getFragmentManager());
 
@@ -60,7 +60,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         long eventsCacheExpiredMS = sharedPreferences.getLong("eventsCacheExpiredMS", 0);
 
         if (nowMS >= eventsCacheExpiredMS) {
-            networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+            networkUtils.loadEventsFromAPI(eventsDB, placesDB);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong("eventsCacheExpiredMS", nowMS + EVENTS_CACHE_DURATION_MS);
             editor.apply();
@@ -91,7 +91,7 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
                 return true;
             case R.id.action_reload:
                 tvEventsTest.setText("");
-                networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+                networkUtils.loadEventsFromAPI(eventsDB, placesDB);
                 return true;
             case R.id.action_clear:
                 eventsDB.deleteAll();
@@ -111,22 +111,22 @@ public class EventsTestActivity extends AppCompatActivity implements NetworkErro
         int single = 0;
         int multiple = 0;
         for (Event e : eList) {
-            results += e.getLocation() + "\n-- " + e.getBuildingId() + " --\n\n";
-            if (e.getBuildingId().equals("NONE")) {
+            results += e.getLocation() + "\n-- " + e.getPlaceId() + " --\n\n";
+            if (e.getPlaceId().equals("NONE")) {
                 none++;
-            } else if (e.getBuildingId().startsWith("MANY", 0)) {
+            } else if (e.getPlaceId().startsWith("MANY", 0)) {
                 multiple++;
             } else {
                 single++;
             }
         }
-        tvEventsTest.setText("" + eList.size() + " events found:\n\nbuildingId matches:\n - none: " + none + "\n - single: " + single + "\n - multiple: " + multiple + "\n\n" + results);
+        tvEventsTest.setText("" + eList.size() + " events found:\n\nplaceId matches:\n - none: " + none + "\n - single: " + single + "\n - multiple: " + multiple + "\n\n" + results);
     }
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog) {
         tvEventsTest.setText("");
-        networkUtils.loadEventsFromAPI(eventsDB, buildingsDB);
+        networkUtils.loadEventsFromAPI(eventsDB, placesDB);
     }
 
     @Override

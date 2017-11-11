@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <name>Georgia Tech Printers</name>
-    <description><![CDATA[Locations on Georgia Tech's campus with Pharos-enabled printers for use with free print balance. Unless noted otherwise, all printers are B/W only. Areas with color printers are noted in the description, and will also have a green marker. Some printers may be restricted to users with building BuzzCard access - these should be noted in the description. If you have any updates or corrections, please see this Reddit thread: http://bit.ly/1STUhsu]]></description>
+    <description><![CDATA[Locations on Georgia Tech's campus with Pharos-enabled printers for use with free print balance. Unless noted otherwise, all printers are B/W only. Areas with color printers are noted in the description, and will also have a green marker. Some printers may be restricted to users with place BuzzCard access - these should be noted in the description. If you have any updates or corrections, please see this Reddit thread: http://bit.ly/1STUhsu]]></description>
     <Folder>
       <name>Residential (Housing Residents Only)</name>
       <Placemark>
@@ -127,7 +127,7 @@
       </Placemark>
       <Placemark>
         <name>Scheller CoB</name>
-        <description><![CDATA[1st Floor - Computer Lab (B/W & Color) **Requires CoB Building BuzzCard Access**]]></description>
+        <description><![CDATA[1st Floor - Computer Lab (B/W & Color) **Requires CoB Place BuzzCard Access**]]></description>
         <Point>
           <coordinates>
             -84.3883681,33.7763984,0
