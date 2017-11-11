@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -181,8 +182,8 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     TextView closeTimesTextView = rootView.findViewById(R.id.closeTimesText);
                     TextView acceptsBuzzFundsTextView = rootView.findViewById(R.id.acceptsBuzzFundsText);
                     TextView priceLevelTextView = rootView.findViewById(R.id.priceLevelText);
-                    TextView categoryTextVew = rootView.findViewById(R.id.categoryText);
-                    TextView altNamesTextVew = rootView.findViewById(R.id.altNamesText);
+                    TextView categoryTextView = rootView.findViewById(R.id.categoryText);
+                    TextView altNamesTextView = rootView.findViewById(R.id.altNamesText);
                     TextView nameTokensTextView = rootView.findViewById(R.id.nameTokensText);
                     TextView addressTokensTextVew = rootView.findViewById(R.id.addressTokensText);
                     TextView numFloorsTextView = rootView.findViewById(R.id.numFloorsText);
@@ -209,14 +210,24 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                     closeTimesTextView.setText(serializeTimes(b.getCloseTimes()));
                     acceptsBuzzFundsTextView.setText(String.valueOf(b.getAcceptsBuzzFunds()));
                     priceLevelTextView.setText(String.valueOf(b.getPriceLevel()));
-                    categoryTextVew.setText(b.getCategory().name());
-                    altNamesTextVew.setText(b.getAltNames());
+                    categoryTextView.setText(b.getCategory().name());
+                    altNamesTextView.setText(b.getAltNames());
                     nameTokensTextView.setText(b.getNameTokens());
                     addressTokensTextVew.setText(b.getAddressTokens());
                     numFloorsTextView.setText(String.valueOf(b.getNumFloors()));
 
                     final Building finalB = b;
                     showInMapButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent mapActivityIntent = new Intent(context, MapActivity.class);
+                            mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.BUILDING);
+                            mapActivityIntent.putExtra(Arguments.OBJECT_ID, finalB.getId());
+                            startActivity(mapActivityIntent);
+                        }
+                    });
+                    streetTextView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Context context = view.getContext();
@@ -235,6 +246,34 @@ public class BuildingDetailsActivity extends AppCompatActivity {
                             startActivity(internalMapIntent);
                         }
                     });
+                    phoneNumTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                            callIntent.setData(Uri.parse("tel:"+ finalB.getPhoneNum()));
+                            callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(callIntent);
+                        }
+                    });
+                    websiteURLTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(finalB.getWebsiteURL()));
+                            startActivity(browserIntent);
+                        }
+                    });
+                    categoryTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Context context = view.getContext();
+                            Intent buildingListIntent = new Intent(context, BuildingListActivity.class);
+                            buildingListIntent.putExtra(Arguments.OBJECT_ID, b.getCategory().name());
+                            startActivity(buildingListIntent);
+                        }
+                    });
+
+
             }
             return rootView;
         }
