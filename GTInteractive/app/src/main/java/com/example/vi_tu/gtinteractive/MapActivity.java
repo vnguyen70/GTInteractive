@@ -92,8 +92,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
     FloatingActionButton selectViewButton;
     FloatingActionButton resetCameraButton;
     FloatingActionButton toggleTrafficButton;
-    FloatingActionButton togglePolygonsButton;
-    FloatingActionButton toggleOverlayButton;
+//    FloatingActionButton togglePolygonsButton;
+//    FloatingActionButton toggleOverlayButton;
 
     TextView placesViewLabel;
     TextView eventsViewLabel;
@@ -151,8 +151,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         selectViewButton = findViewById(R.id.selectViewButton);
         resetCameraButton = findViewById(R.id.resetCameraButton);
         toggleTrafficButton = findViewById(R.id.toggleTrafficButton);
-        togglePolygonsButton = findViewById(R.id.togglePolygonsButton);
-        toggleOverlayButton = findViewById(R.id.toggleOverlayButton);
+//        togglePolygonsButton = findViewById(R.id.togglePolygonsButton);
+//        toggleOverlayButton = findViewById(R.id.toggleOverlayButton);
 
         // button labels
         placesViewLabel = findViewById(R.id.placesViewLabel);
@@ -168,7 +168,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         parkingViewButton.setImageResource(R.drawable.ic_local_parking_black_24dp);
         printingViewButton.setImageResource(R.drawable.ic_print_black_24dp);
         selectViewButton.setImageResource(R.drawable.ic_business_black_24dp);
-
+        resetCameraButton.setImageResource(R.drawable.ic_location_searching_black_24px);
+        toggleTrafficButton.setImageResource(R.drawable.ic_traffic_black_24px);
         buttonsShown = false;
 
         // listeners TODO: risk of button being pressed before map is ready?
@@ -259,22 +260,22 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
                 googleMap.setTrafficEnabled(!googleMap.isTrafficEnabled());
             }
         });
-        togglePolygonsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (polygonsShown) {
-                    hidePlacePolygons();
-                } else {
-                    showPlacePolygons();
-                }
-            }
-        });
-        toggleOverlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                parkingOverlay.setVisible(!parkingOverlay.isVisible());
-            }
-        });
+//        togglePolygonsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (polygonsShown) {
+//                    hidePlacePolygons();
+//                } else {
+//                    showPlacePolygons();
+//                }
+//            }
+//        });
+//        toggleOverlayButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                parkingOverlay.setVisible(!parkingOverlay.isVisible());
+//            }
+//        });
     }
 
     /**
@@ -359,6 +360,7 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         Marker m = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(p.getLatitude(), p.getLongitude()))
                 .title(p.getName())
+                .snippet(p.getStreet())
                 .visible(false));
         m.setTag(p.getId());
         placesMarkers.put(p.getId(), m);
@@ -396,7 +398,7 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         } else {
             centerCampus();
         }
-        togglePolygonsButton.setVisibility(View.VISIBLE);
+//        togglePolygonsButton.setVisibility(View.VISIBLE);
         setCurrView(ViewType.PLACE);
     }
 
@@ -418,7 +420,7 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
     private void showParkingOverlay() {
         clearMap();
         parkingOverlay.setVisible(true);
-        toggleOverlayButton.setVisibility(View.VISIBLE);
+//        toggleOverlayButton.setVisibility(View.VISIBLE);
         centerCampus();
         setCurrView(ViewType.PARKING);
     }
@@ -485,8 +487,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         hideEventMarkers();
         printersLayer.removeLayerFromMap();
         parkingOverlay.setVisible(false);
-        togglePolygonsButton.setVisibility(View.GONE);
-        toggleOverlayButton.setVisibility(View.GONE);
+//        togglePolygonsButton.setVisibility(View.GONE);
+//        toggleOverlayButton.setVisibility(View.GONE);
     }
 
     private void centerMarker(Marker m) {

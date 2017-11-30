@@ -75,6 +75,7 @@ public class InternalMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_internal_bulding);
         floorExpandButton = (FloatingActionButton) findViewById(R.id.button_floor_expand);
+        floorExpandButton.setImageResource(R.drawable.ic_layers_black_24px);
         //floorExpandButton.setImageResource(R.drawable.ic_layers_black_24dp);
         floor1Button = (FloatingActionButton) findViewById(R.id.button_floor_1);
         floor2Button = (FloatingActionButton) findViewById(R.id.button_floor_2);

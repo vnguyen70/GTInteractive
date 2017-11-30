@@ -10,7 +10,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
 
             <ToggleButton
                 android:id="@+id/tb_places"
@@ -18,7 +19,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:layout_weight="1"
+                android:background="@color/colorPrimary"
                 android:padding="0dp"
+                android:textColor="@android:color/white"
                 android:textOff="Places"
                 android:textOn="Places" />
 
@@ -27,8 +30,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textOn="Events"
-                android:textOff="Events"/>
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:textOff="Events"
+                android:textOn="Events" />
 
         </LinearLayout>
 

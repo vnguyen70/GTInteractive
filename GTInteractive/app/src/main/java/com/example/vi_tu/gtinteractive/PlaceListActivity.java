@@ -65,7 +65,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
         pList = placesDB.getAll();
         pFilter = new PlaceFilter(placesDB.getAll());
         pFilter2 = new PlaceFilter(placesDB.getAll());
-        pAdapter = new PlaceListAdapter(pList, getIntent().getBooleanExtra("ShowMapNext", true));
+        pAdapter = new PlaceListAdapter(pList, getIntent().getBooleanExtra("ShowMapNext", false));
         placesListView = (RecyclerView) findViewById(R.id.recyclerview_search);
         placesListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         placesListView.setHasFixedSize(true);
@@ -89,10 +89,13 @@ public class PlaceListActivity extends AppCompatActivity implements ListView.OnI
             public boolean onQueryTextSubmit(String query) {
                 List<Place> queryResults = pFilter2.filterByName(query).getList();
                 // always return first place in queryResults
-                Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
-                mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
-                startActivity(mapActivityIntent);
+//                Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
+//                mapActivityIntent.putExtra(Arguments.DEFAULT_VIEW, ViewType.PLACE);
+//                mapActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
+//                startActivity(mapActivityIntent);
+                Intent detailsActivityIntent = new Intent(getApplicationContext(), PlaceDetailsActivity.class);
+                detailsActivityIntent.putExtra(Arguments.OBJECT_ID, queryResults.get(0).getId());
+                startActivity(detailsActivityIntent);
                 return true;
             }
 

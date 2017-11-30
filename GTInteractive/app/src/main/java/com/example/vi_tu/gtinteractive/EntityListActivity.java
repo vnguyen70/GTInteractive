@@ -3,6 +3,7 @@ package com.example.vi_tu.gtinteractive;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -122,9 +123,10 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
             entityActiveFilters.add(Place.class);
         }
         updateEntityData();
-
         placeButton.setChecked(placeOn);
         eventButton.setChecked(eventOn);
+        setButtonColor(placeButton, placeOn);
+        setButtonColor(eventButton, eventOn);
 
         // Handle onClick events for each button
         placeButton.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +143,13 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         });
     }
 
+    public void setButtonColor(ToggleButton button, boolean checked) {
+        if (checked) {
+            button.setTextColor(Color.parseColor("#eeb211"));
+        } else {
+            button.setTextColor(Color.WHITE);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the options menu from XML
@@ -495,6 +504,8 @@ public class EntityListActivity extends AppCompatActivity implements ListView.On
         eventOn = !eventOn;
         placeButton.setChecked(placeOn);
         eventButton.setChecked(eventOn);
+        setButtonColor(placeButton, placeOn);
+        setButtonColor(eventButton, eventOn);
         placeActiveFilters.clear();
         eventActiveFilters.clear();
     }
