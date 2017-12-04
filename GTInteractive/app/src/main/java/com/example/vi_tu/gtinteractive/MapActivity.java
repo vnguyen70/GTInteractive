@@ -14,15 +14,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -33,11 +30,11 @@ import com.example.vi_tu.gtinteractive.constants.Arguments;
 import com.example.vi_tu.gtinteractive.constants.Constants;
 import com.example.vi_tu.gtinteractive.constants.TabType;
 import com.example.vi_tu.gtinteractive.constants.ViewType;
-import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.domain.Event;
-import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
+import com.example.vi_tu.gtinteractive.domain.Place;
 import com.example.vi_tu.gtinteractive.persistence.EventPersistence;
 import com.example.vi_tu.gtinteractive.persistence.PersistenceHelper;
+import com.example.vi_tu.gtinteractive.persistence.PlacePersistence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,6 +63,8 @@ import java.util.Map;
 public class MapActivity extends FragmentActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnPolygonClickListener, GoogleMap.OnInfoWindowClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final int REQUEST_LOCATION_PERMISSION = 0;
+
+    public static final int DEFAULT_EVENT_MARKER_ID = 0;
 
     PlacePersistence placesDB;
     EventPersistence eventsDB;
@@ -310,6 +309,8 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
         for (Event e : eList) {
             addEventMarker(e);
         }
+        addDefaultEventMarker();
+
         parkingOverlay = googleMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.parking_map))
                 .position(new LatLng(33.777450, -84.397840), 2260f) // TODO: alignment
@@ -368,17 +369,28 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
     private Marker addEventMarker(Event e) {
         String placeId = e.getPlaceId();
         Place p = placesDB.findByPlaceId(placeId);
-        LatLng ll = new LatLng(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
         if (p != null) {
-            ll = new LatLng(p.getLatitude(), p.getLongitude());
+            Marker m = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(p.getLatitude(), p.getLongitude()))
+                    .title(e.getTitle())
+                    .snippet(e.getLocation())
+                    .visible(false));
+            m.setTag(e.getId());
+            eventMarkers.put(e.getId(), m);
+            return m;
         }
+        return null;
+    }
+
+    private Marker addDefaultEventMarker() { // TODO: for all "other" events that haven't been matched to a physical location on campus
         Marker m = googleMap.addMarker(new MarkerOptions()
-                .position(ll)
-                .title(e.getTitle())
-                .snippet(e.getLocation())
+                .position(new LatLng(Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE))
+                .title("Other Events") // TODO
+                .snippet("Other Events") // TODO
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)) // TODO
                 .visible(false));
-        m.setTag(e.getId());
-        eventMarkers.put(e.getId(), m);
+        m.setTag(DEFAULT_EVENT_MARKER_ID);
+        eventMarkers.put(DEFAULT_EVENT_MARKER_ID, m);
         return m;
     }
 
@@ -686,9 +698,15 @@ public class MapActivity extends FragmentActivity implements NavigationView.OnNa
                 startActivity(placeDetailIntent);
                 break;
             case ViewType.EVENT:
-                Intent eventDetailIntent = new Intent(MapActivity.this, EventDetailsActivity.class);
-                eventDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
-                startActivity(eventDetailIntent);
+                int tag = (int) marker.getTag(); // TODO
+                if (tag == DEFAULT_EVENT_MARKER_ID) {
+                    Intent intent = new Intent(MapActivity.this, EventListActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent eventDetailIntent = new Intent(MapActivity.this, EventDetailsActivity.class);
+                    eventDetailIntent.putExtra(Arguments.OBJECT_ID, Integer.parseInt(marker.getTag().toString()));
+                    startActivity(eventDetailIntent);
+                }
                 break;
             default:
                 Toast.makeText(this, "InfoWindow clicked!", Toast.LENGTH_SHORT).show();

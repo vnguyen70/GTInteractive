@@ -524,7 +524,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/openPlaceDetailsButton"
-            app:srcCompat="@drawable/clough" />
+            app:srcCompat="@drawable/default_image" />
 
 
     </android.support.constraint.ConstraintLayout>
